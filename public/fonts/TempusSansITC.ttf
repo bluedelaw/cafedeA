@@ -1,0 +1,4 @@
+@font-face {
+  font-family: 'Tempus Sans ITC';
+  src: url('/fonts/TempusSansITC.ttf') format('truetype');
+}
