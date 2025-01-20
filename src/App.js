@@ -4,6 +4,8 @@ import './App.css';
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSection, setCurrentSection] = useState(null);
 
   const menuSections = [
     {
@@ -65,74 +67,123 @@ function App() {
     },
   ];
 
-  const openModal = (imgSrc) => {
+  const openModal = (imgSrc, sectionId, imgIndex) => {
     setSelectedImage(imgSrc);
+    setCurrentSection(sectionId);
+    setCurrentIndex(imgIndex);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
+    setCurrentIndex(0); // Reset index when modal is closed
   };
-  
-    // This will handle clicks on the background and close the modal
-    const handleBackgroundClick = (e) => {
-      // Only close modal if the click was on the background and not the modal content
-      if (e.target.classList.contains('modal')) {
-        closeModal();
-      }
-    };
 
-    return (
-      <div className="App bg-gray-100 min-h-screen">
-        <header className="text-center py-8 bg-black">
-          <h1 className="text-9xl text-yellow-500 font-tempus">café de A</h1>
-        </header>
-        <main className="menu-gallery p-6">
-          {menuSections.map((section) => (
-            <div key={section.id} className="menu-section mb-12">
-              <h2 className="text-3xl font-bold mb-4 font-tempus">{section.name}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-center">
-                {section.images.map((image) => (
-                  <div
-                    key={image.id}
-                    className="menu-item text-center bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
-                    onClick={() => openModal(image.imgSrc)}
-                  >
-                    <img
-                      src={image.imgSrc}
-                      alt={section.name}
-                      className="menu-image w-full h-90 object-cover transition-all duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </main>
+  const handleBackgroundClick = (e) => {
+    if (e.target.classList.contains('modal')) {
+      closeModal();
+    }
+  };
+
+  const goToNextImage = () => {
+    const sectionImages = menuSections[currentSection - 1].images;
     
-        {isModalOpen && (
-          <div
-            className={`modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-500 ${isModalOpen ? 'opacity-100' : 'opacity-0'}`}
-            onClick={handleBackgroundClick}
-          >
-            <div className="modal-content relative bg-white p-1 rounded-lg transition-all duration-500">
-              <button
-                className="absolute top-2 right-2 text-black text-2xl"
-                onClick={closeModal}
-              >
-                &times;
-              </button>
-              <img
-                src={selectedImage}
-                alt="Full view"
-                className="max-w-full max-h-[95vh] object-contain"
-              />
+    // If we're at the last image of the section, move to the first image of the next section
+    if (currentIndex === sectionImages.length - 1) {
+      const nextSection = (currentSection % menuSections.length) + 1;
+      setCurrentSection(nextSection);
+      setCurrentIndex(0); // Reset index to the first image of the next section
+      setSelectedImage(menuSections[nextSection - 1].images[0].imgSrc);
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+      setSelectedImage(sectionImages[currentIndex + 1].imgSrc);
+    }
+  };
+
+  const goToPreviousImage = () => {
+    const sectionImages = menuSections[currentSection - 1].images;
+    
+    // If we're at the first image of the section, move to the last image of the previous section
+    if (currentIndex === 0) {
+      const prevSection = (currentSection - 2 + menuSections.length) % menuSections.length + 1;
+      setCurrentSection(prevSection);
+      const lastIndex = menuSections[prevSection - 1].images.length - 1;
+      setCurrentIndex(lastIndex);
+      setSelectedImage(menuSections[prevSection - 1].images[lastIndex].imgSrc);
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex - 1);
+      setSelectedImage(sectionImages[currentIndex - 1].imgSrc);
+    }
+  };
+
+  return (
+    <div className="App bg-gray-100 min-h-screen">
+      <header className="text-center py-8 bg-black">
+        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-yellow-500 font-tempus">
+          café de A
+        </h1>
+      </header>
+      <main className="menu-gallery p-6">
+        {menuSections.map((section) => (
+          <div key={section.id} className="menu-section mb-12">
+            <h2 className="text-3xl font-bold mb-4 font-tempus">{section.name}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-center">
+              {section.images.map((image, index) => (
+                <div
+                  key={image.id}
+                  className="menu-item text-center bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                  onClick={() => openModal(image.imgSrc, section.id, index)}
+                >
+                  <img
+                    src={image.imgSrc}
+                    alt={section.name}
+                    className="menu-image w-full h-90 object-cover transition-all duration-500"
+                  />
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </div>
-    );    
+        ))}
+      </main>
+
+      {isModalOpen && (
+        <div
+          className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-500"
+          onClick={handleBackgroundClick}
+        >
+          <div className="modal-content relative bg-white p-1 rounded-lg transition-all duration-500">
+            <button
+              className="absolute top-2 right-2 text-black text-2xl"
+              onClick={closeModal}
+            >
+              &times;
+            </button>
+
+            <button
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white text-4xl"
+              onClick={goToPreviousImage}
+            >
+              &lt;
+            </button>
+
+            <img
+              src={selectedImage}
+              alt="Full view"
+              className="max-w-full max-h-[95vh] object-contain"
+            />
+
+            <button
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white text-4xl"
+              onClick={goToNextImage}
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default App;
