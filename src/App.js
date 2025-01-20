@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import './index.css';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +78,7 @@ function App() {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
-    setCurrentIndex(0); // Reset index when modal is closed
+    setCurrentIndex(0);
   };
 
   const handleBackgroundClick = (e) => {
@@ -88,12 +89,11 @@ function App() {
 
   const goToNextImage = () => {
     const sectionImages = menuSections[currentSection - 1].images;
-    
-    // If we're at the last image of the section, move to the first image of the next section
+
     if (currentIndex === sectionImages.length - 1) {
       const nextSection = (currentSection % menuSections.length) + 1;
       setCurrentSection(nextSection);
-      setCurrentIndex(0); // Reset index to the first image of the next section
+      setCurrentIndex(0);
       setSelectedImage(menuSections[nextSection - 1].images[0].imgSrc);
     } else {
       setCurrentIndex((prevIndex) => prevIndex + 1);
@@ -103,8 +103,7 @@ function App() {
 
   const goToPreviousImage = () => {
     const sectionImages = menuSections[currentSection - 1].images;
-    
-    // If we're at the first image of the section, move to the last image of the previous section
+
     if (currentIndex === 0) {
       const prevSection = (currentSection - 2 + menuSections.length) % menuSections.length + 1;
       setCurrentSection(prevSection);
@@ -148,40 +147,47 @@ function App() {
       </main>
 
       {isModalOpen && (
-        <div
-          className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-500"
-          onClick={handleBackgroundClick}
-        >
-          <div className="modal-content relative bg-white p-1 rounded-lg transition-all duration-500">
-            <button
-              className="absolute top-2 right-2 text-black text-2xl"
-              onClick={closeModal}
-            >
-              &times;
-            </button>
+  <div
+    className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-500"
+    onClick={handleBackgroundClick}
+  >
+    <div className="modal-content relative bg-white p-1 rounded-lg transition-all duration-500">
+      {/* Close button */}
+      <button
+        className="absolute top-2 right-2 text-black text-3xl z-20 focus:outline-none"
+        onClick={closeModal}
+      >
+        &times;
+      </button>
 
-            <button
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white text-4xl"
-              onClick={goToPreviousImage}
-            >
-              &lt;
-            </button>
+      {/* Invisible button for previous image */}
+      <button
+        className="absolute left-0 top-0 h-full w-1/2 bg-transparent focus:outline-none"
+        onClick={(e) => {
+          e.stopPropagation();
+          goToPreviousImage();
+        }}
+      ></button>
 
-            <img
-              src={selectedImage}
-              alt="Full view"
-              className="max-w-full max-h-[95vh] object-contain"
-            />
+      {/* Display the selected image */}
+      <img
+        src={selectedImage}
+        alt="Full view"
+        className="max-w-full max-h-[95vh] object-contain z-10"
+      />
 
-            <button
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white text-4xl"
-              onClick={goToNextImage}
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Invisible button for next image */}
+      <button
+        className="absolute right-0 top-0 h-full w-1/2 bg-transparent focus:outline-none"
+        onClick={(e) => {
+          e.stopPropagation();
+          goToNextImage();
+        }}
+      ></button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
