@@ -119,9 +119,11 @@ function App() {
   return (
     <div className="App bg-gray-100 min-h-screen">
       <header className="text-center py-8 bg-black">
-        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-yellow-500 font-tempus">
-          café de A
-        </h1>
+        <img
+          src="/images/logo.png"
+          alt="café de A logo"
+          className="mx-auto w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6"
+        />
       </header>
       <main className="menu-gallery p-6">
         {menuSections.map((section) => (

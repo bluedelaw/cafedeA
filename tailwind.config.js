@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        tempus: ['Tempus Sans ITC', 'sans-serif'],
+        tempus: ['Tempus Sans ITC'],
       }
     },
   },
