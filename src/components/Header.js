@@ -1,32 +1,65 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Menu, X } from "lucide-react"
+import { useNavbar } from "../context/NavbarContext"
 
 const menuItems = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
+  { name: "Location", href: "/location" },
+  { name: "Reservations", href: "/reservations" },
 ]
 
 function Header() {
+  const { isNavbarVisible } = useNavbar()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [scrollDirection, setScrollDirection] = useState(null)
+
+  useEffect(() => {
+    let lastScrollY = window.pageYOffset
+
+    const handleScroll = () => {
+      const scrollY = window.pageYOffset
+      const direction = scrollY > lastScrollY ? "down" : "up"
+      if (direction !== scrollDirection) {
+        setIsVisible(direction === "up")
+      }
+      setIsScrolled(scrollY > 10)
+      lastScrollY = scrollY > 0 ? scrollY : 0
+      setScrollDirection(direction)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [scrollDirection])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        isScrolled ? (isVisible ? "bg-black bg-opacity-90" : "bg-transparent") : "bg-black"
+      } ${isVisible && isNavbarVisible ? "translate-y-0" : "-translate-y-full"}`}
+    >
+      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         <Link to="/">
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
         </Link>
-        <nav className={`lg:flex ${isMenuOpen ? "block" : "hidden"}`}>
-          <ul className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4">
+        <nav
+          className={`lg:flex ${isMenuOpen ? "block" : "hidden"} absolute lg:relative top-[100%] left-0 w-full lg:w-auto bg-black lg:bg-transparent z-50`}
+        >
+          <ul className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-6 p-4 lg:p-0">
             {menuItems.map((item) => (
               <li key={item.name}>
-                <Link to={item.href} className="text-gray-600 hover:text-gray-900" onClick={() => setIsMenuOpen(false)}>
+                <Link
+                  to={item.href}
+                  className="text-white hover:text-gray-300 transition-colors duration-200 block py-2 lg:py-0"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   {item.name}
                 </Link>
               </li>
@@ -35,7 +68,8 @@ function Header() {
         </nav>
         <button
           onClick={toggleMenu}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 lg:hidden"
+          className="text-white hover:text-gray-300 focus:outline-none focus:text-gray-300 lg:hidden transition-colors duration-200"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

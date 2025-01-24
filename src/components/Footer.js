@@ -2,23 +2,24 @@ import React from "react"
 
 function Footer() {
   return (
-    <footer className="bg-gray-800 text-white py-8">
+    <footer className="bg-gradient-to-b from-gray-800 to-gray-900 text-white py-8 border-t border-gray-700">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-between">
-          <div className="w-full md:w-1/3 mb-6 md:mb-0">
-            <h3 className="text-xl font-bold mb-4">café de A</h3>
-            <p>Delightful dining experiences since 2023</p>
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-stretch">
+          <div className="w-full md:w-1/2 flex justify-center items-center mb-6 md:mb-0">
+            <div className="text-center">
+              <h3 className="text-xl font-bold mb-3">Location</h3>
+              <p className="text-sm mb-1">#3050-11666 Steveston Hwy, Richmond</p>
+              <a href="tel:+16042767800" className="text-sm hover:text-gray-300 transition-colors duration-200">
+                Phone: (604) 276-7800
+              </a>
+            </div>
           </div>
-          <div className="w-full md:w-1/3 mb-6 md:mb-0">
-            <h3 className="text-xl font-bold mb-4">Contact</h3>
-            <p>123 Gourmet Street, Foodville</p>
-            <p>Phone: (123) 456-7890</p>
-            <p>Email: info@cafedea.com</p>
-          </div>
-          <div className="w-full md:w-1/3">
-            <h3 className="text-xl font-bold mb-4">Hours</h3>
-            <p>Monday - Friday: 7am - 10pm</p>
-            <p>Saturday - Sunday: 8am - 11pm</p>
+          <div className="hidden md:block w-px bg-gray-700 self-stretch mx-4"></div>
+          <div className="w-full md:w-1/2 flex justify-center items-center">
+            <div className="text-center">
+              <h3 className="text-xl font-bold mb-3">Hours</h3>
+              <p className="text-sm">Monday - Sunday: 8am - 10pm</p>
+            </div>
           </div>
         </div>
       </div>
