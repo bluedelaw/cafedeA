@@ -1,7 +1,9 @@
-import React, { useState } from "react"
-import { useNavbar } from "../context/NavbarContext"  // Import the context
-import '../App.css'
-import '../index.css'
+"use client"
+
+import { useState, useEffect } from "react"
+import { useNavbar } from "../context/NavbarContext" // Import the context
+import "../App.css"
+import "../index.css"
 
 const menuSections = [
   {
@@ -62,69 +64,90 @@ const menuSections = [
 ]
 
 function Menu() {
-  const { isNavbarVisible, setIsNavbarVisible } = useNavbar()  // Use the NavbarContext to get visibility control
+  const { isNavbarVisible, setIsNavbarVisible } = useNavbar() // Use the NavbarContext to get visibility control
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentSection, setCurrentSection] = useState(null)
 
+  // Handle hash navigation when component mounts
+  useEffect(() => {
+    // Check if there's a hash in the URL
+    if (window.location.hash) {
+      // Remove the # character
+      const sectionId = window.location.hash.substring(1)
+
+      // Find the section element
+      const sectionElement = document.getElementById(sectionId)
+
+      // If the section exists, scroll to it with a slight delay to ensure DOM is ready
+      if (sectionElement) {
+        setTimeout(() => {
+          sectionElement.scrollIntoView({ behavior: "smooth" })
+        }, 300)
+      }
+    }
+  }, [])
+
   const openMenu = (imgSrc, sectionId, imgIndex) => {
-    setSelectedImage(imgSrc);
-    setCurrentSection(sectionId);
-    setCurrentIndex(imgIndex);
-    setIsModalOpen(true);
-    setIsNavbarVisible(false);  // Hide the navbar when the modal is open
-  };
+    setSelectedImage(imgSrc)
+    setCurrentSection(sectionId)
+    setCurrentIndex(imgIndex)
+    setIsModalOpen(true)
+    setIsNavbarVisible(false) // Hide the navbar when the modal is open
+  }
 
   const closeMenu = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
-    setCurrentIndex(0);
-    setIsNavbarVisible(true);  // Show the navbar when the modal is closed
-  };
+    setIsModalOpen(false)
+    setSelectedImage(null)
+    setCurrentIndex(0)
+    setIsNavbarVisible(true) // Show the navbar when the modal is closed
+  }
 
   const handleBackgroundClick = (e) => {
-    if (e.target.classList.contains('menu')) {
-      closeMenu();
+    if (e.target.classList.contains("menu")) {
+      closeMenu()
     }
-  };
+  }
 
   const goToNextImage = () => {
-    const sectionImages = menuSections[currentSection - 1].images;
+    const sectionImages = menuSections[currentSection - 1].images
 
     if (currentIndex === sectionImages.length - 1) {
-      const nextSection = (currentSection % menuSections.length) + 1;
-      setCurrentSection(nextSection);
-      setCurrentIndex(0);
-      setSelectedImage(menuSections[nextSection - 1].images[0].imgSrc);
+      const nextSection = (currentSection % menuSections.length) + 1
+      setCurrentSection(nextSection)
+      setCurrentIndex(0)
+      setSelectedImage(menuSections[nextSection - 1].images[0].imgSrc)
     } else {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-      setSelectedImage(sectionImages[currentIndex + 1].imgSrc);
+      setCurrentIndex((prevIndex) => prevIndex + 1)
+      setSelectedImage(sectionImages[currentIndex + 1].imgSrc)
     }
-  };
+  }
 
   const goToPreviousImage = () => {
-    const sectionImages = menuSections[currentSection - 1].images;
+    const sectionImages = menuSections[currentSection - 1].images
 
     if (currentIndex === 0) {
-      const prevSection = (currentSection - 2 + menuSections.length) % menuSections.length + 1;
-      setCurrentSection(prevSection);
-      const lastIndex = menuSections[prevSection - 1].images.length - 1;
-      setCurrentIndex(lastIndex);
-      setSelectedImage(menuSections[prevSection - 1].images[lastIndex].imgSrc);
+      const prevSection = ((currentSection - 2 + menuSections.length) % menuSections.length) + 1
+      setCurrentSection(prevSection)
+      const lastIndex = menuSections[prevSection - 1].images.length - 1
+      setCurrentIndex(lastIndex)
+      setSelectedImage(menuSections[prevSection - 1].images[lastIndex].imgSrc)
     } else {
-      setCurrentIndex((prevIndex) => prevIndex - 1);
-      setSelectedImage(sectionImages[currentIndex - 1].imgSrc);
+      setCurrentIndex((prevIndex) => prevIndex - 1)
+      setSelectedImage(sectionImages[currentIndex - 1].imgSrc)
     }
-  };
+  }
 
   return (
     <div className="App bg-gray-100 min-h-screen">
-
-      
       <main className="menu-gallery p-6 pt-16">
         {menuSections.map((section) => (
-          <div key={section.id} className="menu-section mb-12">
+          <div
+            key={section.id}
+            id={section.name.toLowerCase().replace(/\s+/g, "-")}
+            className="menu-section mb-12 scroll-mt-20"
+          >
             <h2 className="text-3xl font-bold mb-4 font-tempus">{section.name}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center items-center">
               {section.images.map((image, index) => (
@@ -134,7 +157,7 @@ function Menu() {
                   onClick={() => openMenu(image.imgSrc, section.id, index)}
                 >
                   <img
-                    src={image.imgSrc}
+                    src={image.imgSrc || "/placeholder.svg"}
                     alt={section.name}
                     className="menu-image w-full h-90 object-cover transition-all duration-500"
                   />
@@ -152,10 +175,7 @@ function Menu() {
         >
           <div className="menu-content relative bg-white p-1 rounded-lg transition-all duration-500">
             {/* Close button */}
-            <button
-              className="absolute top-2 right-2 text-black text-3xl z-20 focus:outline-none"
-              onClick={closeMenu}
-            >
+            <button className="absolute top-2 right-2 text-black text-3xl z-20 focus:outline-none" onClick={closeMenu}>
               &times;
             </button>
 
@@ -163,14 +183,14 @@ function Menu() {
             <button
               className="absolute left-0 top-0 h-full w-1/2 bg-transparent focus:outline-none"
               onClick={(e) => {
-                e.stopPropagation();
-                goToPreviousImage();
+                e.stopPropagation()
+                goToPreviousImage()
               }}
             ></button>
 
             {/* Display the selected image */}
             <img
-              src={selectedImage}
+              src={selectedImage || "/placeholder.svg"}
               alt="Full view"
               className="max-w-full max-h-[95vh] object-contain z-10"
             />
@@ -179,15 +199,16 @@ function Menu() {
             <button
               className="absolute right-0 top-0 h-full w-1/2 bg-transparent focus:outline-none"
               onClick={(e) => {
-                e.stopPropagation();
-                goToNextImage();
+                e.stopPropagation()
+                goToNextImage()
               }}
             ></button>
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default Menu;
+export default Menu
+

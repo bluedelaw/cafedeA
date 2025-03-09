@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react"
+"use client"
+
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Menu, X } from "lucide-react"
 import { useNavbar } from "../context/NavbarContext"
@@ -7,7 +9,7 @@ const menuItems = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
   { name: "Location", href: "/location" },
-  { name: "Reservations", href: "/reservations" },
+  // { name: "Bubble Tea", href: "/bubble-tea" },
 ]
 
 function Header() {
@@ -45,7 +47,7 @@ function Header() {
         isScrolled ? (isVisible ? "bg-black bg-opacity-90" : "bg-transparent") : "bg-black"
       } ${isVisible && isNavbarVisible ? "translate-y-0" : "-translate-y-full"}`}
     >
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+      <div className="container mx-auto px-4 py-2 flex justify-between items-center font-tempus">
         <Link to="/">
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
         </Link>

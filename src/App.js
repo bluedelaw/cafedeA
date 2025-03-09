@@ -1,11 +1,10 @@
-import React from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Menu from "./pages/Menu"
 import Location from "./pages/Location"
-import Reservations from "./pages/Reservations"
+import BubbleTea from "./pages/BubbleTea"
 import { NavbarProvider } from "./context/NavbarContext"
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/menu" element={<Menu />} />
               <Route path="/location" element={<Location />} />
-              <Route path="/reservations" element={<Reservations />} />
+              <Route path="/bubble-tea" element={<BubbleTea />} />
             </Routes>
           </main>
           <Footer />
