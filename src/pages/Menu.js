@@ -1,14 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useNavbar } from "../context/NavbarContext" // Import the context
+import { useState, useEffect, useRef } from "react"
+import { useNavbar } from "../context/NavbarContext"
+import { ChevronUp, MenuIcon } from "lucide-react"
 import "../App.css"
 import "../index.css"
 
 const menuSections = [
   {
     id: 1,
-    name: "All-Day Breakfast",
+    name: "Breakfast",
     images: [
       { id: 1, imgSrc: "/images/Breakfast/Breakfast1.jpg" },
       { id: 2, imgSrc: "/images/Breakfast/Breakfast2.jpg" },
@@ -55,6 +56,14 @@ const menuSections = [
   },
   {
     id: 6,
+    name: "BBQ",
+    images: [
+      { id: 1, imgSrc: "/images/BBQ/BBQ1.jpg" },
+      { id: 2, imgSrc: "/images/BBQ/BBQ2.jpg" },
+    ],
+  },
+  {
+    id: 7,
     name: "Drinks",
     images: [
       { id: 1, imgSrc: "/images/Drink/Drink1.jpg" },
@@ -64,11 +73,13 @@ const menuSections = [
 ]
 
 function Menu() {
-  const { isNavbarVisible, setIsNavbarVisible } = useNavbar() // Use the NavbarContext to get visibility control
+  const { isNavbarVisible, setIsNavbarVisible } = useNavbar()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentSection, setCurrentSection] = useState(null)
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false)
+  const navMenuRef = useRef(null)
 
   // Handle hash navigation when component mounts
   useEffect(() => {
@@ -86,6 +97,20 @@ function Menu() {
           sectionElement.scrollIntoView({ behavior: "smooth" })
         }, 300)
       }
+    }
+  }, [])
+
+  // Handle clicks outside the navigation menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navMenuRef.current && !navMenuRef.current.contains(event.target)) {
+        setIsNavMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
 
@@ -139,6 +164,20 @@ function Menu() {
     }
   }
 
+  const scrollToSection = (sectionName) => {
+    const sectionId = sectionName.toLowerCase().replace(/\s+/g, "-")
+    const sectionElement = document.getElementById(sectionId)
+
+    if (sectionElement) {
+      sectionElement.scrollIntoView({ behavior: "smooth" })
+      setIsNavMenuOpen(false) // Close the menu after navigation
+    }
+  }
+
+  const toggleNavMenu = () => {
+    setIsNavMenuOpen(!isNavMenuOpen)
+  }
+
   return (
     <div className="App bg-gray-100 min-h-screen">
       <main className="menu-gallery p-6 pt-16">
@@ -167,6 +206,48 @@ function Menu() {
           </div>
         ))}
       </main>
+
+      {/* Floating Navigation Menu for Mobile */}
+      <div ref={navMenuRef} className="fixed bottom-4 right-4 z-40 md:hidden">
+        {/* Navigation Menu Items */}
+        <div
+          className={`absolute bottom-16 right-0 bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 ${
+            isNavMenuOpen ? "max-h-[400px] opacity-100 translate-y-0 w-48" : "max-h-0 opacity-0 translate-y-2 w-0"
+          }`}
+        >
+          <div className="p-2">
+            {menuSections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollToSection(section.name)}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded transition-colors text-gray-800 font-medium"
+              >
+                {section.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Main FAB Button */}
+        <button
+          onClick={toggleNavMenu}
+          className={`flex items-center justify-center w-14 h-14 rounded-full shadow-lg focus:outline-none transition-all duration-300 ${
+            isNavMenuOpen ? "bg-teal-700 rotate-180" : "bg-teal-600"
+          }`}
+          aria-label="Navigate to menu sections"
+        >
+          {isNavMenuOpen ? <ChevronUp className="w-6 h-6 text-white" /> : <MenuIcon className="w-6 h-6 text-white" />}
+        </button>
+      </div>
+
+      {/* Back to Top Button - Shows when scrolled down */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="fixed bottom-4 left-4 z-40 md:hidden bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg focus:outline-none"
+        aria-label="Back to top"
+      >
+        <ChevronUp className="w-5 h-5" />
+      </button>
 
       {isModalOpen && (
         <div
@@ -211,4 +292,3 @@ function Menu() {
 }
 
 export default Menu
-

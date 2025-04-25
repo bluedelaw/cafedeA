@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { Menu, X } from "lucide-react"
 import { useNavbar } from "../context/NavbarContext"
@@ -18,6 +18,8 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [scrollDirection, setScrollDirection] = useState(null)
+  const navRef = useRef(null)
+  const menuButtonRef = useRef(null)
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset
@@ -31,11 +33,39 @@ function Header() {
       setIsScrolled(scrollY > 10)
       lastScrollY = scrollY > 0 ? scrollY : 0
       setScrollDirection(direction)
+
+      // Close menu on scroll
+      if (isMenuOpen) {
+        setIsMenuOpen(false)
+      }
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [scrollDirection])
+  }, [scrollDirection, isMenuOpen])
+
+  // Handle clicks outside the menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isMenuOpen &&
+        navRef.current &&
+        !navRef.current.contains(event.target) &&
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
+    }
+  }, [isMenuOpen])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -52,6 +82,7 @@ function Header() {
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
         </Link>
         <nav
+          ref={navRef}
           className={`lg:flex ${isMenuOpen ? "block" : "hidden"} absolute lg:relative top-[100%] left-0 w-full lg:w-auto bg-black lg:bg-transparent z-50`}
         >
           <ul className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-6 p-4 lg:p-0">
@@ -69,6 +100,7 @@ function Header() {
           </ul>
         </nav>
         <button
+          ref={menuButtonRef}
           onClick={toggleMenu}
           className="text-white hover:text-gray-300 focus:outline-none focus:text-gray-300 lg:hidden transition-colors duration-200"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -81,4 +113,3 @@ function Header() {
 }
 
 export default Header
-

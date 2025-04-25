@@ -1,6 +1,6 @@
 "use client"
 import { Link } from "react-router-dom"
-import { Clock, MapPin, ChevronDown, Utensils } from "lucide-react"
+import { Clock, MapPin, ChevronDown, Utensils } from 'lucide-react'
 
 function Home() {
   const scrollToNextSection = (e) => {
@@ -14,40 +14,44 @@ function Home() {
   // Simplified menu categories to showcase - match these with the sections in Menu.js
   const menuCategories = [
     {
-      category: "All-Day Breakfast",
+      category: "Breakfast",
       image: "/images/Breakfast/Breakfast1.jpg",
     },
     {
       category: "Lunch",
       image: "/images/Lunch/Lunch2.jpg",
     },
-    {
-      category: "Afternoon Tea",
-      image: "/images/AfternoonTea/Afternoon1LQ.jpg",
-    },
+    // {
+    //   category: "Afternoon Tea",
+    //   image: "/images/AfternoonTea/Afternoon1LQ.jpg",
+    // },
     {
       category: "Dinner",
       image: "/images/Dinner/Dinner2.jpg",
     },
     {
-      category: "Bubble Tea",
+    category: "BBQ",
+    image: "/images/BBQ/BBQ1.jpg",
+    },
+    {
+      category: "Drinks",
       image: "/images/Drink/Drink1.jpg",
     },
   ]
 
   return (
-    <div className="pt-16">
-      {/* Hero Section */}
+<div className="pt-[54px]">
+{/* Hero Section */}
       <section className="relative min-h-[80vh] md:min-h-screen flex flex-col items-center justify-center bg-cover bg-center">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
-          style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
+          style={{ backgroundImage: "url('/images/Home/cafedea.jpg')" }}
         ></div>
         <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
 
         <div className="relative z-20 text-center text-white px-4 max-w-4xl">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 font-tempus">Welcome to café de A</h1>
-          <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8">Experience culinary excellence in every bite</p>
+          <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8">Experience authentic Hong Kong cuisine</p>
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             <Link
               to="/menu"
@@ -62,7 +66,7 @@ function Home() {
             </Link>
             <Link
               to="/location"
-              className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-blue-700 transition duration-300 text-base md:text-lg"
+              className="bg-teal-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300 text-base md:text-lg"
             >
               Find Us
             </Link>
@@ -83,13 +87,13 @@ function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-4">
-              <Utensils className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mr-2 md:mr-3" />
+              <Utensils className="w-6 h-6 md:w-8 md:h-8 text-teal-600 mr-2 md:mr-3" />
               <h2 className="text-2xl md:text-3xl font-bold font-tempus">Our Menu</h2>
             </div>
-            <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
+            {/* <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
               Discover our diverse selection of dishes, from hearty breakfasts to elegant dinners. Our menu features
               locally-sourced ingredients prepared with care by our talented chefs.
-            </p>
+            </p> */}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 max-w-6xl mx-auto">
@@ -99,8 +103,8 @@ function Home() {
                 to={`/menu#${item.category.toLowerCase().replace(/\s+/g, "-")}`}
                 className="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative h-64 md:h-72 overflow-hidden">
-                  <img
+<div className="relative min-h-[18rem] md:min-h-[20rem] overflow-hidden">
+<img
                     src={item.image || "/placeholder.svg"}
                     alt={`${item.category} menu`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -129,7 +133,7 @@ function Home() {
           <div className="text-center mt-12">
             <Link
               to="/menu"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition duration-300"
+              className="inline-block bg-teal-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
               onClick={() => {
                 setTimeout(() => {
                   window.scrollTo(0, 0)
@@ -155,11 +159,11 @@ function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
             <div className="flex items-center justify-center mb-3 md:mb-4">
-              <MapPin className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mr-2 md:mr-3" />
+              <MapPin className="w-6 h-6 md:w-8 md:h-8 text-teal-600 mr-2 md:mr-3" />
               <h2 className="text-2xl md:text-3xl font-bold">Find Us</h2>
             </div>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
-              Located in the heart of Richmond, our restaurant offers a convenient and welcoming atmosphere for all your
+              Located in the heart of Ironwood, our restaurant offers a convenient and welcoming atmosphere for all your
               dining needs.
             </p>
           </div>
@@ -183,11 +187,11 @@ function Home() {
               <h3 className="text-xl md:text-2xl font-bold mb-4 font-tempus">Ironwood Location</h3>
               <div className="space-y-3 md:space-y-4">
                 <div className="flex items-start">
-                  <MapPin className="w-5 h-5 text-blue-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-teal-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
                   <p className="text-sm md:text-base">#3050-11666 Steveston Hwy, Richmond, BC V7A 5J3</p>
                 </div>
                 <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-blue-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
+                  <Clock className="w-5 h-5 text-teal-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-bold mb-1 text-sm md:text-base">Hours of Operation</p>
                     <div className="grid grid-cols-2 gap-x-2 md:gap-x-4 gap-y-0.5 md:gap-y-1 text-sm md:text-base">
@@ -201,7 +205,7 @@ function Home() {
               </div>
               <Link
                 to="/location"
-                className="inline-block mt-4 md:mt-6 bg-blue-600 text-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-blue-700 transition duration-300"
+                className="inline-block mt-4 md:mt-6 bg-teal-600 text-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
               >
                 Get Directions
               </Link>
@@ -211,7 +215,7 @@ function Home() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-10 md:py-16 bg-blue-600 text-white">
+      <section className="py-10 md:py-16 bg-teal-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 font-tempus">Ready to Experience café de A?</h2>
           <p className="text-base md:text-xl mb-6 md:mb-8 max-w-2xl mx-auto">
@@ -220,7 +224,7 @@ function Home() {
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             <Link
               to="/menu"
-              className="bg-white text-blue-600 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300"
+              className="bg-white text-teal-700 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300"
               onClick={() => {
                 setTimeout(() => {
                   window.scrollTo(0, 0)
@@ -231,7 +235,7 @@ function Home() {
             </Link>
             <Link
               to="/location"
-              className="bg-transparent text-white border-2 border-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition duration-300"
+              className="bg-transparent text-white border-2 border-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300"
             >
               Get Directions
             </Link>
@@ -243,4 +247,3 @@ function Home() {
 }
 
 export default Home
-
