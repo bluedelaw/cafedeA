@@ -18,15 +18,15 @@ function Home() {
   const menuCategories = [
     {
       category: "Breakfast",
-      image: "/images/Breakfast/Breakfast1.jpg",
+      image: "/images/Breakfast/Breakfast1.webp",
     },
     {
       category: "Lunch",
-      image: "/images/Lunch/Lunch2.jpg",
+      image: "/images/Lunch/Lunch2.webp",
     },
     {
       category: "Dinner",
-      image: "/images/Dinner/Dinner2.jpg",
+      image: "/images/Dinner/Dinner2.webp",
     },
     {
       category: "BBQ",
