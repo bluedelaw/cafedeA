@@ -45,7 +45,7 @@ const menuSections = [
   },
   {
     id: 5,
-    name: "Mix and Match",
+    name: "Specials",
     images: [
       { id: 1, imgSrc: "/images/Special/Special1.webp" },
       { id: 2, imgSrc: "/images/Special/Special2.webp" },
@@ -63,8 +63,8 @@ const menuSections = [
     id: 7,
     name: "Drinks",
     images: [
-      { id: 1, imgSrc: "/images/Drink/Drink1.jpg" },
-      { id: 2, imgSrc: "/images/Drink/Drink2.jpg" },
+      { id: 1, imgSrc: "/images/Drink/Drink1.webp" },
+      { id: 2, imgSrc: "/images/Drink/Drink2.webp" },
     ],
   },
 ]
@@ -303,7 +303,7 @@ function Menu() {
             </div>
 
             {/* Images Grid with Flexbox for Perfect Centering */}
-            <div className="flex flex-wrap justify-center gap-10">
+            <div className="flex flex-wrap justify-center gap-5">
               {section.images.map((image, index) => (
                 <div
                   key={image.id}
@@ -314,9 +314,9 @@ function Menu() {
                   }`}
                   style={{
                     transitionDelay: `${sectionIndex * 50 + 100 + index * 50}ms`,
-                    width: "calc(33.33% - 30px)", // Adjust based on gap and desired columns
-                    maxWidth: "300px",
-                    minWidth: "200px",
+                    // width: "calc(33.33% - 30px)",
+                    maxWidth: "650px",
+                    minWidth: "310px",
                   }}
                   onClick={() => openMenu(image.imgSrc, section.id, index)}
                 >
@@ -327,7 +327,7 @@ function Menu() {
                       className="menu-image w-full h-auto object-contain"
                       style={{
                         maxHeight: "400px",
-                        minHeight: "250px",
+                        minHeight: "350px",
                         objectFit: "contain",
                       }}
                       loading="lazy"
@@ -406,7 +406,7 @@ function Menu() {
           onClick={handleBackgroundClick}
         >
           <div
-            className={`menu-content relative bg-white p-1 md:p-1 transition-all duration-500 ease-out flex items-center justify-center transform ${
+            className={`menu-content relative bg-white transition-all duration-500 ease-out flex items-center justify-center transform ${
               isModalOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-8"
             }`}
           >

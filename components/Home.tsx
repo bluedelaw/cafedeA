@@ -14,34 +14,26 @@ function Home() {
     }
   }
 
-  // Simplified menu categories to showcase - match these with the sections in Menu.js
   const menuCategories = [
-    {
-      category: "Breakfast",
-      image: "/images/Breakfast/Breakfast1.webp",
-    },
-    {
-      category: "Lunch",
-      image: "/images/Lunch/Lunch2.webp",
-    },
-    {
-      category: "Dinner",
-      image: "/images/Dinner/Dinner2.webp",
-    },
-    {
-      category: "BBQ",
-      image: "/images/BBQ/BBQ1.jpg",
-    },
-    {
-      category: "Drinks",
-      image: "/images/Drink/Drink1.jpg",
-    },
+    { category: "Breakfast", image: "/images/Breakfast/Breakfast1.webp" },
+    { category: "Lunch", image: "/images/Lunch/Lunch2.webp" },
+    { category: "Dinner", image: "/images/Dinner/Dinner2.webp" },
+    { category: "BBQ", image: "/images/BBQ/BBQ1.jpg" },
+    { category: "Drinks", image: "/images/Drink/Drink1.webp" },
+    // { category: "Specials", image: "/images/Special/Special1.webp" },
+
+  ]
+
+  const specials = [
+    { title: "Honey Glazed BBQ Pork", image: "/images/Specials/bbq-pork.jpg" },
+    { title: "Milk Tea Tiramisu", image: "/images/Specials/tiramisu.jpg" },
+    { title: "HK French Toast Combo", image: "/images/Specials/french-toast.jpg" },
   ]
 
   return (
     <div className="pt-[54px]">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] md:min-h-screen flex flex-col items-center justify-center bg-cover bg-center">
+      <section className="relative min-h-[60vh] md:min-h-screen flex flex-col items-center justify-center bg-cover bg-center">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{ backgroundImage: "url('/images/Home/cafedea.jpg')" }}
@@ -55,11 +47,7 @@ function Home() {
             <Link
               href="/menu"
               className="bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300 text-base md:text-lg"
-              onClick={() => {
-                setTimeout(() => {
-                  window.scrollTo(0, 0)
-                }, 0)
-              }}
+              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
             >
               View Menu
             </Link>
@@ -81,7 +69,7 @@ function Home() {
         </button>
       </section>
 
-      {/* Menu Section - Simplified Design */}
+      {/* Menu Section */}
       <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -98,7 +86,7 @@ function Home() {
                 href={`/menu#${item.category.toLowerCase().replace(/\s+/g, "-")}`}
                 className="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative min-h-[18rem] md:min-h-[20rem] overflow-hidden">
+                <div className="relative overflow-hidden">
                   <img
                     src={item.image || "/placeholder.svg"}
                     alt={`${item.category} menu`}
@@ -129,11 +117,7 @@ function Home() {
             <Link
               href="/menu"
               className="inline-block bg-teal-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
-              onClick={() => {
-                setTimeout(() => {
-                  window.scrollTo(0, 0)
-                }, 0)
-              }}
+              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
             >
               View Full Menu
             </Link>
@@ -148,6 +132,35 @@ function Home() {
           <ChevronDown size={24} className="sm:w-7 sm:h-7 md:w-9 md:h-9" />
         </button>
       </section>
+
+      {/* Specials Section
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold font-tempus mb-2">Chef's Specials</h2>
+            <p className="text-gray-600 text-base md:text-lg">
+              Seasonal favorites and featured dishes, curated weekly.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            {specials.map((special, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300"
+              >
+                <img
+                  src={special.image}
+                  alt={special.title}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg md:text-xl font-semibold font-tempus">{special.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
 
       {/* Location Section */}
       <section className="py-12 md:py-20 bg-gray-50">
@@ -171,7 +184,7 @@ function Home() {
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
-                  allowFullScreen=""
+                  allowFullScreen
                   loading="lazy"
                   title="Restaurant location"
                 ></iframe>
@@ -220,11 +233,7 @@ function Home() {
             <Link
               href="/menu"
               className="bg-white text-teal-700 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300"
-              onClick={() => {
-                setTimeout(() => {
-                  window.scrollTo(0, 0)
-                }, 0)
-              }}
+              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
             >
               View Menu
             </Link>
