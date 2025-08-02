@@ -43,21 +43,24 @@ function Home() {
         <div className="relative z-20 text-center text-white px-4 max-w-4xl">
           <img src="/images/logo.png" alt="café de A" className="w-64 md:w-80 mx-auto mb-6" />
           <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8">Experience authentic Hong Kong cuisine</p>
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-md mx-auto">
             <Link
               href="/menu"
-              className="bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300 text-base md:text-lg"
+              className="flex-1 bg-white text-gray-900 py-2 md:py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300 text-center text-base md:text-lg"
               onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
             >
               View Menu
             </Link>
             <Link
-              href="/location"
-              className="bg-teal-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300 text-base md:text-lg"
+              href="https://h5.posking.ca/#/shop?id=617"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-teal-600 text-white py-2 md:py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300 text-center text-base md:text-lg"
             >
-              Find Us
+              Order Takeout
             </Link>
           </div>
+
         </div>
 
         <button
@@ -170,10 +173,10 @@ function Home() {
               <MapPin className="w-6 h-6 md:w-8 md:h-8 text-teal-600 mr-2 md:mr-3" />
               <h2 className="text-2xl md:text-3xl font-bold">Find Us</h2>
             </div>
-            <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
+            {/* <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
               Located in the heart of Ironwood, our restaurant offers a convenient and welcoming atmosphere for all your
               dining needs.
-            </p>
+            </p> */}
           </div>
 
           <div className="flex flex-col lg:flex-row items-stretch bg-white rounded-xl shadow-xl overflow-hidden">
@@ -222,7 +225,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Call to Action Section */}
+      {/* Call to Action Section
       <section className="py-10 md:py-16 bg-teal-600 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 font-tempus">Ready to Experience café de A?</h2>
@@ -245,7 +248,7 @@ function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }
