@@ -55,8 +55,8 @@ const menuSections = [
     id: 6,
     name: "BBQ",
     images: [
-      { id: 1, imgSrc: "/images/BBQ/BBQ1.jpg" },
-      { id: 2, imgSrc: "/images/BBQ/BBQ2.jpg" },
+      { id: 1, imgSrc: "/images/BBQ/BBQ1.webp" },
+      { id: 2, imgSrc: "/images/BBQ/BBQ2.webp" },
     ],
   },
   {
