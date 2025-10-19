@@ -13,7 +13,7 @@ const menuItems = [
   // { name: "Bubble Tea", href: "/bubble-tea" },
 ]
 
-function Header() {
+function Header({ offset }: { offset?: number }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
@@ -73,10 +73,11 @@ function Header() {
   }
 
   return (
-    <header
-      className={`fixed w-full z-50 transition-all duration-300 backdrop-blur-sm ${isScrolled ? (isVisible ? "bg-black/80 shadow-md" : "bg-transparent") : "bg-black/90"
-        } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
-    >
+<header
+  className={`fixed top-[48px] w-full z-50 transition-all duration-300 backdrop-blur-sm ${
+    isScrolled ? (isVisible ? "bg-black/80 shadow-md" : "bg-transparent") : "bg-black/90"
+  } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+>
       <div className="container mx-auto px-4 py-2 flex justify-between items-center font-tempus">
         <Link href="/">
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
