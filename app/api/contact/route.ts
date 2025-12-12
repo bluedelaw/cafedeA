@@ -1,8 +1,6 @@
 import { Resend } from "resend"
 import { NextResponse } from "next/server"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const rateLimit = new Map<string, { count: number; timestamp: number }>()
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
 const MAX_REQUESTS_PER_WINDOW = 5 // Max 5 submissions per hour per IP
@@ -54,30 +52,46 @@ function isSpamMessage(message: string, email: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown"
 
+    console.log("[v0] Contact form submission from IP:", ip)
+
     if (isRateLimited(ip)) {
+      console.log("[v0] Rate limited")
       return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
     }
 
-    const { name, email, phone, subject, message, website } = await request.json()
+    const body = await request.json()
+    console.log("[v0] Request body:", JSON.stringify(body, null, 2))
+
+    const { name, email, phone, subject, message, website } = body
 
     if (website) {
-      // Silently accept but don't send (tricks bots into thinking it worked)
+      console.log("[v0] Honeypot triggered")
       return NextResponse.json({ success: true, id: "honeypot" })
     }
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
+      console.log("[v0] Missing required fields:", {
+        name: !!name,
+        email: !!email,
+        subject: !!subject,
+        message: !!message,
+      })
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
+      console.log("[v0] Invalid email:", email)
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 })
     }
 
     if (isSpamMessage(message, email)) {
+      console.log("[v0] Spam detected")
       return NextResponse.json(
         { error: "Your message was flagged as spam. Please contact us directly at 604-276-7800." },
         { status: 400 },
@@ -85,6 +99,7 @@ export async function POST(request: Request) {
     }
 
     if (message.length < 10 || message.length > 5000) {
+      console.log("[v0] Message length invalid:", message.length)
       return NextResponse.json({ error: "Message must be between 10 and 5000 characters" }, { status: 400 })
     }
 
@@ -96,6 +111,9 @@ export async function POST(request: Request) {
     }
 
     const emailSubject = `[Cafe de A] ${subjectLabels[subject] || "New Inquiry"} from ${name}`
+
+    console.log("[v0] Attempting to send email...")
+    console.log("[v0] RESEND_API_KEY present:", !!process.env.RESEND_API_KEY)
 
     const { data, error } = await resend.emails.send({
       from: "Cafe de A <noreply@cafedea.ca>",
@@ -179,13 +197,14 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      console.error("Resend error:", error)
+      console.error("[v0] Resend error:", error)
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
     }
 
+    console.log("[v0] Email sent successfully:", data?.id)
     return NextResponse.json({ success: true, id: data?.id })
   } catch (error) {
-    console.error("Contact API error:", error)
+    console.error("[v0] Contact API error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
