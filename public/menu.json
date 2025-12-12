@@ -1,0 +1,1557 @@
+{
+  "breakfast": {
+    "name": "Breakfast",
+    "chineseName": "早餐",
+    "subtitle": "1.套餐 (A+D $14.95, B+D $14.95, C+D $16.95)(奉送熱飲)",
+    "englishSubtitle": "1.Combo (Choice of A+D $14.95, B+D $14.95, C+D $16.95) (Hot Drink included)",
+    "sections": [
+      {
+        "id": "A",
+        "name": "Hong Kong Style",
+        "chineseName": "港式系列",
+        "price": "$12.95",
+        "description": "火腿或午餐肉或煙肉或臘皮腸\nHam or Luncheon Meat or Bacon or Sausage\n\n配: 雙蛋(可選:太陽蛋，反蛋，蛋全熟，炒蛋)\nwith: Two eggs (choice of: Sunny Side-up, Over Easy, Over Hard, Scramble)\n\n配: 多士或炸薯餅，或西多士(半份+$1)\nwith: Toast or Hash Brown or French Toast (Half +$1)"
+      },
+      {
+        "id": "B",
+        "name": "Omelette",
+        "chineseName": "蛋列系列",
+        "price": "$12.95",
+        "description": "芝士或蘑菇或火腿絲或雞絲或臘皮腸可選任何兩款\nCheese, Mushroom, Ham, Shredded Chicken, Sausage (Choice of Two Kinds)\n\n配: 多士或炸薯餅，或西多士(半份+$1.00)\nwith: Toast or Hash Brown or French Toast (Half +$1.00)"
+      },
+      {
+        "id": "C",
+        "name": "Healthy",
+        "chineseName": "營養系列",
+        "price": "$14.95",
+        "description": "香煎豬扒或香煎雞扒或吉列魚柳\nPan Fried Pork Chop or Chicken Steak or Cutlet Fish\n\n配: 雙蛋(可選:太陽蛋，反蛋，蛋全熟，炒蛋）\nwith: Two Eggs (Sunny Side-up or Over Easy or Over Hard or Scramble)\n\n配: 多士或炸薯餅，或西多士(半份 +$1.00)\nwith: Toast or Hash Brown or French Toast (Half +$1.00)"
+      },
+      {
+        "id": "D",
+        "name": "Noodle Soup",
+        "chineseName": "湯麵系列",
+        "price": "$13.95",
+        "note": "Pairs with Section A, B, or C",
+        "description": "沙嗲牛肉,或雪菜肉絲,或榨菜肉絲,或牛肉鬆,或火腿絲,或水餃,或雲吞或牛腩\nSatay Beef or Shredded Pork with Snow Veg. or Preserved Veg. or Minced Beef or Ham or Dumpling/Wonton or Beef Brisket\n\n配: 通粉或米粉或河粉或米線或出前一丁。(加$1.00)\nwith: Macaroni or Vermicelli or Noodle or Rice Noodle or Instant Noodle(+$1.00)"
+      },
+      {
+        "id": "2",
+        "name": "Noodle Soup (Hot Drink included)",
+        "chineseName": "湯麵系列(奉送熱飲)",
+        "price": "$13.95",
+        "description": "沙嗲牛肉或雪菜肉絲或榨菜肉絲或牛肉鬆或火腿絲或水餃或雲吞或牛腩或(雞扒)或豬扒)(加$3)\nSatay Beef or Shredded Pork with SnowVeg. or Presv. Veg. or Minced Beef or Ham or Dumpling or Wonton or Beef Brisket or (Chicken Steak or Pork Chop +$3)\n\n配: 通粉或米粉或河粉或米線或出前一丁(加$1)\nwith: Macaroni or Vermicelli or Noodle or Rice Noodleor Instant Noodle(+$1.00)"
+      },
+      {
+        "id": "3",
+        "name": "Sandwich (Choice of any two kinds below and hot drink included)",
+        "chineseName": "早餐三文治(可選以下任何兩款及奉送熱飲)",
+        "price": "$9.95",
+        "description": "雞蛋／蕃茄／火腿／芝士／午餐肉／鹹牛肉\nEgg, Tomato, Ham, Cheese, Luncheon Meat, Corn Beef."
+      },
+      {
+        "id": "4",
+        "name": "Congee Combo",
+        "chineseName": "生滾粥類套餐",
+        "price": "$9.95",
+        "description": "牛肉粥／碎牛粥／艇仔粥／魚片粥／北菇滑雞粥／皮蛋瘦肉粥\nBeef Congee, Minced Beef Congee, Sampan Seafood Congee, Sliced Fish Congee,Chicken & Chinese Mushroom Congee, Pork & Preserved Egg Congee.",
+        "subItems": [
+          {
+            "chineseName": "油條",
+            "name": "Chinese Donut",
+            "price": "$13.95"
+          },
+          {
+            "chineseName": "豉油王炒麵",
+            "name": "Pan Fried Noodle with Supreme Soya Sauce",
+            "price": "$14.95"
+          },
+          {
+            "chineseName": "香煎蘿蔔糕",
+            "name": "Pan Fried Raddish Cake",
+            "price": "$14.95"
+          },
+          {
+            "chineseName": "鹹肉棕",
+            "name": "Salty Pork Rice Wrap",
+            "price": "$14.95"
+          },
+          {
+            "chineseName": "混醬腸粉",
+            "name": "Hong Kong Style Rice Rolls w/Mixed Sauce",
+            "price": "$14.95"
+          }
+        ]
+      },
+      {
+        "id": "5",
+        "name": "Special",
+        "chineseName": "特點",
+        "price": "$9.95",
+        "description": "臘味排骨飯\nPreserved Meats & Sparerib in Black Bean Sauce onRice"
+      },
+      {
+        "id": "6",
+        "name": "Toast(Hot Drink included)",
+        "chineseName": "多士類(奉送熱飲)",
+        "items": [
+          {
+            "chineseName": "法式西多士",
+            "name": "French Toast",
+            "price": "$9.95"
+          },
+          {
+            "chineseName": "奶油多士",
+            "name": "Condensed Milk & Butter Toast",
+            "price": "$7.95"
+          },
+          {
+            "chineseName": "奶醬多士",
+            "name": "Condensed Milk & Peanut Butter Toast",
+            "price": "$7.95"
+          }
+        ]
+      }
+    ]
+  },
+  "lunch": {
+    "name": "Lunch",
+    "chineseName": "午餐",
+    "sections": [
+      {
+        "category": "Appetizer/Snack",
+        "chineseCategory": "前菜",
+        "items": [
+          {
+            "id": "101",
+            "chineseName": "雜菜春卷(2條)",
+            "name": "Assorted Vegetables Spring Roll (2 pcs)",
+            "price": "$6.00"
+          },
+          { "id": "102", "chineseName": "香煎鍋貼(8只)", "name": "Pan Fried Dumplings (8 pcs)", "price": "$9.95" },
+          { "id": "103", "chineseName": "招牌燒鵪鶉(2只)", "name": "Famous BBQ Quail (2 pcs)", "price": "$12.95" },
+          {
+            "id": "104",
+            "chineseName": "港式炸雞翼(6只)",
+            "name": "Deep Fried Chicken Wing (6 pcs)",
+            "price": "$12.95"
+          },
+          { "id": "105", "chineseName": "椒鹽豆腐", "name": "Crispy Salt & Pepper Tofu", "price": "$14.95" },
+          { "id": "106", "chineseName": "港式炸雞髀", "name": "Deep Fried Chicken Leg", "price": "$12.95" },
+          {
+            "id": "107",
+            "chineseName": "泰式燒雞沙律",
+            "name": "Chicken Fillet Salad in Thai Sauce",
+            "price": "$14.95"
+          },
+          { "id": "108", "chineseName": "香煎豬柳凱撒沙律", "name": "Pork Loin with Caesar Salad", "price": "$14.95" },
+          {
+            "id": "109",
+            "chineseName": "魚柳凱撒沙律",
+            "name": "Deep Fried Pacific Cod with Caesar Salad",
+            "price": "$14.95"
+          },
+          {
+            "id": "110",
+            "chineseName": "焗三文魚凱撒沙律",
+            "name": "Baked Salmon Fillet with Caesar Salad",
+            "price": "$16.95"
+          }
+        ]
+      },
+      {
+        "category": "Soup",
+        "chineseCategory": "湯",
+        "items": [
+          { "id": "121", "chineseName": "是日例湯", "name": "Soup of the day", "price": "$9.50" },
+          { "id": "122", "chineseName": "港式羅宋湯", "name": "Borscht in Hong Kong Style", "price": "$9.95" },
+          {
+            "id": "123",
+            "chineseName": "忌廉湯(雞/火腿/蘑菇)",
+            "name": "Cream Soup with (Chicken / Ham / Mushroom)",
+            "price": "$12.95"
+          },
+          { "id": "124", "chineseName": "雞茸粟米羹", "name": "Chicken & Corn Soup", "price": "$13.95" },
+          { "id": "125", "chineseName": "酸辣湯", "name": "Hot & Sour Soup", "price": "$15.95" },
+          { "id": "126", "chineseName": "海鮮忌廉湯", "name": "Seafood Cream Soup", "price": "$15.95" },
+          {
+            "id": "127",
+            "chineseName": "法式酥皮焗龍蝦湯",
+            "name": "French Baked Lobster Soup with Puff Pastry",
+            "price": "$14.95"
+          },
+          {
+            "id": "128",
+            "chineseName": "法式酥皮焗洋蔥湯",
+            "name": "French Baked Onion Soup with Puff Pastry",
+            "price": "$13.95"
+          },
+          { "id": "129", "chineseName": "蒜茸飽(件)", "name": "Garlic Bread (each)", "price": "$0.50" }
+        ],
+        "note": "忌廉湯加酥皮(+$4.00) Cream Soup with Puff(+$4.00)"
+      },
+      {
+        "category": "Curry Dishes",
+        "chineseCategory": "咖喱類",
+        "note": "奉送熱咖啡或奶茶，改凍飲+$1.50（加餐湯及麵包+$2.00）\nHot Tea or Coffee Included, Cold Drink +$1.50 (Add$2.00 for Soup & Bread)",
+        "items": [
+          { "id": "201", "chineseName": "咖喱牛肉飯", "name": "Curry Beef on Rice", "price": "$18.50" },
+          { "id": "202", "chineseName": "咖喱牛腩飯", "name": "Curry Beef Brisket on Rice", "price": "$18.50" },
+          { "id": "203", "chineseName": "咖喱雞飯", "name": "Curry Chicken on Rice", "price": "$18.50" },
+          { "id": "204", "chineseName": "咖喱牛脷飯", "name": "Curry Ox-Tongue on Rice", "price": "$18.95" },
+          {
+            "id": "205",
+            "chineseName": "咖喱吉列魚柳飯",
+            "name": "Curry Cutlet Fish Fillet on Rice",
+            "price": "$18.50"
+          },
+          { "id": "206", "chineseName": "咖喱吉列豬扒飯", "name": "Curry Cutlet Pork Chop on Rice", "price": "$18.50" },
+          { "id": "207", "chineseName": "咖喱雜菜飯", "name": "Curry Assorted Vegetable on Rice", "price": "$17.95" }
+        ]
+      },
+      {
+        "category": "Fried Rice",
+        "chineseCategory": "炒飯",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "211", "chineseName": "雜菜粒炒飯", "name": "Diced Vegetable Fried Rice", "price": "$17.95" },
+          { "id": "212", "chineseName": "叉燒炒飯", "name": "BBQ Pork Fried Rice", "price": "$18.50" },
+          { "id": "213", "chineseName": "海鮮蛋白炒飯", "name": "Seafood & Egg White Fried Rice", "price": "$19.95" },
+          { "id": "214", "chineseName": "蝦仁炒飯", "name": "Shrimp Fried Rice", "price": "$18.95" },
+          { "id": "215", "chineseName": "生炒牛肉飯", "name": "Minced Beef Fried Rice", "price": "$18.50" },
+          { "id": "216", "chineseName": "雞絲炒飯", "name": "Shredded Chicken Fried Rice", "price": "$18.50" },
+          { "id": "217", "chineseName": "揚州炒飯", "name": "BBQ Pork & Shrimp Fried Rice", "price": "$18.95" },
+          {
+            "id": "218",
+            "chineseName": "欖菜肉鬆炒飯",
+            "name": "Preserved Olive Vegetable and Pork Floss Fried Rice",
+            "price": "$18.95"
+          },
+          {
+            "id": "219",
+            "chineseName": "泰式菠蘿燒雞炒飯",
+            "name": "Thai-style Pineapple and Diced Chicken Fried Rice",
+            "price": "$18.95"
+          },
+          {
+            "id": "220",
+            "chineseName": "生炒臘味糯米飯",
+            "name": "Stir-Fried Glutinous Rice with Chinese Cured Meats",
+            "price": "$18.95"
+          },
+          {
+            "id": "221",
+            "chineseName": "鹹魚雞粒炒飯",
+            "name": "Salted Fish and Diced Chicken Fried Rice",
+            "price": "$18.95"
+          }
+        ]
+      },
+      {
+        "category": "Fried Noodle",
+        "chineseCategory": "炒粉麵",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          {
+            "id": "151",
+            "chineseName": "羅漢齋炒麵",
+            "name": "Buddha's Feast Chow Mein (Vegetarian)",
+            "price": "$18.95"
+          },
+          {
+            "id": "152",
+            "chineseName": "三絲炒麵",
+            "name": "Shredded Pork, BBQ Pork & Chicken Chow Mein",
+            "price": "$19.95"
+          },
+          {
+            "id": "153",
+            "chineseName": "豉椒雞球炒麵",
+            "name": "Chicken & Black Bean Sauce Chow Mein",
+            "price": "$19.95"
+          },
+          { "id": "154", "chineseName": "肉絲炒麵", "name": "Shredded Pork Chow Mein", "price": "$19.95" },
+          { "id": "155", "chineseName": "牛腩炒麵", "name": "Beef Brisket & Vegetable Chow Mein", "price": "$19.95" },
+          { "id": "156", "chineseName": "叉燒炒麵", "name": "BBQ Pork & Vegetable Chow Mein", "price": "$19.95" },
+          {
+            "id": "157",
+            "chineseName": "豉椒牛肉炒麵",
+            "name": "Beef & Black Bean Sauce Chow Mein",
+            "price": "$19.95"
+          },
+          {
+            "id": "158",
+            "chineseName": "沙嗲牛河",
+            "name": "Beef & Satay Sauce Chow Fun (Flat Wide Rice Noodle)",
+            "price": "$19.95"
+          },
+          {
+            "id": "159",
+            "chineseName": "乾炒鴨絲米",
+            "name": "Pan Fried Thin Rice Noodle w/Shredded BBQ Duck",
+            "price": "$19.95"
+          },
+          {
+            "id": "160",
+            "chineseName": "乾炒肉絲米",
+            "name": "Pan Fried Thin Rice Noodle w/Shredded Pork",
+            "price": "$19.95"
+          },
+          {
+            "id": "161",
+            "chineseName": "蝦醬乾炒牛河",
+            "name": "Pan Fried Sliced Beef & Shrimp Paste with Rice Noodle",
+            "price": "$19.95"
+          },
+          { "id": "162", "chineseName": "乾炒牛河", "name": "Stir-Fried Beef Rice Noodle", "price": "$19.95" },
+          {
+            "id": "163",
+            "chineseName": "星洲炒米",
+            "name": "Pan Fried Vermicelli in Singapore Style",
+            "price": "$19.95"
+          },
+          {
+            "id": "164",
+            "chineseName": "豉油王芽菜炒麵",
+            "name": "Pan Fried Noodle with Bean Spout",
+            "price": "$18.95"
+          },
+          {
+            "id": "165",
+            "chineseName": "檳城炒貴刁",
+            "name": "Pan Fried Rice Noodle in Penang Style",
+            "price": "$19.95"
+          },
+          {
+            "id": "166",
+            "chineseName": "雪菜火鴨絲炆米",
+            "name": "Preserved Vegetable Duck Meat Braised Thin Rice Noodle",
+            "price": "$19.95"
+          },
+          {
+            "id": "167",
+            "chineseName": "野菌金菇炆伊麵",
+            "name": "E-fu Noodle with Assorted Mushroom",
+            "price": "$18.95"
+          },
+          {
+            "id": "168",
+            "chineseName": "招牌炒麵",
+            "name": "House Special (Assorted Meat) Chow Mein",
+            "price": "$22.95"
+          },
+          { "id": "169", "chineseName": "海鮮炒麵", "name": "Seafood Chow Mein", "price": "$22.95" }
+        ],
+        "bottomNote": "改煎米粉+$5.00 Change to Pan Fried Vermicelli Add $5.00"
+      },
+      {
+        "category": "Baked Rice & Spaghetti",
+        "chineseCategory": "焗飯焗意粉",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 (加餐湯及麵包+$2.00)\nHot Tea or Coffee Included, Cold Drink +$1.50 (Add $2.00 for Soup & Bread)",
+        "items": [
+          {
+            "id": "131",
+            "chineseName": "芝士焗肉醬意粉",
+            "name": "Baked Spaghetti Bolognese & Cheese.",
+            "price": "$18.50"
+          },
+          {
+            "id": "132",
+            "chineseName": "芝士焗肉醬及肉腸意粉",
+            "name": "Baked Spaghetti Bolognese with Sausage & Cheese",
+            "price": "$18.50"
+          },
+          {
+            "id": "133",
+            "chineseName": "芝士白汁火腿菠蘿焗意粉",
+            "name": "Baked Spaghetti w/Ham Pineapple& Cheese in Cream Sauce",
+            "price": "$18.50"
+          },
+          {
+            "id": "134",
+            "chineseName": "椰香焗葡國雞飯",
+            "name": "Baked Coconut Chicken in Portuguese Style on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "135",
+            "chineseName": "茄汁焗牛脷飯",
+            "name": "Baked Ox-Tongue with Tomato Sauce on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "136",
+            "chineseName": "芝士莧菜焗魚柳飯",
+            "name": "Baked Amaranth Sole Fillet with Cheese on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "137",
+            "chineseName": "白汁焗海鮮飯",
+            "name": "Baked Seafood in Cream Sauce on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "138",
+            "chineseName": "咖喱焗雞扒飯",
+            "name": "Baked Curry Chicken Steak on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "139",
+            "chineseName": "白汁焗雜菜飯(可改茄汁)",
+            "name": "Baked Assorted Vegetable in Cream or Tomato Sauce on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "140",
+            "chineseName": "雙色焗蝦仁雞扒飯",
+            "name": "Baked Prawn & Chicken Rice w/Tomato & Cream Sauce on Rice",
+            "price": "$18.95"
+          },
+          {
+            "id": "141",
+            "chineseName": "鮮茄豬扒焗飯(可改雞扒)",
+            "name": "Baked Pork Chop (or Chicken Steak) with Tomato Sauce on Rice",
+            "price": "$18.50"
+          },
+          {
+            "id": "142",
+            "chineseName": "芝士白汁焗雞飯",
+            "name": "Baked Chicken Rice w/Cream Sauce & Cheese",
+            "price": "$18.50"
+          },
+          {
+            "id": "143",
+            "chineseName": "西班牙汁焗海鮮飯",
+            "name": "Baked Seafood on Rice in Spanish Style",
+            "price": "$19.95"
+          },
+          {
+            "id": "144",
+            "chineseName": "意大利汁焗海鮮長通粉",
+            "name": "Baked Seafood with Italian Sauce in Penne",
+            "price": "$19.95"
+          },
+          {
+            "id": "145",
+            "chineseName": "鮮茄牛脷焗意粉",
+            "name": "Ox-Tongue & Spaghetti in Tomato Sauce",
+            "price": "$19.95"
+          },
+          {
+            "id": "146",
+            "chineseName": "燒臘拼手肉焗意粉",
+            "name": "Roasted Pork Knuckle Spaghetti",
+            "price": "$19.95"
+          },
+          {
+            "id": "147",
+            "chineseName": "火腿蝦仁蘑菇焗意粉",
+            "name": "Prawn, Ham & Mushroom with Spaghetti",
+            "price": "$19.95"
+          },
+          {
+            "id": "148",
+            "chineseName": "香草汁三文魚長通粉",
+            "name": "Salmon & Penne in Herbs Sauce",
+            "price": "$19.95"
+          },
+          {
+            "id": "149",
+            "chineseName": "黑松露海鮮焗意粉",
+            "name": "Seafood and Truffle with Spaghetti",
+            "price": "$19.95"
+          }
+        ]
+      },
+      {
+        "category": "Noodle Soup",
+        "chineseCategory": "湯麵",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "181", "chineseName": "上湯雲吞(10只)", "name": "Wonton in Soup (10pcs)", "price": "$15.50" },
+          { "id": "182", "chineseName": "上湯水餃(8只)", "name": "Dumpling in Soup (8 pcs)", "price": "$15.50" },
+          { "id": "183", "chineseName": "雜菜湯麵", "name": "Assorted Vegetable & Noodle in Soup", "price": "$15.25" },
+          { "id": "184", "chineseName": "雲吞麵(6只)", "name": "Wonton & Noodle in Soup (6 pcs)", "price": "$16.25" },
+          {
+            "id": "185",
+            "chineseName": "水餃湯麵(5只)",
+            "name": "Dumpling & Noodle in Soup (5 pcs)",
+            "price": "$16.25"
+          },
+          {
+            "id": "186",
+            "chineseName": "柱侯牛腩湯麵",
+            "name": "Stewed Beef Brisket & Noodle in Soup",
+            "price": "$16.25"
+          },
+          {
+            "id": "187",
+            "chineseName": "雪菜肉絲湯米粉",
+            "name": "Preserved Vegetable & Minced Pork w/ Vermicelli in Soup",
+            "price": "$16.25"
+          },
+          {
+            "id": "188",
+            "chineseName": "榨菜肉絲湯米粉",
+            "name": "Chinese Pickle Minced Pork w/ Vermicelli in Soup",
+            "price": "$16.25"
+          },
+          { "id": "189", "chineseName": "叉燒湯麵", "name": "B.B.Q. Pork & Noodle in Soup", "price": "$16.95" },
+          { "id": "190", "chineseName": "燒鴨湯麵", "name": "B.B.Q. Duck & Noodle in Soup", "price": "$16.95" },
+          { "id": "191", "chineseName": "油雞湯麵", "name": "Soy Sauce Chicken & Noodle in Soup", "price": "$16.95" },
+          { "id": "192", "chineseName": "水餃雲吞麵", "name": "Dumpling & Wonton & Noodle in Soup", "price": "$16.95" },
+          {
+            "id": "193",
+            "chineseName": "雲吞牛腩麵",
+            "name": "Stewed Beef Brisket & Wonton & Noodle in Soup",
+            "price": "$16.95"
+          },
+          {
+            "id": "194",
+            "chineseName": "雪菜火鴨絲湯米",
+            "name": "Preserved Veg. & Duck Meat w / Vermicelli in Soup",
+            "price": "$16.95"
+          }
+        ],
+        "bottomNote": "**粉，麵及米粉同價** Noodle, Rice Noodle and Vermicelli Same Price"
+      },
+      {
+        "category": "Sandwiches",
+        "chineseCategory": "三文治",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "251", "chineseName": "奶油多士", "name": "Condensed Milk Toast", "price": "$7.95" },
+          { "id": "252", "chineseName": "法式西多士", "name": "French Thick Toast", "price": "$9.95" },
+          { "id": "253", "chineseName": "火腿蛋三文治", "name": "Ham & Egg Sandwich", "price": "$11.95" },
+          { "id": "254", "chineseName": "吞拿魚三文治", "name": "Tuna Sandwich", "price": "$11.95" },
+          { "id": "255", "chineseName": "鹹牛肉蛋三文治", "name": "Corn Beef & Egg Sandwich", "price": "$11.95" },
+          { "id": "256", "chineseName": "燒雞三文治", "name": "Roasted Chicken & Lettuce Sandwich", "price": "$12.95" },
+          { "id": "257", "chineseName": "公司三文治", "name": "House Sandwich", "price": "$15.95" }
+        ]
+      }
+    ]
+  },
+  "lunch-combo": {
+    "name": "Lunch Combo",
+    "chineseName": "午餐套餐",
+    "sections": [
+      {
+        "category": "Lunch Special Combo (Steamed Rice, Soup, and Hot Tea or Coffee included)",
+        "chineseCategory": "午餐客飯套餐（跟白飯，中湯及熱咖啡或茶）",
+        "note": "改凍飲+$1.50（Cold Drink +$1.50）",
+        "price": "$19.95",
+        "availableTime": "套餐套餐供應時間為11:00 am 至 5:00 pm\nLunch Special Combo available between 11:00 am to 5:00 pm",
+        "items": [
+          { "id": "261", "chineseName": "柱侯牛腩生菜", "name": "Beef Brisket Stew" },
+          { "id": "262", "chineseName": "紅燒豆腐", "name": "Fried Tofu in Oyster Sauce" },
+          { "id": "263", "chineseName": "豉汁豆仔雞球", "name": "Boneless Chicken & Green Beans & Black Bean Sauce" },
+          { "id": "264", "chineseName": "雙菇炒雞球", "name": "Boneless Chicken with Two Kinds of Mushrooms" },
+          { "id": "265", "chineseName": "百加利炒雞球", "name": "Sauteed Boneless Chicken with Broccoli" },
+          { "id": "266", "chineseName": "麻婆豆腐(牛)", "name": "Mapo Tofu with Beef" },
+          { "id": "267", "chineseName": "沙茶牛肉炒芥蘭", "name": "Stir Fried Gai Lan with Beef & Satay Sauce" },
+          { "id": "268", "chineseName": "百加利炒牛肉", "name": "Stir Fried Broccoli with Beef" },
+          { "id": "269", "chineseName": "豉汁豆仔炒牛肉", "name": "Beef & Green Bean in Black Bean Sauce" },
+          { "id": "270", "chineseName": "回鍋肉", "name": "Szechuan Pork & Cabbage (Spicy)" },
+          { "id": "271", "chineseName": "麻婆豆腐(豬)", "name": "Mapo Tofu with Pork" },
+          { "id": "272", "chineseName": "菠蘿咕嚕肉", "name": "Sweet & Sour Boneless Pork with Pineapple" },
+          {
+            "id": "273",
+            "chineseName": "豉汁涼瓜牛肉",
+            "name": "Stir-Fried Beef with Bitter Melon and Black Bean Sauce"
+          },
+          { "id": "274", "chineseName": "豆腐火腩", "name": "Braised Tofu and Crispy Pork Belly" },
+          { "id": "275", "chineseName": "涼瓜火腩", "name": "Stir-Fried Bitter Melon with Roast Pork Belly" }
+        ]
+      }
+    ]
+  },
+  "afternoon-tea": {
+    "name": "Afternoon Tea",
+    "chineseName": "下午茶",
+    "sections": [
+      {
+        "category": "Afternoon Tea",
+        "chineseCategory": "下午茶",
+        "note": "Hot Drink Included Cold Drink +$1.50 奉送熱飲改凍飲 +$1.50",
+        "items": [
+          {
+            "id": "501",
+            "chineseName": "香煎鍋貼",
+            "name": "Pan Fried Potstickers (6pcs) (Pork Gyoza)",
+            "price": "$9.95"
+          },
+          { "id": "502", "chineseName": "凱撒沙律", "name": "Caesar Salad", "price": "$9.95" },
+          {
+            "id": "503",
+            "chineseName": "意式香草燴青口",
+            "name": "Mussel in Italian Herb Sauce (10pcs)",
+            "price": "$11.95"
+          },
+          {
+            "id": "504",
+            "chineseName": "港式炸雞腿薯條",
+            "name": "Fried Chicken Drum Stick w/French Fries",
+            "price": "$12.95"
+          },
+          {
+            "id": "505",
+            "chineseName": "港式炸雞中翼",
+            "name": "Deep Fried Chicken Wings w/French Fries",
+            "price": "$12.95"
+          },
+          { "id": "506", "chineseName": "雞脆骨串燒", "name": "Chicken Gizzard Skewers (3pcs)", "price": "$12.95" },
+          { "id": "507", "chineseName": "五香牛肉串燒", "name": "Five Spices Beef Skewers (3pcs)", "price": "$12.95" },
+          {
+            "id": "508",
+            "chineseName": "沙嗲串燒豬/雞",
+            "name": "Assorted Satay Pork/Chicken Skewers (3pcs)",
+            "price": "$12.95"
+          },
+          { "id": "509", "chineseName": "孜然羊肉串燒", "name": "Cumin Powder Lamb Skewers (3pcs)", "price": "$13.95" },
+          { "id": "510", "chineseName": "鮮茄豬扒焗飯", "name": "Baked Pork Chop on Rice", "price": "$14.95" },
+          {
+            "id": "511",
+            "chineseName": "芝士白汁焗海鮮飯",
+            "name": "Baked Seafood on Rice w/Cheese in Cream Sauce",
+            "price": "$14.95"
+          },
+          {
+            "id": "512",
+            "chineseName": "芝士肉醬焗意粉",
+            "name": "Baked Cheese Spaghetti Bolognese",
+            "price": "$13.95"
+          },
+          {
+            "id": "513",
+            "chineseName": "鮮茄雞絲焗意粉",
+            "name": "Baked Shredded Chicken Spaghetti w/Tomato",
+            "price": "$13.95"
+          },
+          {
+            "id": "514",
+            "chineseName": "芝士白汁菠蘿火腿焗意粉",
+            "name": "Baked Ham & Pineapple Spaghetti w/Cheese in Cream Sauce",
+            "price": "$13.95"
+          },
+          {
+            "id": "515",
+            "chineseName": "白汁火腿雞絲焗意粉",
+            "name": "Ham & Shredded Chicken on Spaghetti in Cream Sauce",
+            "price": "$13.95"
+          },
+          { "id": "516", "chineseName": "香辣肉腸焗長通粉", "name": "Spicy Sausage on Penne", "price": "$14.95" },
+          {
+            "id": "517",
+            "chineseName": "咖喱吉列魚柳飯",
+            "name": "Cutlet Fish in Curry Sauce on Rice",
+            "price": "$14.95"
+          },
+          {
+            "id": "518",
+            "chineseName": "咖喱雞球/牛肉/牛腩飯",
+            "name": "Chicken/Sliced Beef/Beef Brisket in Curry Sauce on Rice",
+            "price": "$14.95"
+          },
+          { "id": "519", "chineseName": "鹹牛肉蛋三文治", "name": "Corn Beef & Egg Sandwich", "price": "$11.95" },
+          { "id": "520", "chineseName": "公司三文治伴薯條", "name": "Club Sandwich & French Fries", "price": "$14.95" },
+          {
+            "id": "521",
+            "chineseName": "雪菜肉絲炆米粉",
+            "name": "Braised Shredded Pork & Snow Veg. w/Rice Vermicelli",
+            "price": "$14.95"
+          },
+          {
+            "id": "522",
+            "chineseName": "香煎雞扒蛋公仔湯麵",
+            "name": "Pan Fried Chicken & Egg Instant Noodle Soup",
+            "price": "$15.95"
+          },
+          { "id": "523", "chineseName": "古列豬扒湯烏冬", "name": "Cutlet Pork Chop Udon in Soup", "price": "$15.95" }
+        ]
+      }
+    ]
+  },
+  "dinner": {
+    "name": "Dinner",
+    "chineseName": "晚餐",
+    "sections": [
+      {
+        "category": "Appetizer/Snack",
+        "chineseCategory": "前菜",
+        "items": [
+          {
+            "id": "301",
+            "chineseName": "雜菜春卷(2條)",
+            "name": "Assorted Vegetables Spring Roll (2 pcs)",
+            "price": "$6.00"
+          },
+          { "id": "302", "chineseName": "香煎鍋貼(8只)", "name": "Pan Fried Dumplings (8 pcs)", "price": "$9.95" },
+          { "id": "303", "chineseName": "招牌燒鵪鶉", "name": "Famous BBQ Quail (2 pcs)", "price": "$12.95" },
+          { "id": "304", "chineseName": "港式炸雞翼", "name": "Deep Fried Chicken Wing (6 pcs)", "price": "$12.95" },
+          { "id": "305", "chineseName": "椒鹽豆腐", "name": "Crispy Salt & Pepper Tofu", "price": "$14.95" },
+          { "id": "306", "chineseName": "港式炸雞髀", "name": "Deep Fried Chicken Leg", "price": "$12.95" },
+          {
+            "id": "307",
+            "chineseName": "泰式燒雞沙律",
+            "name": "Chicken Fillet Salad in Thai Sauce",
+            "price": "$14.95"
+          },
+          {
+            "id": "308",
+            "chineseName": "香煎豬柳凱撒沙律",
+            "name": "Pork Loin Cutlet with Caesar Salad",
+            "price": "$14.95"
+          },
+          {
+            "id": "309",
+            "chineseName": "魚柳凱撒沙律",
+            "name": "Deep Fried Pacific Cod with Caesar Salad",
+            "price": "$14.95"
+          },
+          {
+            "id": "310",
+            "chineseName": "焗三文魚凱撒沙律",
+            "name": "Baked Salmon Fillet with Caesar Salad",
+            "price": "$16.95"
+          }
+        ]
+      },
+      {
+        "category": "Soup",
+        "chineseCategory": "湯",
+        "items": [
+          { "id": "321", "chineseName": "是日例湯", "name": "Soup of the day", "price": "$9.50" },
+          { "id": "322", "chineseName": "港式羅宋湯", "name": "Borscht in Hong Kong Style", "price": "$9.95" },
+          {
+            "id": "323",
+            "chineseName": "忌廉湯(雞/火腿/蘑菇)",
+            "name": "Cream Soup with (Chicken, Ham, Mushroom)",
+            "price": "$12.95"
+          },
+          { "id": "324", "chineseName": "雞茸粟米羹", "name": "Chicken & Corn Soup", "price": "$13.95" },
+          { "id": "325", "chineseName": "酸辣湯", "name": "Hot & Sour Soup", "price": "$15.95" },
+          { "id": "326", "chineseName": "海鮮忌廉湯", "name": "Seafood Cream Soup", "price": "$15.95" },
+          {
+            "id": "327",
+            "chineseName": "法式酥皮焗龍蝦湯",
+            "name": "French Baked Lobster Soup with Puff Pastry",
+            "price": "$15.95"
+          },
+          {
+            "id": "328",
+            "chineseName": "法式酥皮焗洋蔥湯",
+            "name": "French Baked Onion Soup with Puff Pastry",
+            "price": "$13.95"
+          },
+          { "id": "329", "chineseName": "蒜茸飽(件)", "name": "Garlic Bread (each)", "price": "$0.50" }
+        ],
+        "note": "忌廉湯加酥皮(+$4.00) Cream Soup with Puff(+$4.00)"
+      },
+      {
+        "category": "Curry Dishes",
+        "chineseCategory": "咖喱類",
+        "note": "奉送熱咖啡或奶茶, 餐湯(凍飲 +$1.50), Hot coffee or Tea & Soup Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "461", "chineseName": "咖喱牛肉飯", "name": "Curry Beef on Rice", "price": "$20.95" },
+          { "id": "462", "chineseName": "咖喱牛腩飯", "name": "Curry Beef Brisket on Rice", "price": "$20.95" },
+          { "id": "463", "chineseName": "咖喱雞飯", "name": "Curry Chicken on Rice", "price": "$20.95" },
+          { "id": "464", "chineseName": "咖喱牛脷飯", "name": "Curry Ox-Tongue on Rice", "price": "$21.95" },
+          {
+            "id": "465",
+            "chineseName": "咖喱吉列魚柳飯",
+            "name": "Curry Cutlet Fish Fillet on Rice",
+            "price": "$20.95"
+          },
+          { "id": "466", "chineseName": "咖喱吉列豬扒飯", "name": "Curry Cutlet Pork Chop on Rice", "price": "$20.95" },
+          { "id": "467", "chineseName": "咖喱雜菜飯", "name": "Curry Assorted Vegetable on Rice", "price": "$19.95" }
+        ]
+      },
+      {
+        "category": "Lobster and BC Crab",
+        "chineseCategory": "龍蝦/BC蟹",
+        "note": "Seasonal Price 時價\n\n可選以下煮法 CHOICE OF FOLLOWING SEAFOOD COOKING:\n\n金蒜XO醬 Dry Garlic & XO Sauce | 上湯 Sauteed with Supreme Broth | 蒜蓉蒸 Steamed with Garlic Paste | 薑蒜 Ginger & Green Onion | 豉汁 Sauteed with Black Bean Sauce\n奶油 Butter Cream Sauce | 頭抽 Supreme Soy sauce | 椒鹽 Salted Pepper | 避風塘 Spicy Garlic & Onion (Hong Kong Style)\n\n可選配伊麵底或生麵底(加$10)Add $10 per order for E-fu Noodle or Egg Noodle",
+        "items": []
+      },
+      {
+        "category": "Noodle Soup",
+        "chineseCategory": "湯麵",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "331", "chineseName": "上湯雲吞(10只)", "name": "Wonton in Soup (10pcs)", "price": "$15.50" },
+          { "id": "332", "chineseName": "上湯水餃(8只)", "name": "Dumpling in Soup (8 pcs)", "price": "$15.50" },
+          { "id": "333", "chineseName": "雜菜湯麵", "name": "Assorted Vegetable & Noodle in Soup", "price": "$15.50" },
+          { "id": "334", "chineseName": "雲吞麵(6只)", "name": "Wonton & Noodle in Soup (6 pcs)", "price": "$16.25" },
+          {
+            "id": "335",
+            "chineseName": "水餃湯麵(5只)",
+            "name": "Dumpling & Noodle in Soup (5 pcs)",
+            "price": "$16.25"
+          },
+          {
+            "id": "336",
+            "chineseName": "柱侯牛腩湯麵",
+            "name": "Stewed Beef Brisket & Noodle in Soup",
+            "price": "$16.25"
+          },
+          {
+            "id": "337",
+            "chineseName": "雪菜肉絲湯米粉",
+            "name": "Preserved Vegetable & Minced Pork with Vermicelli in Soup",
+            "price": "$16.25"
+          },
+          {
+            "id": "338",
+            "chineseName": "榨菜肉絲湯米粉",
+            "name": "Chinese Pickle Minced Pork w/ Vermicelli in Soup",
+            "price": "$16.25"
+          },
+          { "id": "339", "chineseName": "叉燒湯麵", "name": "BBQ Pork & Noodle in Soup", "price": "$16.95" },
+          { "id": "340", "chineseName": "燒鴨湯麵", "name": "BBQ Duck & Noodle in Soup", "price": "$16.95" },
+          { "id": "341", "chineseName": "油雞湯麵", "name": "Soy Sauce Chicken & Noodle in Soup", "price": "$16.95" },
+          { "id": "342", "chineseName": "水餃雲吞麵", "name": "Dumpling & Wonton & Noodle in Soup", "price": "$16.95" },
+          {
+            "id": "343",
+            "chineseName": "雲吞牛腩麵",
+            "name": "Stewed Beef Brisket & Wonton & Noodle in Soup",
+            "price": "$16.95"
+          },
+          {
+            "id": "344",
+            "chineseName": "雪菜火鴨絲湯米",
+            "name": "Preserved Veg. & Duck Meat w / Vermicelli in Soup",
+            "price": "$16.95"
+          }
+        ],
+        "bottomNote": "**粉，麵及米粉同價** Noodle, Rice Noodle and Vermicelli Same Price"
+      },
+      {
+        "category": "Beef",
+        "chineseCategory": "牛肉類",
+        "items": [
+          { "id": "401", "chineseName": "麻婆豆腐(牛)", "name": "Mapo Tofu with Beef", "price": "$21.95" },
+          {
+            "id": "402",
+            "chineseName": "時菜炒牛肉",
+            "name": "Stir Fried SeasonalVegetable and Beef",
+            "price": "$23.95"
+          },
+          {
+            "id": "403",
+            "chineseName": "沙茶牛肉炒芥蘭",
+            "name": "Stir Fried Gai Lan and Beef in Satay Sauce",
+            "price": "$23.95"
+          },
+          {
+            "id": "404",
+            "chineseName": "黑椒蘑菇炒牛柳粒",
+            "name": "Stir-Fried Beef Cubes & Mushroom in Black Pepper Sauce",
+            "price": "$23.95"
+          },
+          { "id": "405", "chineseName": "百加利炒牛肉", "name": "Stir Fried Broccoli & Beef", "price": "$23.95" },
+          {
+            "id": "406",
+            "chineseName": "豉汁豆仔牛肉",
+            "name": "Beef & Green Beans in Black Bean Sauce",
+            "price": "$23.95"
+          },
+          {
+            "id": "407",
+            "chineseName": "孜然牛肉(辣)",
+            "name": "Pan Fried Beef with Spicy Sauce (Szechuan Style)",
+            "price": "$24.95"
+          },
+          {
+            "id": "408",
+            "chineseName": "豉汁涼瓜炒牛肉",
+            "name": "Stir-Fried Beef & Bitter Melon in Black Bean Sauce",
+            "price": "$23.95"
+          }
+        ]
+      },
+      {
+        "category": "Pork",
+        "chineseCategory": "豬肉類",
+        "items": [
+          { "id": "411", "chineseName": "回鍋肉", "name": "Sichuan Style Pork & Cabbage (Spicy)", "price": "$21.95" },
+          { "id": "412", "chineseName": "麻婆豆腐(豬)", "name": "Mapo Tofu with Pork", "price": "$21.95" },
+          { "id": "413", "chineseName": "蒜子蜜汁骨", "name": "Spare Ribs in Honey Garlic Sauce", "price": "$22.95" },
+          {
+            "id": "414",
+            "chineseName": "京都肉排",
+            "name": "Deep Fried Pork Chop with Gourmet Sauce",
+            "price": "$23.95"
+          },
+          {
+            "id": "415",
+            "chineseName": "椒鹽焗肉排",
+            "name": "Deep Fried Pork Chop with Spicy Rock Salt",
+            "price": "$23.95"
+          },
+          {
+            "id": "416",
+            "chineseName": "菠蘿咕嚕肉",
+            "name": "Sweet & Sour Boneless Pork with Pineapple",
+            "price": "$23.95"
+          }
+        ]
+      },
+      {
+        "category": "Seafood",
+        "chineseCategory": "海鮮類",
+        "items": [
+          { "id": "421", "chineseName": "時菜斑球", "name": "Pan Fried Sliced Basa with Vegetable", "price": "$23.95" },
+          {
+            "id": "422",
+            "chineseName": "甜酸斑塊",
+            "name": "Deep Fried Basa Cutlet in Sweet & Sour Sauce",
+            "price": "$23.95"
+          },
+          { "id": "423", "chineseName": "珍珠斑塊", "name": "Deep Fried Basa Cutlet in Corn Sauce", "price": "$23.95" },
+          { "id": "424", "chineseName": "椒鹽大蝦", "name": "Crispy Salt & Pepper Prawns", "price": "$24.95" },
+          {
+            "id": "425",
+            "chineseName": "薑蔥頭抽哈利拔",
+            "name": "Stir-Fried Halibut with Ginger, Scallion with Premium Soy Sauce",
+            "price": "$23.95"
+          },
+          {
+            "id": "426",
+            "chineseName": "珊瑚玉子豆腐",
+            "name": "Braised Tamago Tofu with Seafood & Egg White",
+            "price": "$23.95"
+          }
+        ]
+      },
+      {
+        "category": "Baked Rice & Spaghetti",
+        "chineseCategory": "焗飯焗意粉",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 (跟餐湯) Hot Tea or Coffee & Soup Included (Cold Drink +$1.50)",
+        "items": [
+          {
+            "id": "471",
+            "chineseName": "芝士焗肉醬意粉",
+            "name": "Baked Spaghetti Bolognese & Cheese",
+            "price": "$20.95"
+          },
+          {
+            "id": "472",
+            "chineseName": "芝士焗肉醬及肉腸意粉",
+            "name": "Baked Spaghetti Bolognese with Sausage & Cheese",
+            "price": "$20.95"
+          },
+          {
+            "id": "473",
+            "chineseName": "芝士白汁火腿菠蘿焗意粉",
+            "name": "Baked Spaghetti w/Ham Pineapple & Cheese in Cream Sauce",
+            "price": "$20.95"
+          },
+          {
+            "id": "474",
+            "chineseName": "椰香焗葡國雞飯",
+            "name": "Baked Coconut Chicken in Portuguese Style on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "475",
+            "chineseName": "茄汁焗牛脷飯",
+            "name": "Baked Ox-Tongue with Tomato Sauce on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "476",
+            "chineseName": "芝士莧菜焗魚柳飯",
+            "name": "Baked Amaranth Sole Fillet with Cheese on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "477",
+            "chineseName": "白汁焗海鮮飯",
+            "name": "Baked Seafood in Cream Sauce on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "478",
+            "chineseName": "咖喱焗雞扒飯",
+            "name": "Baked Curry Chicken Steak on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "479",
+            "chineseName": "白汁焗雜菜飯 (可改茄汁)",
+            "name": "Baked Assorted Vegetable in Cream or Tomato Sauce on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "480",
+            "chineseName": "雙色焗蝦仁雞扒飯",
+            "name": "Baked Prawn & Chicken Rice w/Tomato & Cream Sauce on Rice",
+            "price": "$21.95"
+          },
+          {
+            "id": "481",
+            "chineseName": "鮮茄豬扒焗飯(可改雞扒)",
+            "name": "Baked Pork Chop (or Chicken Steak) with Tomato Sauce on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "482",
+            "chineseName": "芝士白汁焗雞飯",
+            "name": "Baked Chicken Rice w/Cream Sauce & Cheese",
+            "price": "$20.95"
+          },
+          {
+            "id": "483",
+            "chineseName": "西班牙汁焗海鮮飯",
+            "name": "Baked Seafood on Rice in Spanish Style",
+            "price": "$21.95"
+          },
+          {
+            "id": "484",
+            "chineseName": "意大利汁焗海鮮長通粉",
+            "name": "Baked Seafood with Italian Sauce in Penne",
+            "price": "$21.95"
+          },
+          {
+            "id": "485",
+            "chineseName": "鮮茄牛脷焗意粉",
+            "name": "Ox-Tongue & Spaghetti in Tomato Sauce",
+            "price": "$21.95"
+          },
+          {
+            "id": "486",
+            "chineseName": "燒臘豬手肉焗意粉",
+            "name": "Roasted Pork Knuckle Spaghetti",
+            "price": "$21.95"
+          },
+          {
+            "id": "487",
+            "chineseName": "火腿蝦仁蘑菇焗意粉",
+            "name": "Prawn, Ham & Mushroom with Spaghetti",
+            "price": "$21.95"
+          },
+          {
+            "id": "488",
+            "chineseName": "香草汁三文魚長通粉",
+            "name": "Salmon & Penne in Herbs Sauce",
+            "price": "$21.95"
+          },
+          {
+            "id": "489",
+            "chineseName": "黑松露海鮮焗意粉",
+            "name": "Seafood and Truffle with Spaghetti",
+            "price": "$22.95"
+          }
+        ]
+      },
+      {
+        "category": "Hot Pot",
+        "chineseCategory": "煲仔菜",
+        "items": [
+          {
+            "id": "351",
+            "chineseName": "沙嗲粉絲雜菜煲",
+            "name": "Mixed Veggies & Clear Noodles in Satay Sauce",
+            "price": "$19.95"
+          },
+          { "id": "352", "chineseName": "柱侯牛腩煲", "name": "Beef Brisket Stew", "price": "$21.95" },
+          {
+            "id": "353",
+            "chineseName": "魚香茄子煲",
+            "name": "Eggplant & Shredded Pork in Spicy Sauce",
+            "price": "$21.95"
+          },
+          {
+            "id": "354",
+            "chineseName": "啫啫雞煲",
+            "name": "Sizzling Chicken (Boneless) with Chinese Sausage",
+            "price": "$21.95"
+          },
+          { "id": "355", "chineseName": "八珍豆腐煲", "name": "Mixed Meat with Fried To-fu", "price": "$22.95" },
+          {
+            "id": "356",
+            "chineseName": "沙嗲肥牛粉絲煲",
+            "name": "Satay Fatty Beef & Clear Noodles",
+            "price": "$22.95"
+          },
+          { "id": "357", "chineseName": "豆腐火腩煲", "name": "Braised Tofu & Roast Pork Belly", "price": "$21.95" },
+          {
+            "id": "358",
+            "chineseName": "鹹魚雞粒豆腐煲",
+            "name": "Braised Salted Fish and Diced Chicken Tofu",
+            "price": "$21.95"
+          },
+          { "id": "359", "chineseName": "涼瓜火腩煲", "name": "Braised Bitter Melon & Pork Belly", "price": "$22.95" },
+          {
+            "id": "360",
+            "chineseName": "蝦乾肉片菜心煲",
+            "name": "Braised Dried Shrimp, Pork & Choy Sum",
+            "price": "$22.95"
+          }
+        ]
+      },
+      {
+        "category": "Vegetable",
+        "chineseCategory": "蔬菜類",
+        "items": [
+          {
+            "id": "371",
+            "chineseName": "蒜蓉炒時菜",
+            "name": "Stir-Fried with Garlic Sauce Veggie",
+            "price": "$20.95"
+          },
+          { "id": "372", "chineseName": "紅燒豆腐", "name": "Fried Tofu in Oyster Sauce", "price": "$20.95" },
+          { "id": "373", "chineseName": "腐皮浸菜苗", "name": "Bean Curd Skin with Bok Choy", "price": "$20.95" },
+          {
+            "id": "374",
+            "chineseName": "南乳炆粗齋",
+            "name": "Braised Vegetable with Preserved Bean Curd Sauce",
+            "price": "$20.95"
+          },
+          { "id": "375", "chineseName": "竹笙羅漢齋", "name": "Bamboo Pith Buddha's Feast", "price": "$20.95" },
+          {
+            "id": "376",
+            "chineseName": "椒絲腐乳西生菜",
+            "name": "Lettuce Stir-Fry with Chilli and Preserved Bean Curd",
+            "price": "$20.95"
+          },
+          { "id": "377", "chineseName": "乾煸四季豆", "name": "Sichuan Dry-Fried Green Beans", "price": "$20.95" },
+          {
+            "id": "378",
+            "chineseName": "臘味炒台灣椰菜花",
+            "name": "Stir-Fried Cauliflower with Cured Meats",
+            "price": "$23.95"
+          },
+          {
+            "id": "379",
+            "chineseName": "金菇扒玉子豆腐",
+            "name": "Braised Egg Tofu with Enoki Mushrooms in Savory Sauce",
+            "price": "$22.95"
+          },
+          {
+            "id": "380",
+            "chineseName": "蝦醬火腩炒台灣椰菜花",
+            "name": "Stir-Fried Cauliflower with Pork Belly and Shrimp Paste",
+            "price": "$23.95"
+          }
+        ]
+      },
+      {
+        "category": "Chicken",
+        "chineseCategory": "雞類",
+        "items": [
+          {
+            "id": "391",
+            "chineseName": "豉汁豆仔雞球",
+            "name": "Boneless Chicken & Bean in Black Bean Sauce",
+            "price": "$21.95"
+          },
+          {
+            "id": "392",
+            "chineseName": "雙菇雞球",
+            "name": "Boneless Chicken w/Two kinds of Mushrooms",
+            "price": "$21.95"
+          },
+          {
+            "id": "393",
+            "chineseName": "宮保雞丁",
+            "name": "Diced Chicken w/Peanuts & Green Pepper In Spicy Sauce",
+            "price": "$21.95"
+          },
+          {
+            "id": "394",
+            "chineseName": "腰果雞丁",
+            "name": "Diced Chicken w/Cashew Nuts & Diced Vegetables",
+            "price": "$21.95"
+          },
+          { "id": "395", "chineseName": "甜酸雞球", "name": "Sweet & Sour Sliced Chicken", "price": "$21.95" },
+          {
+            "id": "396",
+            "chineseName": "時菜雞球",
+            "name": "Sautéed Seasonal Vegetable with Sliced Chicken",
+            "price": "$21.95"
+          }
+        ]
+      },
+      {
+        "category": "Fried Rice",
+        "chineseCategory": "炒飯",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)",
+        "items": [
+          { "id": "431", "chineseName": "雜菜粒炒飯", "name": "Diced Vegetable Fried Rice", "price": "$17.95" },
+          { "id": "432", "chineseName": "蘑菇炒飯", "name": "Mushroom Fried Rice", "price": "$17.95" },
+          { "id": "433", "chineseName": "叉燒炒飯", "name": "BBQ Pork Fried Rice", "price": "$18.95" },
+          { "id": "434", "chineseName": "海鮮蛋白炒飯", "name": "Seafood & Egg White Fried Rice", "price": "$19.95" },
+          { "id": "435", "chineseName": "蝦仁炒飯", "name": "Shrimp Fried Rice", "price": "$18.95" },
+          { "id": "436", "chineseName": "牛肉炒飯", "name": "Minced Beef Fried Rice", "price": "$18.95" },
+          { "id": "437", "chineseName": "雞絲炒飯", "name": "Shredded Chicken Fried Rice", "price": "$18.95" },
+          { "id": "438", "chineseName": "揚州炒飯", "name": "BBQ Pork & Shrimp Fried Rice", "price": "$18.95" },
+          {
+            "id": "493",
+            "chineseName": "欖菜肉鬆炒飯",
+            "name": "Preserved Olive Vegetable and Pork Floss Fried Rice",
+            "price": "$18.95"
+          },
+          {
+            "id": "494",
+            "chineseName": "泰式菠蘿燒雞炒飯",
+            "name": "Thai-style Pineapple and Diced Chicken Fried Rice",
+            "price": "$18.95"
+          },
+          {
+            "id": "495",
+            "chineseName": "生炒臘味糯米飯",
+            "name": "Stir-Fried Glutinous Rice with Chinese Cured Meats",
+            "price": "$18.95"
+          },
+          {
+            "id": "496",
+            "chineseName": "鹹魚雞粒炒飯",
+            "name": "Salted Fish and Diced Chicken Fried Rice",
+            "price": "$18.95"
+          }
+        ]
+      },
+      {
+        "category": "Fried Noodle",
+        "chineseCategory": "炒粉麵",
+        "note": "奉送熱咖啡或奶茶, 改凍飲加$1.50 Hot Tea or Coffee Included (Cold Drink +$1.50)\n改煎米粉+$5.00 Change to Pan Fried Vermicelli Add $5.00",
+        "items": [
+          {
+            "id": "441",
+            "chineseName": "羅漢齋炒麵",
+            "name": "Buddha's Feast Chow Mein (Vegetarian)",
+            "price": "$18.95"
+          },
+          {
+            "id": "442",
+            "chineseName": "三絲炒麵",
+            "name": "Shredded Pork, BBQ Pork & Chicken Chow Mein",
+            "price": "$19.95"
+          },
+          {
+            "id": "443",
+            "chineseName": "豉椒雞球炒麵",
+            "name": "Chicken & Black Bean Sauce Chow Mein",
+            "price": "$19.95"
+          },
+          { "id": "444", "chineseName": "肉絲炒麵", "name": "Shredded Pork Chow Mein", "price": "$19.95" },
+          { "id": "445", "chineseName": "牛腩炒麵", "name": "Beef Brisket & Vegetable Chow Mein", "price": "$19.95" },
+          { "id": "446", "chineseName": "叉燒炒麵", "name": "BBQ Pork & Vegetable Chow Mein", "price": "$19.95" },
+          {
+            "id": "447",
+            "chineseName": "豉椒牛肉炒麵",
+            "name": "Beef & Black Bean Sauce Chow Mein",
+            "price": "$19.95"
+          },
+          {
+            "id": "448",
+            "chineseName": "沙嗲牛河",
+            "name": "Fried Rice Noodle with Beef and Satay Sauce",
+            "price": "$19.95"
+          },
+          { "id": "449", "chineseName": "乾炒牛河", "name": "Pan Fried Rice Noodle with Beef", "price": "$19.95" },
+          {
+            "id": "450",
+            "chineseName": "乾炒鴨絲米",
+            "name": "Pan Fried Thin Rice Noodle w/Shredded BBQ Duck",
+            "price": "$19.95"
+          },
+          {
+            "id": "451",
+            "chineseName": "乾炒肉絲米",
+            "name": "Pan Fried Vermicelli w/ Shredded Pork",
+            "price": "$19.95"
+          },
+          {
+            "id": "452",
+            "chineseName": "蝦醬乾炒牛河",
+            "name": "Pan Fried Sliced Beef & Shrimp Paste with Rice Noodle",
+            "price": "$19.95"
+          },
+          {
+            "id": "453",
+            "chineseName": "星洲炒米",
+            "name": "Pan Fried Vermicelli in Singapore Style",
+            "price": "$19.95"
+          },
+          {
+            "id": "454",
+            "chineseName": "豉油王芽菜炒麵",
+            "name": "Pan Fried Noodle with Bean Spout",
+            "price": "$18.95"
+          },
+          {
+            "id": "455",
+            "chineseName": "檳城炒貴刁",
+            "name": "Pan Fried Rice Noodle in Penang Style",
+            "price": "$20.95"
+          },
+          {
+            "id": "456",
+            "chineseName": "雪菜火鴨絲炆米",
+            "name": "Preserved Vegetable Duck Meat Braised Vermicelli",
+            "price": "$19.95"
+          },
+          {
+            "id": "457",
+            "chineseName": "野菌金菇炆伊麵",
+            "name": "E-Fu Noodle with Assorted Mushroom",
+            "price": "$19.95"
+          },
+          { "id": "458", "chineseName": "招牌炒麵", "name": "House Special Chow Mein", "price": "$22.95" },
+          { "id": "459", "chineseName": "海鮮炒麵", "name": "Seafood Chow Mein", "price": "$22.95" }
+        ]
+      }
+    ]
+  },
+  "bbq": {
+    "name": "BBQ Combo",
+    "chineseName": "雙拼打寶飯套餐",
+    "price": "$19.95",
+    "note": "Includes Soup + Hot Coffee or Tea\n包括湯 + 熱飲咖啡或茶\nCold Drinks +$1.50 冷飲 +$1.50",
+    "subtitle": "BBQ Combo (Any 2 Items)",
+    "subtitleChinese": "燒味任選2款",
+    "items": [
+      { "id": "1", "chineseName": "叉燒", "name": "B.B.Q Pork" },
+      { "id": "2", "chineseName": "燒鴨", "name": "B.B.Q Duck" },
+      { "id": "3", "chineseName": "燒肉", "name": "Roasted Pork Belly" },
+      { "id": "4", "chineseName": "豉油雞", "name": "Soya Sauce Chicken" },
+      { "id": "5", "chineseName": "文昌雞", "name": "House Special Chicken" },
+      { "id": "6", "chineseName": "豉油鴨腿", "name": "Soy Sauce Duck Leg" }
+    ],
+    "sections": [
+      {
+        "category": "Barbecue",
+        "chineseCategory": "燒臘類",
+        "items": [
+          {
+            "id": "230",
+            "chineseName": "明爐燒鴨",
+            "name": "B.B.Q Duck",
+            "halfPrice": "$23.50",
+            "wholePrice": "$46.00"
+          },
+          {
+            "id": "231",
+            "chineseName": "椒子油雞",
+            "name": "Soya Sauce Chicken",
+            "halfPrice": "$15.50",
+            "wholePrice": "$29.00"
+          },
+          {
+            "id": "232",
+            "chineseName": "馳名文昌雞",
+            "name": "House Special Chicken",
+            "halfPrice": "$18.50",
+            "wholePrice": "$37.00"
+          },
+          {
+            "id": "233",
+            "chineseName": "蜜汁叉燒",
+            "name": "B.B.Q Pork",
+            "price": "$14.95"
+          },
+          {
+            "id": "235",
+            "chineseName": "脆皮燒肉",
+            "name": "Roasted Pork Belly",
+            "price": "$23.95"
+          },
+          {
+            "id": "236",
+            "chineseName": "燒味雙拼",
+            "name": "Two Kinds of B.B.Q Combination",
+            "price": "$24.95"
+          },
+          {
+            "id": "237",
+            "chineseName": "燒味三拼",
+            "name": "Three Kinds of B.B.Q Combination",
+            "price": "$28.95"
+          }
+        ]
+      },
+      {
+        "category": "Barbecue on Rice/Noodle",
+        "chineseCategory": "燒臘粉麵飯",
+        "note": "白飯改炒飯加$3.00 Add$3.00 per order to replace with fried rice\n改湯粉麵加$1.50 Add$1.50 per order change to Noodle",
+        "items": [
+          {
+            "id": "238",
+            "chineseName": "燒鴨飯",
+            "name": "B.B.Q. Duck on Rice",
+            "price": "$15.95"
+          },
+          {
+            "id": "239",
+            "chineseName": "豉油雞飯",
+            "name": "Soya Sauce Chicken on Rice",
+            "price": "$15.95"
+          },
+          {
+            "id": "240",
+            "chineseName": "叉燒飯",
+            "name": "B.B.Q Roasted Pork on Rice",
+            "price": "$15.95"
+          },
+          {
+            "id": "241",
+            "chineseName": "燒肉飯",
+            "name": "Crispy Pork on Rice",
+            "price": "$16.95"
+          },
+          {
+            "id": "242",
+            "chineseName": "燒味孖寶飯",
+            "name": "Two Kinds of B.B.Q on Rice",
+            "price": "$17.95"
+          },
+          {
+            "id": "350",
+            "chineseName": "燒味三寶飯",
+            "name": "Three Kinds of B.B.Q on Rice",
+            "price": "$20.95"
+          },
+          {
+            "id": "243",
+            "chineseName": "文昌雞飯",
+            "name": "House Special Chicken on Rice",
+            "price": "$15.95"
+          }
+        ]
+      }
+    ]
+  },
+  "drinks": {
+    "name": "Drinks",
+    "chineseName": "飲品",
+    "sections": [
+      {
+        "category": "Hot & Cold Beverages",
+        "chineseCategory": "冷熱飲品",
+        "items": [
+          {
+            "chineseName": "港式奶茶",
+            "name": "Hong Kong Style Milk Tea",
+            "hotPrice": "$3.50",
+            "coldPrice": "$4.50"
+          },
+          {
+            "chineseName": "港式咖啡",
+            "name": "Hong Kong Style Coffee",
+            "hotPrice": "$3.50",
+            "coldPrice": "$4.50"
+          },
+          {
+            "chineseName": "港式鴛鴦",
+            "name": "Hong Kong Style Milk Tea & Coffee",
+            "hotPrice": "$3.50",
+            "coldPrice": "$4.50"
+          },
+          { "chineseName": "西式咖啡", "name": "Local Coffee", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "檸檬茶", "name": "Lemon Tea", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "檸檬水", "name": "Lemonade", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "檸檬蜜糖", "name": "Lemon Honey", "hotPrice": "$3.75", "coldPrice": "$4.50" },
+          { "chineseName": "檸檬可樂", "name": "Lemon Coke", "coldPrice": "$3.50" },
+          {
+            "chineseName": "檸檬可樂，加薑",
+            "name": "Lemon Coke+ Ginger",
+            "hotPrice": "$5.00",
+            "coldPrice": "$4.50"
+          },
+          { "chineseName": "檸檬雪碧", "name": "Lemon Sprite", "coldPrice": "$3.50" },
+          { "chineseName": "檸檬利賓納", "name": "Lemon Ribena", "coldPrice": "$4.50" },
+          {
+            "chineseName": "檸檬利賓納+七喜",
+            "name": "Lemon Ribena +7up",
+            "hotPrice": "$5.50",
+            "coldPrice": "$5.00"
+          },
+          { "chineseName": "杏仁霜", "name": "Almond Milk", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "阿華田", "name": "Ovaltine", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "朱古力", "name": "Hot Chocolate", "hotPrice": "$3.50", "coldPrice": "$4.50" },
+          { "chineseName": "蘋果汁", "name": "Apple Juice", "coldPrice": "$3.50" },
+          { "chineseName": "紅豆冰", "name": "Red Bean with Ice", "coldPrice": "$5.95" },
+          { "chineseName": "紅豆冰加雪糕", "name": "Red Bean with Ice Cream", "coldPrice": "$6.95" },
+          { "chineseName": "可樂", "name": "Coke", "coldPrice": "$2.50" },
+          { "chineseName": "雪碧", "name": "Sprite", "coldPrice": "$2.50" },
+          { "chineseName": "可樂加雪糕", "name": "Coke with Ice Cream", "coldPrice": "$4.00" },
+          { "chineseName": "雪碧加雪糕", "name": "Sprite with Ice Cream", "coldPrice": "$4.00" }
+        ]
+      },
+      {
+        "category": "Refreshing Series",
+        "chineseCategory": "爽爽凍捏打系列",
+        "price": "$5.99",
+        "subtitle": "REFRESHING SERIES",
+        "items": [
+          { "id": "801", "chineseName": "招牌手打檸檬茶", "name": "Signature Smashed Lemon Tea" },
+          { "id": "802", "chineseName": "茉莉冰塔黑加侖茶", "name": "Jasmine Frostbloom Blackcurrant Tea" },
+          { "id": "803", "chineseName": "鳳梨檸檬茶", "name": "Pineapple Zing Lemon Tea" },
+          { "id": "804", "chineseName": "鮮橙檸檬茶", "name": "Citrus Burst Lemon Tea" },
+          { "id": "805", "chineseName": "芒果檸檬茶", "name": "Mango Tango Lemon Tea" },
+          { "id": "806", "chineseName": "百香果檸檬茶", "name": "Passion Fruit Lemon Tea" },
+          { "id": "821", "chineseName": "利賓納檸檬氣泡茶", "name": "Ribena Lemon Fizz Tea" },
+          { "id": "822", "chineseName": "鴨屎香檸檬氣泡茶", "name": "Phoenix Zest Lemon Fizz Tea" },
+          { "id": "823", "chineseName": "山茶花檸檬氣泡茶", "name": "Camellia Breeze Lemon Fizz Tea" }
+        ]
+      },
+      {
+        "category": "Smoothie",
+        "chineseCategory": "冰沙",
+        "price": "$5.99",
+        "items": [
+          { "id": "831", "chineseName": "芒果冰沙", "name": "Mango Monsoon Smoothie" },
+          { "id": "832", "chineseName": "荔枝冰沙", "name": "Lychee Frost Vortex Smoothie" },
+          { "id": "833", "chineseName": "雜果冰沙", "name": "Tropical Tornado Smoothie" },
+          { "id": "834", "chineseName": "水蜜桃冰沙", "name": "Peach Blush Frost Swirl Smoothie" },
+          { "id": "835", "chineseName": "百香果冰沙", "name": "Passion Fruit Smoothie" },
+          { "id": "836", "chineseName": "芒椰冰沙", "name": "Mango Coconut Jelly Smoothie" }
+        ]
+      },
+      {
+        "category": "Milkshakes & Tea",
+        "chineseCategory": "奶昔及茶",
+        "price": "$5.99",
+        "items": [
+          { "id": "841", "chineseName": "朱古力奶昔", "name": "Chocolate Milkshake" },
+          { "id": "842", "chineseName": "士多啤梨奶昔", "name": "Strawberry Milkshake" },
+          { "id": "843", "chineseName": "羅漢果茶", "name": "Monk Fruit Tea" },
+          { "id": "844", "chineseName": "菊花蜜", "name": "Chrysanthemum Honey Tea" }
+        ],
+        "note": "額外椰果, 紅豆, 涼粉 或 珍珠 +$0.75 Add Coconut Jelly or Red Beans or Chinese Jelly Noodles or Tapioca Pearls +$0.75"
+      },
+      {
+        "category": "Beer",
+        "chineseCategory": "啤酒",
+        "items": [
+          { "chineseName": "喜力啤", "name": "Heineken", "size": "355ml", "price": "$6.50" },
+          { "chineseName": "青島啤酒", "name": "Tsingtao", "size": "355ml", "price": "$6.50" },
+          { "chineseName": "Canadians", "name": "Canadians", "size": "355ml", "price": "$5.50" },
+          { "chineseName": "Kokanee", "name": "Kokanee", "size": "355ml", "price": "$5.50" },
+          { "chineseName": "Coors Light", "name": "Coors Light", "size": "355ml", "price": "$5.50" }
+        ]
+      }
+    ]
+  },
+  "specials": {
+    "name": "Specials",
+    "chineseName": "特色菜",
+    "type": "posters",
+    "posters": [
+      {
+        "image": "/images/Special/holiday-special.webp",
+        "alt": "Special Promotion 1"
+      },
+      {
+        "image": "/images/Special/lamb-hotpot-special.webp",
+        "alt": "Special Promotion 2"
+      },
+      {
+        "image": "/images/Special/weekday-special.webp",
+        "alt": "Special Promotion 3"
+      }
+    ]
+  }
+}

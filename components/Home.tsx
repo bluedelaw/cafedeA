@@ -1,7 +1,8 @@
 "use client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Clock, MapPin, ChevronDown, Utensils } from "lucide-react"
+import { MapPin, ChevronDown, Sparkles, Phone, Mail, UtensilsCrossed, CalendarDays } from "lucide-react"
+import InquiryForm from "./InquiryForm"
 
 function Home() {
   const router = useRouter()
@@ -21,13 +22,48 @@ function Home() {
     { category: "BBQ", image: "/images/BBQ/BBQ1.jpg" },
     { category: "Drinks", image: "/images/Drink/Drink1.webp" },
     // { category: "Specials", image: "/images/Special/Special1.webp" },
-
   ]
 
-  const specials = [
-    { title: "Honey Glazed BBQ Pork", image: "/images/Specials/bbq-pork.jpg" },
-    { title: "Milk Tea Tiramisu", image: "/images/Specials/tiramisu.jpg" },
-    { title: "HK French Toast Combo", image: "/images/Specials/french-toast.jpg" },
+  const featuredSpecials = [
+    {
+      title: "Peking Duck",
+      chineseTitle: "北京烤鴨",
+      description: "Whole duck served with pancakes (24hr notice required)",
+      price: "$45.99",
+      image: "/peking-duck-whole-roasted-crispy-skin-chinese-cuis.jpg",
+      badge: "Signature Dish",
+    },
+    {
+      title: "Seafood Hot Pot",
+      chineseTitle: "海鮮火鍋",
+      description: "Assorted seafood in spicy broth",
+      price: "$22.99",
+      image: "/chinese-seafood-hot-pot-steaming-spicy-broth.jpg",
+      badge: "Chef's Pick",
+    },
+    {
+      title: "Lobster with Ginger & Scallions",
+      chineseTitle: "薑蔥龍蝦",
+      description: "Fresh lobster in aromatic ginger sauce",
+      price: "$29.99",
+      image: "/chinese-lobster-ginger-scallions-wok-fried.jpg",
+      badge: "Premium",
+    },
+  ]
+
+  const promotionalPosters = [
+    {
+      image: "/images/Special/holiday-special.webp",
+      alt: "Holiday Special - December 24, 25, 31, January 1",
+    },
+    {
+      image: "/images/Special/weekday-special.webp",
+      alt: "Monday to Thursday Special - New York Steak with Prawns and Duck Confit with Salmon $23.95",
+    },
+    {
+      image: "/images/Special/lamb-hotpot-special.webp",
+      alt: "Seasonal Lamb Brisket Hot Pot $38.95",
+    },
   ]
 
   return (
@@ -60,7 +96,6 @@ function Home() {
               Order Takeout
             </Link>
           </div>
-
         </div>
 
         <button
@@ -72,183 +107,111 @@ function Home() {
         </button>
       </section>
 
-      {/* Menu Section */}
-      <section className="py-12 md:py-20 bg-white">
+      <section className="py-12 md:py-20 bg-gradient-to-b from-gray-900 to-gray-800 text-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-4">
-              <Utensils className="w-6 h-6 md:w-8 md:h-8 text-teal-600 mr-2 md:mr-3" />
-              <h2 className="text-2xl md:text-3xl font-bold font-tempus">Our Menu</h2>
+          <div className="text-center mb-10 md:mb-14">
+            <div className="flex items-center justify-center mb-3">
+              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-amber-400 mr-2 md:mr-3" />
+              <h2 className="text-2xl md:text-4xl font-bold font-tempus">Current Specials</h2>
+              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-amber-400 ml-2 md:ml-3" />
             </div>
+            {/* <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
+              Limited time offers you don't want to miss
+            </p> */}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 max-w-6xl mx-auto">
-            {menuCategories.map((item, index) => (
-              <Link
-                key={index}
-                href={`/menu#${item.category.toLowerCase().replace(/\s+/g, "-")}`}
-                className="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+          {/* Image Gallery Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            {promotionalPosters.map((poster, idx) => (
+              <div
+                key={idx}
+                className="group relative rounded-2xl overflow-hidden shadow-2xl bg-gray-800 hover:scale-[1.02] transition-all duration-300"
               >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={item.image || "/placeholder.svg"}
-                    alt={`${item.category} menu`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <h3 className="text-xl md:text-2xl font-bold mb-1 font-tempus">{item.category}</h3>
-                    <span className="inline-flex items-center text-sm font-medium text-white group-hover:underline">
-                      View Menu
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                <img
+                  src={poster.image || "/placeholder.svg"}
+                  alt={poster.alt}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/menu"
-              className="inline-block bg-teal-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
-              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
-            >
-              View Full Menu
-            </Link>
           </div>
         </div>
 
         <button
           onClick={scrollToNextSection}
-          className="block mx-auto mt-10 md:mt-14 text-gray-400 hover:text-gray-600 transition-colors"
+          className="block mx-auto mt-10 md:mt-14 text-gray-500 hover:text-gray-300 transition-colors"
           aria-label="Scroll to next section"
         >
           <ChevronDown size={24} className="sm:w-7 sm:h-7 md:w-9 md:h-9" />
         </button>
       </section>
 
-      {/* Specials Section
-      <section className="py-12 md:py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold font-tempus mb-2">Chef's Specials</h2>
-            <p className="text-gray-600 text-base md:text-lg">
-              Seasonal favorites and featured dishes, curated weekly.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-            {specials.map((special, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300"
-              >
-                <img
-                  src={special.image}
-                  alt={special.title}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg md:text-xl font-semibold font-tempus">{special.title}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Location Section */}
+      {/* Quick Links Section - Location & Contact CTAs */}
       <section className="py-12 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8 md:mb-12">
-            <div className="flex items-center justify-center mb-3 md:mb-4">
-              <MapPin className="w-6 h-6 md:w-8 md:h-8 text-teal-600 mr-2 md:mr-3" />
-              <h2 className="text-2xl md:text-3xl font-bold">Find Us</h2>
-            </div>
-            {/* <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
-              Located in the heart of Ironwood, our restaurant offers a convenient and welcoming atmosphere for all your
-              dining needs.
-            </p> */}
-          </div>
-
-          <div className="flex flex-col lg:flex-row items-stretch bg-white rounded-xl shadow-xl overflow-hidden">
-            <div className="w-full lg:w-1/2">
-              <div className="h-64 sm:h-80 lg:h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+            {/* Find Us Card */}
+            <Link
+              href="/location"
+              className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="h-48 md:h-56 overflow-hidden">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d493.13259539964594!2d-123.09580059956326!3d49.13219505975619!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5485e101f046e8ff%3A0xcb201b822511cf35!2scaf%C3%A9%20de%20A!5e0!3m2!1sen!2sca!4v1737688840630!5m2!1sen!2sca"
                   width="100%"
                   height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
+                  style={{ border: 0, pointerEvents: "none" }}
                   loading="lazy"
                   title="Restaurant location"
                 ></iframe>
               </div>
-            </div>
-
-            <div className="w-full lg:w-1/2 p-5 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold mb-4 font-tempus">Ironwood Location</h3>
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex items-start">
-                  <MapPin className="w-5 h-5 text-teal-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm md:text-base">#3050-11666 Steveston Hwy, Richmond, BC V7A 5J3</p>
+              <div className="p-6 md:p-8">
+                <div className="flex items-center mb-3">
+                  <MapPin className="w-6 h-6 text-teal-600 mr-3" />
+                  <h3 className="text-xl md:text-2xl font-bold">Find Us</h3>
+                  <span className="text-lg md:text-xl ml-2">位置</span>
                 </div>
-                <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-teal-600 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-bold mb-1 text-sm md:text-base">Hours of Operation</p>
-                    <div className="grid grid-cols-2 gap-x-2 md:gap-x-4 gap-y-0.5 md:gap-y-1 text-sm md:text-base">
-                      <p>Monday - Friday:</p>
-                      <p>8am - 10pm</p>
-                      <p>Saturday - Sunday:</p>
-                      <p>8am - 10pm</p>
-                    </div>
-                  </div>
+                <p className="text-gray-600 mb-4">Visit our Ironwood location in Richmond, BC</p>
+                <div className="flex items-center text-teal-600 font-semibold group-hover:translate-x-2 transition-transform">
+                  View Location & Hours
+                  <ChevronDown className="w-5 h-5 ml-1 -rotate-90" />
                 </div>
               </div>
-              <Link
-                href="/location"
-                className="inline-block mt-4 md:mt-6 bg-teal-600 text-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
-              >
-                Get Directions
-              </Link>
-            </div>
+            </Link>
+            <Link
+              href="/contact"
+              className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="h-48 md:h-56 bg-gradient-to-br from-teal-600 to-teal-800 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="flex justify-center gap-4 mb-4">
+                    <UtensilsCrossed className="w-10 h-10 md:w-12 md:h-12" />
+                    <CalendarDays className="w-10 h-10 md:w-12 md:h-12" />
+                    <Mail className="w-10 h-10 md:w-12 md:h-12" />
+                  </div>
+                  <p className="text-lg md:text-xl font-medium">Catering • Reservations • Inquiries</p>
+                  <p className="text-teal-200">餐飲服務 • 預訂 • 查詢</p>
+                </div>
+              </div>
+              <div className="p-6 md:p-8">
+                <div className="flex items-center mb-3">
+                  <Phone className="w-6 h-6 text-teal-600 mr-3" />
+                  <h3 className="text-xl md:text-2xl font-bold">Contact Us</h3>
+                  <span className="text-lg md:text-xl ml-2">聯繫我們</span>
+                </div>
+                <p className="text-gray-600 mb-4">Get in touch for catering, reservations, or questions</p>
+                <div className="flex items-center text-teal-600 font-semibold group-hover:translate-x-2 transition-transform">
+                  Send Us a Message
+                  <ChevronDown className="w-5 h-5 ml-1 -rotate-90" />
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Call to Action Section
-      <section className="py-10 md:py-16 bg-teal-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 font-tempus">Ready to Experience café de A?</h2>
-          <p className="text-base md:text-xl mb-6 md:mb-8 max-w-2xl mx-auto">
-            Join us for an unforgettable dining experience. Browse our menu or find our location.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            <Link
-              href="/menu"
-              className="bg-white text-teal-700 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300"
-              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
-            >
-              View Menu
-            </Link>
-            <Link
-              href="/location"
-              className="bg-transparent text-white border-2 border-white px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300"
-            >
-              Get Directions
-            </Link>
-          </div>
-        </div>
-      </section> */}
+      {/* Inquiry Form Section */}
+      {/* <InquiryForm /> */}
     </div>
   )
 }

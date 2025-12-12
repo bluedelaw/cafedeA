@@ -9,8 +9,9 @@ const menuItems = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
   { name: "Location", href: "/location" },
+  { name: "Contact", href: "/contact" },
   { name: "Order Takeout", href: "https://h5.posking.ca/#/shop?id=617", target: "_blank", rel: "noopener noreferrer" },
-  // { name: "Bubble Tea", href: "/bubble-tea" },
+  { name: "Holiday Special", href: "/holiday-special", isSpecial: true },
 ]
 
 function Header({ offset }: { offset?: number }) {
@@ -73,11 +74,9 @@ function Header({ offset }: { offset?: number }) {
   }
 
   return (
-<header
-  className={`fixed top-[48px] w-full z-50 transition-all duration-300 backdrop-blur-sm ${
-    isScrolled ? (isVisible ? "bg-black/80 shadow-md" : "bg-transparent") : "bg-black/90"
-  } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
->
+    <header
+      className={`fixed top-[48px] w-full z-50 transition-all duration-300 ${"bg-black shadow-md"} $translate-y-0`}
+    >
       <div className="container mx-auto px-4 py-2 flex justify-between items-center font-tempus">
         <Link href="/">
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
@@ -97,9 +96,9 @@ function Header({ offset }: { offset?: number }) {
                       href={item.href}
                       target={item.target || "_blank"}
                       rel={item.rel || "noopener noreferrer"}
-                      className={`text-white inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 ${isActive ? "after:w-full" : "after:w-0 hover:after:w-full"
-                        }`}
-
+                      className={`text-white inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 ${
+                        isActive ? "after:w-full" : "after:w-0 hover:after:w-full"
+                      }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
@@ -107,11 +106,14 @@ function Header({ offset }: { offset?: number }) {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`text-white inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 ${isActive ? "after:w-full" : "after:w-0 hover:after:w-full"
-                        }`}
-
+                      className={`inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:transition-all after:duration-300 ${
+                        item.isSpecial
+                          ? "text-red-500 font-bold animate-pulse after:bg-red-500"
+                          : "text-white after:bg-white"
+                      } ${isActive ? "after:w-full" : "after:w-0 hover:after:w-full"}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
+                      {item.isSpecial && <span className="mr-1">🎄</span>}
                       {item.name}
                     </Link>
                   )}

@@ -1,4 +1,4 @@
-import Menu from "@/components/Menu"
+import TextMenu from "@/components/TextMenu"
 import type { Metadata } from "next"
 import ErrorBoundary from "@/components/ErrorBoundary"
 import config from "@/lib/config"
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function MenuPage() {
   return (
     <ErrorBoundary>
-      <Menu />
+      <TextMenu />
     </ErrorBoundary>
   )
 }
