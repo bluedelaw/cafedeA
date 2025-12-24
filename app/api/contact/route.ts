@@ -36,7 +36,7 @@ function isSpamMessage(message: string, email: string): boolean {
     /\b(click here|act now|limited time|urgent)\b/i,
     /(http[s]?:\/\/[^\s]+){3,}/i, // More than 2 URLs
   ]
-
+ ode
   const suspiciousEmailPatterns = [/@(tempmail|throwaway|guerrillamail|mailinator|10minutemail)/i]
 
   for (const pattern of spamPatterns) {
