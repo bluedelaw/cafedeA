@@ -36,7 +36,7 @@ function isSpamMessage(message: string, email: string): boolean {
     /\b(click here|act now|limited time|urgent)\b/i,
     /(http[s]?:\/\/[^\s]+){3,}/i, // More than 2 URLs
   ]
- ode
+
   const suspiciousEmailPatterns = [/@(tempmail|throwaway|guerrillamail|mailinator|10minutemail)/i]
 
   for (const pattern of spamPatterns) {
@@ -52,8 +52,6 @@ function isSpamMessage(message: string, email: string): boolean {
 
 export async function POST(request: Request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY)
-
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown"
 
     console.log("[v0] Contact form submission from IP:", ip)
@@ -114,6 +112,16 @@ export async function POST(request: Request) {
 
     console.log("[v0] Attempting to send email...")
     console.log("[v0] RESEND_API_KEY present:", !!process.env.RESEND_API_KEY)
+
+    if (!process.env.RESEND_API_KEY) {
+      console.error("[v0] RESEND_API_KEY is not configured")
+      return NextResponse.json(
+        { error: "Email service is not configured. Please contact us directly at 604-276-7800." },
+        { status: 503 },
+      )
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     const { data, error } = await resend.emails.send({
       from: "Cafe de A <noreply@cafedea.ca>",
