@@ -11,7 +11,7 @@ const menuItems = [
   { name: "Location", href: "/location" },
   { name: "Contact", href: "/contact" },
   { name: "Order Takeout", href: "https://h5.posking.ca/#/shop?id=617", target: "_blank", rel: "noopener noreferrer" },
-  { name: "Holiday Special", href: "/holiday-special", isSpecial: true },
+  // { name: "Holiday Special", href: "/holiday-special", isSpecial: true },
 ]
 
 function Header({ offset }: { offset?: number }) {
