@@ -73,17 +73,18 @@ function Header({ offset }: { offset?: number }) {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  // Header height: 56px (h-14)
   return (
     <header
-      className={`fixed top-[48px] w-full z-50 transition-all duration-300 ${"bg-black shadow-md"} $translate-y-0`}
+      className="fixed top-12 w-full z-50 bg-stone-900 h-14 flex items-center"
     >
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center font-tempus">
+      <div className="container mx-auto px-4 flex justify-between items-center font-tempus">
         <Link href="/">
           <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
         </Link>
         <nav
           ref={navRef}
-          className={`lg:flex ${isMenuOpen ? "block" : "hidden"} absolute lg:relative top-[100%] left-0 w-full lg:w-auto bg-black lg:bg-transparent z-50`}
+          className={`lg:flex ${isMenuOpen ? "block" : "hidden"} absolute lg:relative top-[100%] left-0 w-full lg:w-auto bg-stone-900 lg:bg-transparent z-50`}
         >
           <ul className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-6 p-4 lg:p-0">
             {menuItems.map((item) => {
