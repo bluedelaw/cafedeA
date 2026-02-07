@@ -1,62 +1,91 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ShoppingBag } from "lucide-react"
 
-const menuItems = [
-  { name: "Home", href: "/" },
-  { name: "Menu", href: "/menu" },
-  { name: "Location", href: "/location" },
-  { name: "Contact", href: "/contact" },
-  { name: "Order Takeout", href: "https://h5.posking.ca/#/shop?id=617", target: "_blank", rel: "noopener noreferrer" },
-  // { name: "Holiday Special", href: "/holiday-special", isSpecial: true },
-]
+// Navigation items configuration
+const navigationItems = [
+  { name: "Home", href: "/", description: "Our story" },
+  { name: "Menu", href: "/menu", description: "Explore dishes" },
+  { name: "Location", href: "/location", description: "Find us" },
+  { name: "Contact", href: "/contact", description: "Get in touch" },
+] as const
 
-function Header({ offset }: { offset?: number }) {
+const orderLink = {
+  name: "Order Pickup",
+  href: "https://h5.posking.ca/#/shop?id=617",
+  icon: ShoppingBag,
+} as const
+
+// Custom hook for header state management
+function useHeaderState() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
-  const [scrollDirection, setScrollDirection] = useState(null)
-  const navRef = useRef(null)
-  const menuButtonRef = useRef(null)
   const pathname = usePathname()
 
+  // Close menu when route changes
   useEffect(() => {
-    let lastScrollY = window.pageYOffset
+    setIsMenuOpen(false)
+  }, [pathname])
 
+  // Handle scroll effects
+  useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.pageYOffset
-      const direction = scrollY > lastScrollY ? "down" : "up"
-      if (direction !== scrollDirection) {
-        setIsVisible(direction === "up")
-      }
-      setIsScrolled(scrollY > 10)
-      lastScrollY = scrollY > 0 ? scrollY : 0
-      setScrollDirection(direction)
-
-      // Close menu on scroll
-      if (isMenuOpen) {
+      setIsScrolled(window.scrollY > 10)
+      
+      // Close mobile menu on scroll
+      if (isMenuOpen && window.scrollY > 50) {
         setIsMenuOpen(false)
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [scrollDirection, isMenuOpen])
+  }, [isMenuOpen])
 
-  // Handle clicks outside the menu
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isMenuOpen &&
-        navRef.current &&
-        !navRef.current.contains(event.target) &&
-        menuButtonRef.current &&
-        !menuButtonRef.current.contains(event.target)
-      ) {
-        setIsMenuOpen(false)
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMenuOpen])
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((prev) => !prev)
+  }, [])
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false)
+  }, [])
+
+  return {
+    isMenuOpen,
+    isScrolled,
+    pathname,
+    toggleMenu,
+    closeMenu,
+  }
+}
+
+// Custom hook for click outside detection
+function useClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void, enabled: boolean) {
+  useEffect(() => {
+    if (!enabled) return
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const isOutside = refs.every((ref) => ref.current && !ref.current.contains(event.target as Node))
+      
+      if (isOutside) {
+        handler()
       }
     }
 
@@ -67,72 +96,194 @@ function Header({ offset }: { offset?: number }) {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("touchstart", handleClickOutside)
     }
-  }, [isMenuOpen])
+  }, [refs, handler, enabled])
+}
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+function Header() {
+  const { isMenuOpen, isScrolled, pathname, toggleMenu, closeMenu } = useHeaderState()
+  const navRef = useRef<HTMLElement>(null)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
 
-  // Header height: 56px (h-14)
+  // Close menu when clicking outside
+  useClickOutside([navRef, menuButtonRef], closeMenu, isMenuOpen)
+
   return (
-    <header
-      className="fixed top-12 w-full z-50 bg-stone-900 h-14 flex items-center"
-    >
-      <div className="container mx-auto px-4 flex justify-between items-center font-tempus">
-        <Link href="/">
-          <img src="/images/logo.png" alt="café de A logo" className="w-32 h-auto" />
-        </Link>
+    <>
+      <header
+        className={`fixed top-12 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-stone-900/95 backdrop-blur-md shadow-lg"
+            : "bg-stone-900"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="flex-shrink-0 group relative z-10"
+              onClick={closeMenu}
+            >
+              <div className="relative w-32 h-10 transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/images/logo.png"
+                  alt="café de A"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="group relative px-4 py-2 font-tempus"
+                  >
+                    <span
+                      className={`relative z-10 transition-colors duration-300 ${
+                        isActive
+                          ? "text-white"
+                          : "text-gray-300 group-hover:text-white"
+                      }`}
+                    >
+                      {item.name}
+                    </span>
+                    
+                    {/* Animated underline */}
+                    <span
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 to-teal-600 transition-all duration-300 ${
+                        isActive
+                          ? "opacity-100 scale-x-100"
+                          : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
+                      }`}
+                    />
+
+                    {/* Hover background */}
+                    <span className="absolute inset-0 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </Link>
+                )
+              })}
+
+              {/* Order Pickup Button - Desktop */}
+              <a
+                href={orderLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-4 group relative inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <orderLink.icon className="w-4 h-4" />
+                  {orderLink.name}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+              </a>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              ref={menuButtonRef}
+              onClick={toggleMenu}
+              className="lg:hidden relative z-10 p-2 text-white hover:text-teal-400 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-lg"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                {isMenuOpen ? (
+                  <X className="w-6 h-6 animate-in spin-in-90 duration-300" />
+                ) : (
+                  <Menu className="w-6 h-6 animate-in spin-in-90 duration-300" />
+                )}
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
         <nav
           ref={navRef}
-          className={`lg:flex ${isMenuOpen ? "block" : "hidden"} absolute lg:relative top-[100%] left-0 w-full lg:w-auto bg-stone-900 lg:bg-transparent z-50`}
+          className={`lg:hidden absolute top-full left-0 right-0 bg-stone-900/98 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-hidden ${
+            isMenuOpen
+              ? "max-h-screen opacity-100 shadow-2xl"
+              : "max-h-0 opacity-0"
+          }`}
         >
-          <ul className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-6 p-4 lg:p-0">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href
-
-              return (
-                <li key={item.name}>
-                  {item.href.startsWith("http") ? (
-                    <a
-                      href={item.href}
-                      target={item.target || "_blank"}
-                      rel={item.rel || "noopener noreferrer"}
-                      className={`text-white inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 ${
-                        isActive ? "after:w-full" : "after:w-0 hover:after:w-full"
-                      }`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
+          <div className="container mx-auto px-4 py-6">
+            {/* Mobile Navigation Items */}
+            <ul className="space-y-1 mb-6">
+              {navigationItems.map((item, index) => {
+                const isActive = pathname === item.href
+                return (
+                  <li
+                    key={item.name}
+                    className="animate-in slide-in-from-left duration-300"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
                     <Link
                       href={item.href}
-                      className={`inline-block py-2 lg:py-0 relative after:absolute after:left-0 after:bottom-0 after:h-[2px] after:transition-all after:duration-300 ${
-                        item.isSpecial
-                          ? "text-red-500 font-bold animate-pulse after:bg-red-500"
-                          : "text-white after:bg-white"
-                      } ${isActive ? "after:w-full" : "after:w-0 hover:after:w-full"}`}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={closeMenu}
+                      className={`group flex items-center justify-between px-4 py-3 rounded-lg font-tempus transition-all duration-300 ${
+                        isActive
+                          ? "bg-teal-600/20 text-white"
+                          : "text-gray-300 hover:bg-white/5 hover:text-white"
+                      }`}
                     >
-                      {item.isSpecial && <span className="mr-1">🎄</span>}
-                      {item.name}
+                      <div>
+                        <div className="font-semibold text-lg">{item.name}</div>
+                        <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                          {item.description}
+                        </div>
+                      </div>
+                      {isActive && (
+                        <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+                      )}
                     </Link>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
+                  </li>
+                )
+              })}
+            </ul>
+
+            {/* Order Pickup Button - Mobile */}
+            <a
+              href={orderLink.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              className="group flex flex-col items-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus animate-in slide-in-from-bottom duration-300"
+              style={{ animationDelay: "200ms" }}
+            >
+              <div className="flex items-center gap-2">
+                <orderLink.icon className="w-5 h-5" />
+                <span className="text-lg">{orderLink.name}</span>
+              </div>
+              <span className="text-xs text-teal-100">Pickup Only • Direct Order</span>
+            </a>
+
+            {/* Decorative Element */}
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <p className="text-center text-xs text-gray-500">
+                Open Daily: 8am - 10pm
+              </p>
+            </div>
+          </div>
         </nav>
-        <button
-          ref={menuButtonRef}
-          onClick={toggleMenu}
-          className="text-white hover:text-gray-300 focus:outline-none focus:text-gray-300 lg:hidden transition-colors duration-200"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-300"
+          style={{ top: "104px" }}
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+      )}
+    </>
   )
 }
 
