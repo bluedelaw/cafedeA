@@ -120,36 +120,50 @@ function Home() {
             </p>
           </div>
 
-          {/* CTA Buttons - Unified Teal Color Scheme */}
-          <div
-            className={`flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto mb-12 transition-all duration-1000 delay-500 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-          >
-            <Link
-              href="/menu"
-              className="group relative px-8 py-4 bg-white text-gray-900 rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-              onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                View Our Menu
-                <ChevronDown className="w-5 h-5 -rotate-90 transition-transform group-hover:translate-x-1" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-            </Link>
-            <Link
-              href="https://h5.posking.ca/#/shop?id=617"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/50"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Order Pickup
-                <ShoppingBag className="w-5 h-5 transition-transform group-hover:rotate-12" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-            </Link>
-          </div>
+{/* CTA Buttons - Unified Teal Color Scheme with Waitlist */}
+<div
+  className={`flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto mb-12 transition-all duration-1000 delay-500 ${
+    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+  }`}
+>
+  <Link
+    href="/menu"
+    className="group relative px-8 py-4 bg-white text-gray-900 rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+    onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
+  >
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      View Our Menu
+      <ChevronDown className="w-5 h-5 -rotate-90 transition-transform group-hover:translate-x-1" />
+    </span>
+    <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+  </Link>
+  
+  <Link
+    href="https://cafedeawaitlist.vercel.app/join"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group relative px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/50"
+  >
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      Join Waitlist
+      <CalendarDays className="w-5 h-5 transition-transform group-hover:scale-110" />
+    </span>
+    <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+  </Link>
+  
+  {/* <Link
+    href="https://h5.posking.ca/#/shop?id=617"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group relative px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/50"
+  >
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      Order Pickup
+      <ShoppingBag className="w-5 h-5 transition-transform group-hover:rotate-12" />
+    </span>
+    <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+  </Link> */}
+</div>
 
           {/* Highlights Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 mb-20 md:mb-16">
