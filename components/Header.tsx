@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ShoppingBag } from "lucide-react"
+import { Menu, X, ShoppingBag, Instagram, Facebook } from "lucide-react"
 
 // Navigation items configuration
 const navigationItems = [
@@ -19,6 +19,19 @@ const orderLink = {
   href: "https://h5.posking.ca/#/shop?id=617",
   icon: ShoppingBag,
 } as const
+
+const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/cafedea_richmond/",
+    icon: Instagram,
+  },
+  {
+    name: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61588606623911",
+    icon: Facebook,
+  },
+] as const
 
 // Custom hook for header state management
 function useHeaderState() {
@@ -110,33 +123,16 @@ function Header() {
   return (
     <>
       <header
-        className={`fixed top-12 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-stone-900/95 backdrop-blur-md shadow-lg"
-            : "bg-stone-900"
+            ? "bg-[#232936]/95 backdrop-blur-md shadow-lg"
+            : "bg-[#232936]"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14">
-            {/* Logo */}
-            <Link
-              href="/"
-              className="flex-shrink-0 group relative z-10"
-              onClick={closeMenu}
-            >
-              <div className="relative w-32 h-10 transition-transform duration-300 group-hover:scale-105">
-                <Image
-                  src="/images/logo.png"
-                  alt="café de A"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Left: Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1 flex-1">
               {navigationItems.map((item) => {
                 const isActive = pathname === item.href
                 return (
@@ -169,13 +165,52 @@ function Header() {
                   </Link>
                 )
               })}
+            </nav>
 
-              {/* Order Pickup Button - Desktop */}
+            {/* Mobile: Empty spacer for layout balance */}
+            <div className="lg:hidden w-10" />
+
+            {/* Center: Logo */}
+            <Link
+              href="/"
+              className="absolute left-1/2 -translate-x-1/2 z-10"
+              onClick={closeMenu}
+            >
+              <div className="relative w-48 lg:w-60 h-14 lg:h-18">
+                <Image
+                  src="/images/logo.png"
+                  alt="café de A"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
+
+            {/* Right: Social Icons & Order Button */}
+            <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
+              {/* Social Icons */}
+              <div className="flex items-center gap-2 mr-2">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
+                    aria-label={social.name}
+                  >
+                    <social.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+
+              {/* Order Pickup Button */}
               <a
                 href={orderLink.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-4 group relative inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus"
+                className="group relative inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <orderLink.icon className="w-4 h-4" />
@@ -183,9 +218,9 @@ function Header() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               </a>
-            </nav>
+            </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Right */}
             <button
               ref={menuButtonRef}
               onClick={toggleMenu}
@@ -207,7 +242,7 @@ function Header() {
         {/* Mobile Navigation */}
         <nav
           ref={navRef}
-          className={`lg:hidden absolute top-full left-0 right-0 bg-stone-900/98 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-hidden ${
+          className={`lg:hidden absolute top-full left-0 right-0 bg-[#232936]/98 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-hidden ${
             isMenuOpen
               ? "max-h-screen opacity-100 shadow-2xl"
               : "max-h-0 opacity-0"
@@ -248,6 +283,24 @@ function Header() {
               })}
             </ul>
 
+            {/* Social Media Links - Mobile */}
+            <div className="flex items-center justify-center gap-3 mb-6 pb-6 border-b border-white/10">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-all duration-300 font-tempus animate-in slide-in-from-bottom duration-300"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  aria-label={social.name}
+                >
+                  <social.icon className="w-5 h-5" />
+                  <span className="text-sm">{social.name}</span>
+                </a>
+              ))}
+            </div>
+
             {/* Order Pickup Button - Mobile */}
             <a
               href={orderLink.href}
@@ -278,7 +331,7 @@ function Header() {
       {isMenuOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-300"
-          style={{ top: "104px" }}
+          style={{ top: "64px" }}
           onClick={closeMenu}
           aria-hidden="true"
         />

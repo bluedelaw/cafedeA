@@ -46,7 +46,7 @@ const menuSections: MenuSection[] = [
     name: "Afternoon Tea",
     // description: "Classic afternoon tea selections",
     images: [
-      { id: 1, imgSrc: "/images/AfternoonTea/AfternoonTea1.webp", alt: "Afternoon tea menu" },
+      { id: 1, imgSrc: "/images/AfternoonTea/Afternoon1LQ.webp", alt: "Afternoon tea menu" },
     ],
   },
   {
@@ -340,7 +340,7 @@ function Menu() {
                 <div
                   key={image.id}
                   onClick={() => openModal(currentSection.id, index)}
-                  className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2"
+                  className="relative bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer"
                 >
                   {/* Image Badge */}
                   <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
@@ -349,32 +349,19 @@ function Menu() {
                     </span>
                   </div>
 
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center">
-                    <div className="text-white text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <Grid3x3 className="w-12 h-12 mx-auto mb-2" />
-                      <p className="text-sm font-medium">Click to enlarge</p>
-                    </div>
-                  </div>
-
                   {/* Image */}
                   <div className="relative aspect-[3/4] bg-gray-100">
                     <Image
                       src={image.imgSrc}
                       alt={image.alt || `${currentSection.name} menu page ${index + 1}`}
                       fill
-                      className="object-contain transition-transform duration-700 group-hover:scale-105"
+                      className="object-contain"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       loading={index < 2 ? "eager" : "lazy"}
                     />
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Navigation hint for mobile */}
-            <div className="mt-12 text-center text-gray-500 text-sm md:hidden">
-              <p>Swipe left or right to view more categories</p>
             </div>
           </div>
         </main>
@@ -435,11 +422,6 @@ function Menu() {
               className="max-w-[90vw] max-h-[90vh] object-contain"
               priority
             />
-          </div>
-
-          {/* Keyboard Hints */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full">
-            Use arrow keys or swipe to navigate • Press ESC to close
           </div>
         </div>
       )}

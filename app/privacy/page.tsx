@@ -1,9 +1,10 @@
-import InquiryForm from "@/components/InquiryForm"
+import PrivacyPolicy from "@/components/PrivacyPolicy"
+import type { Metadata } from "next"
 import Script from "next/script"
 
-export const metadata = {
-  title: "Contact | café de A Richmond Hong Kong Restaurant",
-  description: "Contact café de A for catering, reservations, or inquiries. Call 604-276-7800 or send us a message. Authentic Hong Kong cuisine in Richmond BC.",
+export const metadata: Metadata = {
+  title: "Privacy Policy | café de A Richmond BC",
+  description: "Read café de A's privacy policy to learn how we collect, use, and protect your personal information.",
 }
 
 const breadcrumbSchema = {
@@ -19,21 +20,21 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Contact",
-      "item": "https://cafedea.ca/contact"
+      "name": "Privacy Policy",
+      "item": "https://cafedea.ca/privacy"
     }
   ]
 }
 
-export default function ContactPage() {
+export default function PrivacyPage() {
   return (
-    <div className="min-h-screen flex flex-col pt-24">
+    <>
       <Script
         id="breadcrumb-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <InquiryForm />
-    </div>
+      <PrivacyPolicy />
+    </>
   )
 }

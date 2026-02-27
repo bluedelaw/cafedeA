@@ -35,7 +35,7 @@ function Location() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-28 pb-12">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header Section */}
         <div 
