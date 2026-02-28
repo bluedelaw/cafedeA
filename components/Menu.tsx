@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { ChevronLeft, ChevronRight, X, Grid3x3, ChevronDown } from "lucide-react"
 
 // Type definitions
@@ -183,6 +184,18 @@ function useMenuState() {
 
 function Menu() {
   const { activeSection, setActiveSection, modalState, openModal, closeModal, navigateImage } = useMenuState()
+  const searchParams = useSearchParams()
+
+  // Handle URL section parameter
+  useEffect(() => {
+    const sectionParam = searchParams.get('section')
+    if (sectionParam) {
+      const section = menuSections.find(s => s.name.toLowerCase() === sectionParam.toLowerCase())
+      if (section) {
+        setActiveSection(section.id)
+      }
+    }
+  }, [searchParams, setActiveSection])
 
   // Keyboard navigation for modal
   useEffect(() => {

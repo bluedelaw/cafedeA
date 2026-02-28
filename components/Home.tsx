@@ -114,6 +114,51 @@ function Home() {
         </button>
       </section>
 
+      {/* BBQ Section */}
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto items-center">
+            {/* Image Side */}
+            <div className="relative h-[500px] md:h-[600px] lg:h-[750px] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="/images/Home/bbq2.webp"
+                alt="Hong Kong Style BBQ"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+
+            {/* Text Side */}
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 font-tempus">
+                Authentic Cantonese Cuisine & BBQ Meats
+              </h2>
+              
+              <div className="space-y-4 text-gray-600 text-lg">
+                <p>
+                  As a traditional Hong Kong café, we offer a complete dining experience featuring 
+                  breakfast, lunch, afternoon tea, dinner, and our specialty Hong Kong-style barbecue.
+                </p>
+                <p>
+                  Our BBQ selection includes perfectly roasted duck, BBQ pork (char siu), roasted pork belly, 
+                  soy sauce chicken, and house special chicken—all prepared using time-honored Cantonese methods 
+                  that deliver the rich, savory flavors Hong Kong cuisine is renowned for.
+                </p>
+              </div>
+
+              <Link
+                href="/menu?section=BBQ"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-full hover:shadow-lg transition-shadow"
+              >
+                View BBQ Menu
+                <ChevronDown className="w-5 h-5 -rotate-90" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Current Specials Section - Updated to Teal Theme */}
       <section className="relative py-16 md:py-24 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
         {/* Decorative background elements */}
