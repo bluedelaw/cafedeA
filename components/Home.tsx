@@ -29,10 +29,10 @@ function Home() {
       image: "/images/Special/Month.webp",
       alt: "This Month's Featured Special",
     },
-    {
-      image: "/images/Special/Lamb.webp",
-      alt: "Seasonal Lamb Brisket Hot Pot",
-    },
+    // {
+    //   image: "/images/Special/Lamb.webp",
+    //   alt: "Seasonal Lamb Brisket Hot Pot",
+    // },
     {
       image: "/images/Special/ChefRec.webp",
       alt: "Chef's Recommendation",

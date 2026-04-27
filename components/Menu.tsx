@@ -97,7 +97,7 @@ const menuSections: MenuSection[] = [
     images: [
       { id: 1, imgSrc: "/images/Special/Month.webp", alt: "Monthly special" },
       { id: 2, imgSrc: "/images/Special/ChefRec.webp", alt: "Chef's recommendation" },
-      { id: 3, imgSrc: "/images/Special/Lamb.webp", alt: "Lamb special" },
+      // { id: 3, imgSrc: "/images/Special/Lamb.webp", alt: "Lamb special" },
     ],
   },
 ]
