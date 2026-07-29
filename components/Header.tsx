@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ShoppingBag, Instagram, Facebook } from "lucide-react"
+import { Menu, X, Instagram, Facebook } from "lucide-react"
+import { OrderButtons } from "./order-buttons"
 
 // Navigation items configuration
 const navigationItems = [
@@ -14,11 +15,7 @@ const navigationItems = [
   { name: "Contact", href: "/contact", description: "Get in touch" },
 ] as const
 
-const orderLink = {
-  name: "Order Pickup",
-  href: "https://h5.posking.ca/#/shop?id=617",
-  icon: ShoppingBag,
-} as const
+
 
 const socialLinks = [
   {
@@ -48,7 +45,7 @@ function useHeaderState() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
-      
+
       // Close mobile menu on scroll
       if (isMenuOpen && window.scrollY > 50) {
         setIsMenuOpen(false)
@@ -96,7 +93,7 @@ function useClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => vo
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const isOutside = refs.every((ref) => ref.current && !ref.current.contains(event.target as Node))
-      
+
       if (isOutside) {
         handler()
       }
@@ -123,11 +120,10 @@ function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
             ? "bg-[#232936]/95 backdrop-blur-md shadow-lg"
             : "bg-[#232936]"
-        }`}
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -142,22 +138,20 @@ function Header() {
                     className="group relative px-4 py-2 font-tempus"
                   >
                     <span
-                      className={`relative z-10 transition-colors duration-300 ${
-                        isActive
+                      className={`relative z-10 transition-colors duration-300 ${isActive
                           ? "text-white"
                           : "text-gray-300 group-hover:text-white"
-                      }`}
+                        }`}
                     >
                       {item.name}
                     </span>
-                    
+
                     {/* Animated underline */}
                     <span
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 to-teal-600 transition-all duration-300 ${
-                        isActive
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 to-teal-600 transition-all duration-300 ${isActive
                           ? "opacity-100 scale-x-100"
                           : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
-                      }`}
+                        }`}
                     />
 
                     {/* Hover background */}
@@ -165,6 +159,7 @@ function Header() {
                   </Link>
                 )
               })}
+
             </nav>
 
             {/* Mobile: Empty spacer for layout balance */}
@@ -187,10 +182,16 @@ function Header() {
               </div>
             </Link>
 
-            {/* Right: Social Icons & Order Button */}
+            {/* Right: Order Buttons & Social Icons */}
             <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
+              {/* Order Buttons */}
+              <OrderButtons variant="nav" />
+              
+              {/* Divider */}
+              <div className="w-px h-6 bg-white/10" />
+              
               {/* Social Icons */}
-              <div className="flex items-center gap-2 mr-2">
+              <div className="flex items-center gap-2">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
@@ -204,20 +205,6 @@ function Header() {
                   </a>
                 ))}
               </div>
-
-              {/* Order Pickup Button */}
-              <a
-                href={orderLink.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <orderLink.icon className="w-4 h-4" />
-                  {orderLink.name}
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </a>
             </div>
 
             {/* Mobile Menu Button - Right */}
@@ -239,18 +226,28 @@ function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Fixed Overlay */}
+        {isMenuOpen && (
+          <div
+            className="lg:hidden fixed inset-0 top-16 bg-black/40 z-40"
+            onClick={closeMenu}
+          />
+        )}
         <nav
           ref={navRef}
-          className={`lg:hidden absolute top-full left-0 right-0 bg-[#232936]/98 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-hidden ${
-            isMenuOpen
-              ? "max-h-screen opacity-100 shadow-2xl"
-              : "max-h-0 opacity-0"
-          }`}
+          className={`lg:hidden fixed top-16 left-0 right-0 bottom-0 bg-[#232936]/99 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-y-auto z-50 ${isMenuOpen
+              ? "opacity-100"
+              : "pointer-events-none opacity-0"
+            }`}
         >
-          <div className="container mx-auto px-4 py-6">
+          <div className="w-full px-4 py-4 space-y-4">
+            {/* Mobile Order Buttons - Featured at top */}
+            <div className="animate-in slide-in-from-top duration-300">
+              <OrderButtons variant="mobile" onSelect={closeMenu} />
+            </div>
+
             {/* Mobile Navigation Items */}
-            <ul className="space-y-1 mb-6">
+            <ul className="space-y-0.5">
               {navigationItems.map((item, index) => {
                 const isActive = pathname === item.href
                 return (
@@ -262,20 +259,17 @@ function Header() {
                     <Link
                       href={item.href}
                       onClick={closeMenu}
-                      className={`group flex items-center justify-between px-4 py-3 rounded-lg font-tempus transition-all duration-300 ${
-                        isActive
+                      className={`flex items-center justify-between px-4 py-2 rounded-lg font-tempus text-sm transition-all duration-300 ${isActive
                           ? "bg-teal-600/20 text-white"
                           : "text-gray-300 hover:bg-white/5 hover:text-white"
-                      }`}
+                        }`}
                     >
                       <div>
-                        <div className="font-semibold text-lg">{item.name}</div>
-                        <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
-                          {item.description}
-                        </div>
+                        <div className="font-semibold">{item.name}</div>
+                        <div className="text-xs text-gray-500">{item.description}</div>
                       </div>
                       {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-teal-500" />
                       )}
                     </Link>
                   </li>
@@ -283,44 +277,31 @@ function Header() {
               })}
             </ul>
 
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
             {/* Social Media Links - Mobile */}
-            <div className="flex items-center justify-center gap-3 mb-6 pb-6 border-b border-white/10">
+            <div className="grid grid-cols-2 gap-2">
               {socialLinks.map((social, index) => (
                 <a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-all duration-300 font-tempus animate-in slide-in-from-bottom duration-300"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="flex items-center justify-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-all duration-300 font-tempus text-xs animate-in slide-in-from-bottom duration-300"
+                  style={{ animationDelay: `${(navigationItems.length + 1) * 50 + index * 50}ms` }}
                   aria-label={social.name}
                 >
                   <social.icon className="w-5 h-5" />
-                  <span className="text-sm">{social.name}</span>
+                  <span className="text-sm hidden sm:inline">{social.name}</span>
                 </a>
               ))}
             </div>
 
-            {/* Order Pickup Button - Mobile */}
-            <a
-              href={orderLink.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              className="group flex flex-col items-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/50 font-tempus animate-in slide-in-from-bottom duration-300"
-              style={{ animationDelay: "200ms" }}
-            >
-              <div className="flex items-center gap-2">
-                <orderLink.icon className="w-5 h-5" />
-                <span className="text-lg">{orderLink.name}</span>
-              </div>
-              <span className="text-xs text-teal-100">Pickup Only • Direct Order</span>
-            </a>
-
-            {/* Decorative Element */}
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <p className="text-center text-xs text-gray-500">
-                Open Daily: 8am - 10pm
+            {/* Operating Hours */}
+            <div className="text-center py-2 border-t border-white/10">
+              <p className="text-xs text-gray-500 font-tempus">
+                Open: 8am - 10pm
               </p>
             </div>
           </div>
