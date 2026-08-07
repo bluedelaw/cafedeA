@@ -40,6 +40,8 @@ const menuSections: MenuSection[] = [
       { id: 3, imgSrc: "/images/Lunch/Lunch3.webp", alt: "Lunch menu page 3" },
       { id: 4, imgSrc: "/images/Lunch/Lunch4.webp", alt: "Lunch menu page 4" },
       { id: 5, imgSrc: "/images/Lunch/Lunch5.webp", alt: "Lunch menu page 5" },
+      { id: 6, imgSrc: "/images/Lunch/Lunch6.webp", alt: "Lunch menu page 6" },
+      { id: 7, imgSrc: "/images/Lunch/Lunch7.webp", alt: "Lunch menu page 7" },
     ],
   },
   {

@@ -5,7 +5,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, X, Instagram, Facebook } from "lucide-react"
-import { OrderButtons } from "./order-buttons"
 
 // Navigation items configuration
 const navigationItems = [
@@ -182,16 +181,21 @@ function Header() {
               </div>
             </Link>
 
-            {/* Right: Order Buttons & Social Icons */}
-            <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
-              {/* Order Buttons */}
-              <OrderButtons variant="nav" />
-              
-              {/* Divider */}
-              <div className="w-px h-6 bg-white/10" />
+            {/* Right: Order Button & Social Icons */}
+            <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
+              {/* Order Button - Temporarily pointing to Order Direct */}
+              {/* TODO: Change back to href="/order" when order page is ready */}
+              <a
+                href="https://order.online/store/49725843?pickup=true&redirected=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-2 text-white font-semibold border border-teal-500 rounded-lg hover:bg-teal-500/10 transition-all duration-300 font-tempus"
+              >
+                Order Now
+              </a>
               
               {/* Social Icons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ml-2">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
@@ -241,10 +245,16 @@ function Header() {
             }`}
         >
           <div className="w-full px-4 py-4 space-y-4">
-            {/* Mobile Order Buttons - Featured at top */}
-            <div className="animate-in slide-in-from-top duration-300">
-              <OrderButtons variant="mobile" onSelect={closeMenu} />
-            </div>
+            {/* Mobile Order Link - Featured at top */}
+            {/* TODO: Change back to Link href="/order" when order page is ready */}
+            <a
+              href="https://order.online/store/49725843?pickup=true&redirected=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold rounded-lg transition-all duration-300 font-tempus animate-in slide-in-from-top duration-300"
+            >
+              Order Now
+            </a>
 
             {/* Mobile Navigation Items */}
             <ul className="space-y-0.5">
