@@ -1,115 +1,105 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingCart, Truck, ArrowRight } from 'lucide-react'
+import { ArrowRight, ShoppingCart, Truck } from 'lucide-react'
 
-const orderOptions = [
+const pickupUrl = 'https://order.online/store/49725843?pickup=true&redirected=true'
+
+const deliveryOptions = [
   {
-    type: 'Pickup',
-    url: 'https://order.online/store/49725843?pickup=true&redirected=true',
-    icon: ShoppingCart,
-    description: 'Order pickup at our location',
-    features: ['No extra fees', 'Quick service', 'Easy ordering'],
+    name: 'Uber Eats',
+    url: 'https://ubereats.com/ca/store/cafe-de-a-11666-steveston-hwy-3050/eXpeXQ5IS5aZrqIhBmEO8Q?utm_campaign=CM2508147-search-free-nonbrand-google-pas_e_all_acq_Global&utm_medium=search-free-nonbrand&utm_source=google-pas&rwg_token=AE37R_j93zdmW29aaQTCBnds3JlJaL2Aw7EWQWFSUF9z9Py52ir-69WR-Y0vfMz-sNVYfTpxcOVevN6CxOtV3X2-8Qt_PgTkgQ%3D%3D',
   },
   {
-    type: 'Delivery',
-    url: 'https://order.online/store/49725843?redirected=true&delivery=true',
-    icon: Truck,
-    description: 'Fresh food delivered to you',
-    features: ['No extra fees', 'Convenient', 'Hot & fresh'],
+    name: 'DoorDash',
+    url: 'https://www.doordash.com/en-CA/store/cafe-de-a-11666-steveston-highway-apt-3050-richmond-49725843/114745349/?preview=1',
   },
 ]
 
 export default function OrderPage() {
   return (
-    <main className="min-h-screen bg-background pt-32 pb-16">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-foreground mb-4 font-tempus">Order Now</h1>
-          <p className="text-lg text-foreground/70">Choose your preferred ordering method</p>
-        </div>
+    <main className="min-h-screen bg-background px-4 pb-16 pt-32">
+      <div className="container mx-auto">
+        <header className="mx-auto mb-12 max-w-2xl text-center">
+          {/* <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-teal-600">
+            Cafe de A
+          </p> */}
+          <h1 className="mb-4 font-tempus text-4xl font-bold text-foreground md:text-5xl">
+            Order Now
+          </h1>
+          <p className="text-lg text-foreground/70">
+            Choose pickup or select the delivery service that works best for you.
+          </p>
+        </header>
 
-        {/* Order Options */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {orderOptions.map((option) => {
-            const Icon = option.icon
-            return (
+        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
+          {/* Pickup: one clear direct option */}
+          <section className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:border-teal-500 hover:shadow-xl">
+            <div className="relative z-10 flex h-full flex-col">
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-600 text-primary-foreground">
+                <ShoppingCart className="h-7 w-7" aria-hidden="true" />
+              </div>
+              <h2 className="mb-2 font-tempus text-3xl font-bold text-foreground">Pickup</h2>
+              <p className="mb-6 text-foreground/65">
+                Order directly from Cafe de A and pick up at our location.
+              </p>
+              <ul className="mb-8 space-y-2 text-foreground/70">
+                <li className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-teal-600" aria-hidden="true" />
+                  No extra fees
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-teal-600" aria-hidden="true" />
+                  Quick and easy ordering
+                </li>
+              </ul>
               <a
-                key={option.type}
-                href={option.url}
+                href={pickupUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative bg-white border border-border rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 hover:border-teal-500 cursor-pointer"
+                aria-label="Start your pickup order"
+                className="mt-auto inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-xl bg-teal-600 px-5 py-4 text-center text-lg font-bold text-primary-foreground shadow-md transition-all duration-300 hover:bg-teal-700 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
               >
-                {/* Background gradient on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-
-                <div className="relative z-10">
-                  {/* Icon */}
-                  <div className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="text-3xl font-bold text-foreground mb-2 font-tempus">{option.type}</h2>
-
-                  {/* Description */}
-                  <p className="text-foreground/60 mb-6">{option.description}</p>
-
-                  {/* Features */}
-                  <ul className="space-y-2 mb-8">
-                    {option.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-foreground/70">
-                        <div className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA */}
-                  <div className="inline-flex items-center gap-2 text-teal-600 font-semibold group-hover:gap-3 transition-all duration-300">
-                    Order {option.type}
-                    <ArrowRight className="w-5 h-5" />
-                  </div>
-                </div>
+                <span>Start Pickup Order</span>
+                <ArrowRight className="h-5 w-5" aria-hidden="true" />
               </a>
-            )
-          })}
+            </div>
+          </section>
+
+          {/* Delivery: make the provider choice explicit */}
+          <section className="rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:border-teal-500 hover:shadow-xl">
+            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-600 text-primary-foreground">
+              <Truck className="h-7 w-7" aria-hidden="true" />
+            </div>
+            <h2 className="mb-2 font-tempus text-3xl font-bold text-foreground">Delivery</h2>
+            <p className="mb-6 text-foreground/65">
+              Choose your preferred delivery service.
+            </p>
+            <div className="space-y-3">
+              {deliveryOptions.map((option) => (
+                <a
+                  key={option.name}
+                  href={option.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between rounded-xl border border-border px-4 py-3 font-semibold text-foreground transition-all duration-300 hover:border-teal-500 hover:bg-teal-50"
+                >
+                  {option.name}
+                  <ArrowRight className="h-5 w-5 text-teal-600" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </section>
         </div>
 
-        {/* Also Available On Section */}
-        <div className="mt-20 pt-16 border-t border-border text-center">
-          <p className="text-foreground/60 mb-8">Also available on</p>
-          <div className="flex items-center justify-center gap-8 flex-wrap">
-            {[
-              { name: 'Uber Eats', url: 'https://ubereats.com/ca/store/cafe-de-a-11666-steveston-hwy-3050/eXpeXQ5IS5aZrqIhBmEO8Q?utm_campaign=CM2508147-search-free-nonbrand-google-pas_e_all_acq_Global&utm_medium=search-free-nonbrand&utm_source=google-pas&rwg_token=AE37R_j93zdmW29aaQTCBnds3JlJaL2Aw7EWQWFSUF9z9Py52ir-69WR-Y0vfMz-sNVYfTpxcOVevN6CxOtV3X2-8Qt_PgTkgQ%3D%3D' },
-              { name: 'Doordash', url: 'https://order.online/store/49725843?redirected=true&delivery=true' },
-            ].map((platform) => (
-              <a
-                key={platform.name}
-                href={platform.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2 border border-border rounded-lg text-foreground/70 hover:text-foreground hover:border-teal-500 transition-all duration-300"
-              >
-                {platform.name}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Back Link */}
-        <div className="text-center mt-12">
+        {/* <div className="mt-12 text-center">
           <Link
             href="/"
-            className="text-foreground/60 hover:text-foreground transition-colors duration-300"
+            className="text-foreground/60 transition-colors duration-300 hover:text-foreground"
           >
-            ← Back to home
+            Back to home
           </Link>
-        </div>
+        </div> */}
       </div>
     </main>
   )

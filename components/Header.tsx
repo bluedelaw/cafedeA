@@ -183,16 +183,13 @@ function Header() {
 
             {/* Right: Order Button & Social Icons */}
             <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
-              {/* Order Button - Temporarily pointing to Order Direct */}
-              {/* TODO: Change back to href="/order" when order page is ready */}
-              <a
-                href="https://order.online/store/49725843?pickup=true&redirected=true"
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* Order Button */}
+              <Link
+                href="/order"
                 className="px-6 py-2 text-white font-semibold border border-teal-500 rounded-lg hover:bg-teal-500/10 transition-all duration-300 font-tempus"
               >
                 Order Now
-              </a>
+              </Link>
               
               {/* Social Icons */}
               <div className="flex items-center gap-2 ml-2">
@@ -233,28 +230,26 @@ function Header() {
         {/* Mobile Navigation - Fixed Overlay */}
         {isMenuOpen && (
           <div
-            className="lg:hidden fixed inset-0 top-16 bg-black/40 z-40"
+            className="lg:hidden fixed inset-0 top-16 bg-black/60 z-40"
             onClick={closeMenu}
           />
         )}
         <nav
           ref={navRef}
-          className={`lg:hidden fixed top-16 left-0 right-0 bottom-0 bg-[#232936]/99 backdrop-blur-lg border-t border-white/10 transition-all duration-300 overflow-y-auto z-50 ${isMenuOpen
+          className={`lg:hidden fixed top-16 left-0 right-0 bottom-0 bg-[#232936] backdrop-blur-lg border-t border-white/10 shadow-2xl transition-all duration-300 overflow-y-auto z-50 ${isMenuOpen
               ? "opacity-100"
               : "pointer-events-none opacity-0"
             }`}
         >
           <div className="w-full px-4 py-4 space-y-4">
             {/* Mobile Order Link - Featured at top */}
-            {/* TODO: Change back to Link href="/order" when order page is ready */}
-            <a
-              href="https://order.online/store/49725843?pickup=true&redirected=true"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/order"
+              onClick={closeMenu}
               className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold rounded-lg transition-all duration-300 font-tempus animate-in slide-in-from-top duration-300"
             >
               Order Now
-            </a>
+            </Link>
 
             {/* Mobile Navigation Items */}
             <ul className="space-y-0.5">
