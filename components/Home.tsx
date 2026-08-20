@@ -85,14 +85,13 @@ function Home() {
   </Link>
   
   <Link
-    href="https://cafedeawaitlist.vercel.app/join"
-    target="_blank"
-    rel="noopener noreferrer"
+    href="/order"
     className="group relative px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/50"
+    onClick={() => setTimeout(() => window.scrollTo(0, 0), 0)}
   >
     <span className="relative z-10 flex items-center justify-center gap-2">
-      Join Waitlist
-      <CalendarDays className="w-5 h-5 transition-transform group-hover:scale-110" />
+      Order Takeout
+      <UtensilsCrossed className="w-5 h-5 transition-transform group-hover:scale-110" />
     </span>
     <div className="absolute inset-0 bg-gradient-to-r from-teal-700 to-teal-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
   </Link>
