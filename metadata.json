@@ -1,0 +1,6 @@
+{
+  "name": "café de A",
+  "description": "Authentic Hong Kong cuisine restaurant website featuring menus, ordering options, location info, and catering inquiry forms in Richmond, BC.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

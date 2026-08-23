@@ -4,22 +4,21 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Instagram, Facebook } from "lucide-react"
+import { Menu, X, Instagram, Facebook, Phone, MapPin, Clock, ExternalLink, CalendarDays, ShoppingBag } from "lucide-react"
 
-// Navigation items configuration
+// Navigation items configuration with bilingual subtitles
 const navigationItems = [
-  { name: "Home", href: "/", description: "Our story" },
-  { name: "Menu", href: "/menu", description: "Explore dishes" },
-  { name: "Location", href: "/location", description: "Find us" },
-  { name: "Contact", href: "/contact", description: "Get in touch" },
+  { name: "Home", chinese: "主頁", href: "/", description: "Welcome to café de A" },
+  { name: "Menu", chinese: "菜單", href: "/menu", description: "Authentic HK dishes & BBQ" },
+  { name: "Order", chinese: "點餐", href: "/order", description: "Pickup & Delivery" },
+  { name: "Location", chinese: "位置及營業時間", href: "/location", description: "Ironwood Plaza, Richmond" },
+  { name: "Contact", chinese: "聯絡我們", href: "/contact", description: "Catering & Inquiries" },
 ] as const
-
-
 
 const socialLinks = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/cafedea_richmond/",
+    href: "https://www.instagram.com/cafedea_ironwood/",
     icon: Instagram,
   },
   {
@@ -43,10 +42,10 @@ function useHeaderState() {
   // Handle scroll effects
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+      setIsScrolled(window.scrollY > 15)
 
-      // Close mobile menu on scroll
-      if (isMenuOpen && window.scrollY > 50) {
+      // Close mobile menu on substantial scroll
+      if (isMenuOpen && window.scrollY > 60) {
         setIsMenuOpen(false)
       }
     }
@@ -86,7 +85,7 @@ function useHeaderState() {
 }
 
 // Custom hook for click outside detection
-function useClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void, enabled: boolean) {
+function useClickOutside(refs: React.RefObject<HTMLElement | null>[], handler: () => void, enabled: boolean) {
   useEffect(() => {
     if (!enabled) return
 
@@ -108,7 +107,7 @@ function useClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => vo
   }, [refs, handler, enabled])
 }
 
-function Header() {
+export default function Header() {
   const { isMenuOpen, isScrolled, pathname, toggleMenu, closeMenu } = useHeaderState()
   const navRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
@@ -119,211 +118,259 @@ function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? "bg-[#232936]/95 backdrop-blur-md shadow-lg"
-            : "bg-[#232936]"
-          }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-[#1d232e]/98 backdrop-blur-md shadow-md py-0 border-b border-white/10"
+            : "bg-[#1d232e] border-b border-white/5"
+        }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Left: Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1 flex-1">
-              {navigationItems.map((item) => {
-                const isActive = pathname === item.href
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="group relative px-4 py-2 font-tempus"
-                  >
-                    <span
-                      className={`relative z-10 transition-colors duration-300 ${isActive
-                          ? "text-white"
-                          : "text-gray-300 group-hover:text-white"
-                        }`}
-                    >
-                      {item.name}
-                    </span>
+        {/* Top Info Bar (Desktop & Tablet landscape) */}
+        <div className="hidden md:block bg-[#161a22] text-xs text-gray-300 border-b border-white/5 py-1.5 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto flex items-center justify-between max-w-7xl">
+            <div className="flex items-center gap-6">
+              <span className="inline-flex items-center gap-1.5 text-gray-300">
+                <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>#3050-11666 Steveston Hwy, Richmond, BC (Ironwood Plaza)</span>
+              </span>
+              <span className="hidden lg:inline-flex items-center gap-1.5 text-gray-400">
+                <Clock className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Mon-Sat: 8am–10pm · Sun: 8am–9:30pm</span>
+              </span>
+            </div>
 
-                    {/* Animated underline */}
-                    <span
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 to-teal-600 transition-all duration-300 ${isActive
-                          ? "opacity-100 scale-x-100"
-                          : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
-                        }`}
-                    />
-
-                    {/* Hover background */}
-                    <span className="absolute inset-0 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </Link>
-                )
-              })}
-
-            </nav>
-
-            {/* Mobile: Empty spacer for layout balance */}
-            <div className="lg:hidden w-10" />
-
-            {/* Center: Logo */}
-            <Link
-              href="/"
-              className="absolute left-1/2 -translate-x-1/2 z-10"
-              onClick={closeMenu}
-            >
-              <div className="relative w-48 lg:w-60 h-14 lg:h-18">
-                <Image
-                  src="/images/logo.png"
-                  alt="café de A"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            </Link>
-
-            {/* Right: Order Button & Social Icons */}
-            <div className="hidden lg:flex items-center gap-4 flex-1 justify-end">
-              {/* Order Button */}
-              <Link
-                href="/order"
-                className="px-6 py-2 text-white font-semibold border border-teal-500 rounded-lg hover:bg-teal-500/10 transition-all duration-300 font-tempus"
+            <div className="flex items-center gap-4">
+              <a
+                href="tel:6042767800"
+                className="inline-flex items-center gap-1 text-teal-300 hover:text-teal-200 transition-colors font-medium"
               >
-                Order Now
-              </Link>
-              
-              {/* Social Icons */}
-              <div className="flex items-center gap-2 ml-2">
+                <Phone className="w-3.5 h-3.5 shrink-0" />
+                <span>(604) 276-7800</span>
+              </a>
+              <div className="h-3 w-px bg-white/20" />
+              <div className="flex items-center gap-2">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
-                    aria-label={social.name}
+                    className="text-gray-400 hover:text-teal-300 transition-colors"
+                    aria-label={`Follow on ${social.name}`}
                   >
-                    <social.icon className="w-5 h-5" />
+                    <social.icon className="w-3.5 h-3.5" />
                   </a>
                 ))}
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Mobile Menu Button - Right */}
+        {/* Main Navbar */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Left: Brand Logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-lg py-1"
+              onClick={closeMenu}
+              aria-label="café de A Homepage"
+            >
+              <div className="relative w-40 sm:w-48 lg:w-56 h-12 lg:h-14">
+                <Image
+                  src="/images/logo.png"
+                  alt="café de A"
+                  fill
+                  className="object-contain object-left transition-transform duration-300 group-hover:scale-[1.02]"
+                  priority
+                />
+              </div>
+            </Link>
+
+            {/* Center: Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`relative px-3.5 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                      isActive
+                        ? "text-white bg-white/10 shadow-sm"
+                        : "text-gray-300 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <span>{item.name}</span>
+                      <span className="text-xs text-teal-400 font-normal font-chinese opacity-90">{item.chinese}</span>
+                    </span>
+                    {isActive && (
+                      <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal-400 rounded-full" />
+                    )}
+                  </Link>
+                )
+              })}
+            </nav>
+
+            {/* Right: Actions */}
+            <div className="hidden md:flex items-center gap-3">
+              {/* Waitlist Button */}
+              <a
+                href="https://cafedeawaitlist.vercel.app/join"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-200 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg transition-colors"
+              >
+                <CalendarDays className="w-3.5 h-3.5 text-teal-300" />
+                <span>Join Waitlist</span>
+              </a>
+
+              {/* Order Online CTA */}
+              <Link
+                href="/order"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all font-tempus"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>Order Now</span>
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
               ref={menuButtonRef}
               onClick={toggleMenu}
-              className="lg:hidden relative z-10 p-2 text-white hover:text-teal-400 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-lg"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="lg:hidden p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+              aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMenuOpen}
             >
-              <div className="w-6 h-6 flex items-center justify-center">
-                {isMenuOpen ? (
-                  <X className="w-6 h-6 animate-in spin-in-90 duration-300" />
-                ) : (
-                  <Menu className="w-6 h-6 animate-in spin-in-90 duration-300" />
-                )}
-              </div>
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation - Fixed Overlay */}
-        {isMenuOpen && (
-          <div
-            className="lg:hidden fixed inset-0 top-16 bg-black/60 z-40"
-            onClick={closeMenu}
-          />
-        )}
+        {/* Mobile & Tablet Drawer Menu */}
+        <div
+          className={`lg:hidden fixed inset-0 top-[65px] md:top-[97px] bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+            isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+
         <nav
           ref={navRef}
-          className={`lg:hidden fixed top-16 left-0 right-0 bottom-0 bg-[#232936] backdrop-blur-lg border-t border-white/10 shadow-2xl transition-all duration-300 overflow-y-auto z-50 ${isMenuOpen
-              ? "opacity-100"
-              : "pointer-events-none opacity-0"
-            }`}
+          className={`lg:hidden fixed top-[65px] md:top-[97px] left-0 right-0 bottom-0 max-w-md ml-auto bg-[#1a1f29] border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+          aria-label="Mobile Navigation"
         >
-          <div className="w-full px-4 py-4 space-y-4">
-            {/* Mobile Order Link - Featured at top */}
-            <Link
-              href="/order"
-              onClick={closeMenu}
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold rounded-lg transition-all duration-300 font-tempus animate-in slide-in-from-top duration-300"
-            >
-              Order Now
-            </Link>
+          <div className="p-6 space-y-6">
+            {/* Fast Order & Waitlist CTA cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                href="/order"
+                onClick={closeMenu}
+                className="flex flex-col items-center justify-center gap-1.5 p-3.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                <span>Order Now</span>
+                <span className="text-[11px] text-teal-100 font-normal">自取 / 外賣</span>
+              </Link>
 
-            {/* Mobile Navigation Items */}
-            <ul className="space-y-0.5">
-              {navigationItems.map((item, index) => {
+              <a
+                href="https://cafedeawaitlist.vercel.app/join"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center gap-1.5 p-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl font-semibold text-sm transition-colors"
+              >
+                <CalendarDays className="w-5 h-5 text-teal-400" />
+                <span>Join Waitlist</span>
+                <span className="text-[11px] text-gray-300 font-normal">現場排隊</span>
+              </a>
+            </div>
+
+            {/* Navigation links list */}
+            <div className="space-y-1">
+              {navigationItems.map((item) => {
                 const isActive = pathname === item.href
                 return (
-                  <li
+                  <Link
                     key={item.name}
-                    className="animate-in slide-in-from-left duration-300"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={`flex items-center justify-between p-3.5 rounded-xl transition-colors ${
+                      isActive
+                        ? "bg-teal-900/40 text-teal-300 border border-teal-500/30"
+                        : "text-gray-200 hover:bg-white/5 hover:text-white"
+                    }`}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={closeMenu}
-                      className={`flex items-center justify-between px-4 py-2 rounded-lg font-tempus text-sm transition-all duration-300 ${isActive
-                          ? "bg-teal-600/20 text-white"
-                          : "text-gray-300 hover:bg-white/5 hover:text-white"
-                        }`}
-                    >
-                      <div>
-                        <div className="font-semibold">{item.name}</div>
-                        <div className="text-xs text-gray-500">{item.description}</div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-base">{item.name}</span>
+                        <span className="text-xs text-teal-400 font-chinese">{item.chinese}</span>
                       </div>
-                      {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-teal-500" />
-                      )}
-                    </Link>
-                  </li>
+                      <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
+                    </div>
+                    {isActive && <div className="w-2 h-2 rounded-full bg-teal-400" />}
+                  </Link>
                 )
               })}
-            </ul>
+            </div>
 
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            {/* Quick Contact & Directions */}
+            <div className="p-4 bg-white/5 border border-white/10 rounded-xl space-y-3">
+              <a
+                href="tel:6042767800"
+                className="flex items-center gap-3 text-sm text-teal-300 hover:text-teal-200 font-medium"
+              >
+                <div className="w-8 h-8 rounded-lg bg-teal-950/60 border border-teal-800 flex items-center justify-center text-teal-400">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400">Call restaurant</div>
+                  <div className="font-semibold">(604) 276-7800</div>
+                </div>
+              </a>
 
-            {/* Social Media Links - Mobile */}
-            <div className="grid grid-cols-2 gap-2">
-              {socialLinks.map((social, index) => (
+              <a
+                href="https://maps.app.goo.gl/cWFJu98tEtuGss9J9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-sm text-gray-300 hover:text-white"
+              >
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-teal-400">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs text-gray-400">Ironwood Plaza, Richmond</div>
+                  <div className="text-xs text-gray-300 truncate">#3050-11666 Steveston Hwy</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          {/* Drawer Footer */}
+          <div className="p-6 border-t border-white/10 bg-[#131720] text-center space-y-3">
+            <div className="flex justify-center gap-4">
+              {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-all duration-300 font-tempus text-xs animate-in slide-in-from-bottom duration-300"
-                  style={{ animationDelay: `${(navigationItems.length + 1) * 50 + index * 50}ms` }}
+                  className="p-2 text-gray-400 hover:text-teal-400 hover:bg-white/5 rounded-lg transition-colors"
                   aria-label={social.name}
                 >
                   <social.icon className="w-5 h-5" />
-                  <span className="text-sm hidden sm:inline">{social.name}</span>
                 </a>
               ))}
             </div>
-
-            {/* Operating Hours */}
-            <div className="text-center py-2 border-t border-white/10">
-              <p className="text-xs text-gray-500 font-tempus">
-                Open: 8am - 10pm
-              </p>
-            </div>
+            <p className="text-xs text-gray-400">
+              Open Daily: 8:00 AM – 10:00 PM (Sun until 9:30 PM)
+            </p>
           </div>
         </nav>
       </header>
-
-      {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-300"
-          style={{ top: "64px" }}
-          onClick={closeMenu}
-          aria-hidden="true"
-        />
-      )}
     </>
   )
 }
-
-export default Header

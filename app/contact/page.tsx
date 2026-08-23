@@ -1,9 +1,21 @@
 import InquiryForm from "@/components/InquiryForm"
+import type { Metadata } from "next"
 import Script from "next/script"
 
-export const metadata = {
-  title: "Contact | café de A Richmond Hong Kong Restaurant",
-  description: "Contact café de A for catering, reservations, or inquiries. Call 604-276-7800 or send us a message. Authentic Hong Kong cuisine in Richmond BC.",
+export const metadata: Metadata = {
+  title: "Contact, Catering & Inquiries | café de A Richmond BC",
+  description: "Contact café de A for group reservations, custom event catering, and general inquiries. Phone: (604) 276-7800. Located in Ironwood Plaza, Richmond BC.",
+  alternates: {
+    canonical: "https://cafedea.ca/contact",
+  },
+  openGraph: {
+    title: "Contact & Catering | café de A Richmond",
+    description: "Contact café de A for reservations, catering, or inquiries. Phone: (604) 276-7800.",
+    url: "https://cafedea.ca/contact",
+    siteName: "café de A",
+    locale: "en_CA",
+    type: "website",
+  },
 }
 
 const breadcrumbSchema = {
@@ -29,7 +41,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col pt-24">
       <Script
-        id="breadcrumb-schema"
+        id="breadcrumb-schema-contact"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />

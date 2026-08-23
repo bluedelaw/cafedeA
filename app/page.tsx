@@ -5,7 +5,18 @@ import Script from "next/script"
 
 export const metadata: Metadata = {
   title: "café de A | Authentic Hong Kong Cuisine Richmond BC",
-  description: "Experience authentic Hong Kong cuisine at café de A in Richmond, BC. Traditional recipes, fresh ingredients, expert chefs. Visit us today.",
+  description: "Experience authentic Hong Kong café culture and Cantonese BBQ at café de A in Ironwood Plaza, Richmond BC. Breakfast, lunch, afternoon tea, dinner & wok-hei classics.",
+  alternates: {
+    canonical: "https://cafedea.ca",
+  },
+  openGraph: {
+    title: "café de A | Authentic Hong Kong Cuisine Richmond BC",
+    description: "Experience authentic Hong Kong café culture and Cantonese BBQ at café de A in Ironwood Plaza, Richmond BC.",
+    url: "https://cafedea.ca",
+    siteName: "café de A",
+    locale: "en_CA",
+    type: "website",
+  },
 }
 
 const breadcrumbSchema = {
@@ -25,7 +36,7 @@ export default function HomePage() {
   return (
     <ErrorBoundary>
       <Script
-        id="breadcrumb-schema"
+        id="breadcrumb-schema-home"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />

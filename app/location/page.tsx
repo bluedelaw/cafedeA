@@ -4,8 +4,19 @@ import ErrorBoundary from "@/components/ErrorBoundary"
 import Script from "next/script"
 
 export const metadata: Metadata = {
-  title: "Location & Hours | café de A Richmond BC Steveston Hwy",
-  description: "Visit café de A at Ironwood Plaza, Richmond BC. Open 8am-10pm daily. Authentic Hong Kong cuisine near Vancouver. Get directions and hours.",
+  title: "Location, Hours & Directions | café de A Ironwood Plaza Richmond",
+  description: "Find café de A at Ironwood Plaza (#3050-11666 Steveston Hwy, Richmond BC). Open daily 8 AM - 10 PM. Free parking, transit directions & map.",
+  alternates: {
+    canonical: "https://cafedea.ca/location",
+  },
+  openGraph: {
+    title: "Location, Hours & Directions | café de A Richmond",
+    description: "Find café de A at Ironwood Plaza Richmond BC. Open daily with free parking.",
+    url: "https://cafedea.ca/location",
+    siteName: "café de A",
+    locale: "en_CA",
+    type: "website",
+  },
 }
 
 const breadcrumbSchema = {
@@ -21,7 +32,7 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Location",
+      "name": "Location & Hours",
       "item": "https://cafedea.ca/location"
     }
   ]
@@ -31,7 +42,7 @@ export default function LocationPage() {
   return (
     <ErrorBoundary>
       <Script
-        id="breadcrumb-schema"
+        id="breadcrumb-schema-location"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />

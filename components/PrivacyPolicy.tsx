@@ -6,23 +6,23 @@ import { Shield, Mail, Phone, MapPin } from "lucide-react"
 
 function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
+    <div className="min-h-screen bg-[#faf8f5] pt-28 pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
-            <Shield className="w-8 h-8 text-teal-600" />
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-teal-50 border border-teal-200 rounded-2xl mb-4 text-teal-700">
+            <Shield className="w-7 h-7" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent font-tempus">
+          <h1 className="text-3xl md:text-5xl font-bold mb-3 text-gray-900 font-tempus">
             Privacy Policy
           </h1>
-          <p className="text-gray-600">
-            Last Updated: February 26, 2026
+          <p className="text-sm text-gray-500">
+            Last Updated: February 2026 · café de A (Richmond, BC)
           </p>
         </div>
 
         {/* Content */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 space-y-8">
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 md:p-12 space-y-8 text-gray-700 text-sm sm:text-base leading-relaxed">
           {/* Introduction */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4 font-tempus">Introduction</h2>

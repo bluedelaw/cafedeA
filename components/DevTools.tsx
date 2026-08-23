@@ -1,14 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { isDev } from "@/lib/dev-utils"
 import config from "@/lib/config"
 
 export default function DevTools() {
   const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  // Only render in development mode
-  if (!isDev()) {
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Only render in development mode and once mounted on client
+  if (!mounted || !isDev()) {
     return null
   }
 

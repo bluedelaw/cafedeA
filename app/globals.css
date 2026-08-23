@@ -23,7 +23,7 @@
     --border: 30 15% 88%;
     --input: 30 15% 88%;
     --ring: 168 50% 38%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -53,9 +53,12 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground;
-    font-family: Arial, Helvetica, sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   }
 }
 
@@ -70,7 +73,11 @@
 
 /* Add the font-tempus utility class */
 .font-tempus {
-  font-family: "Tempus Sans ITC", sans-serif;
+  font-family: "Tempus Sans ITC", Georgia, serif;
+}
+
+.font-chinese {
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
 }
 
 @layer utilities {
