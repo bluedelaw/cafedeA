@@ -33,6 +33,11 @@ function useHeaderState() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const isMenuOpenRef = useRef(isMenuOpen)
+
+  useEffect(() => {
+    isMenuOpenRef.current = isMenuOpen
+  }, [isMenuOpen])
 
   // Close menu when route changes
   useEffect(() => {
@@ -45,25 +50,25 @@ function useHeaderState() {
       setIsScrolled(window.scrollY > 15)
 
       // Close mobile menu on substantial scroll
-      if (isMenuOpen && window.scrollY > 60) {
+      if (isMenuOpenRef.current && window.scrollY > 60) {
         setIsMenuOpen(false)
+        document.body.style.overflow = ""
       }
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [isMenuOpen])
+  }, [])
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    if (!isMenuOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
 
     return () => {
-      document.body.style.overflow = ""
+      document.body.style.overflow = previousOverflow
     }
   }, [isMenuOpen])
 
@@ -89,7 +94,7 @@ function useClickOutside(refs: React.RefObject<HTMLElement | null>[], handler: (
   useEffect(() => {
     if (!enabled) return
 
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+    const handleClickOutside = (event: MouseEvent) => {
       const isOutside = refs.every((ref) => ref.current && !ref.current.contains(event.target as Node))
 
       if (isOutside) {
@@ -98,11 +103,9 @@ function useClickOutside(refs: React.RefObject<HTMLElement | null>[], handler: (
     }
 
     document.addEventListener("mousedown", handleClickOutside)
-    document.addEventListener("touchstart", handleClickOutside)
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
-      document.removeEventListener("touchstart", handleClickOutside)
     }
   }, [refs, handler, enabled])
 }
@@ -118,10 +121,10 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1d232e] border-b max-lg:backdrop-blur-none ${
           isScrolled
-            ? "bg-[#1d232e]/98 backdrop-blur-md shadow-md py-0 border-b border-white/10"
-            : "bg-[#1d232e] border-b border-white/5"
+            ? "lg:backdrop-blur-md shadow-md py-0 border-white/10"
+            : "border-white/5"
         }`}
       >
         {/* Top Info Bar (Desktop & Tablet landscape) */}
@@ -134,7 +137,7 @@ export default function Header() {
               </span>
               <span className="hidden lg:inline-flex items-center gap-1.5 text-gray-400">
                 <Clock className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                <span>Mon-Sat: 8am–10pm · Sun: 8am–9:30pm</span>
+                <span>Open Daily: 8:00 AM – 10:00 PM</span>
               </span>
             </div>
 
@@ -171,7 +174,7 @@ export default function Header() {
             {/* Left: Brand Logo */}
             <Link
               href="/"
-              className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-lg py-1"
+              className="relative z-10 flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-lg py-1 max-w-[60%]"
               onClick={closeMenu}
               aria-label="café de A Homepage"
             >
@@ -238,8 +241,13 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               ref={menuButtonRef}
-              onClick={toggleMenu}
-              className="lg:hidden p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+              type="button"
+              onClick={(event) => {
+                event.preventDefault()
+                event.stopPropagation()
+                toggleMenu()
+              }}
+              className="relative z-20 lg:hidden p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
               aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMenuOpen}
             >
@@ -248,21 +256,21 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile & Tablet Drawer Menu */}
         <div
-          className={`lg:hidden fixed inset-0 top-[65px] md:top-[97px] bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+          className={`lg:hidden fixed inset-0 top-16 md:top-[97px] bg-black/60 z-40 transition-opacity duration-300 ${
             isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
           onClick={closeMenu}
-          aria-hidden="true"
+          aria-hidden={!isMenuOpen}
         />
 
         <nav
           ref={navRef}
-          className={`lg:hidden fixed top-[65px] md:top-[97px] left-0 right-0 bottom-0 max-w-md ml-auto bg-[#1a1f29] border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          className={`lg:hidden fixed top-16 md:top-[97px] right-0 bottom-0 w-full max-w-md bg-[#1a1f29] border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
+            isMenuOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"
           }`}
           aria-label="Mobile Navigation"
+          aria-hidden={!isMenuOpen}
         >
           <div className="p-6 space-y-6">
             {/* Fast Order & Waitlist CTA cards */}
@@ -366,7 +374,7 @@ export default function Header() {
               ))}
             </div>
             <p className="text-xs text-gray-400">
-              Open Daily: 8:00 AM – 10:00 PM (Sun until 9:30 PM)
+              Open Daily: 8:00 AM – 10:00 PM
             </p>
           </div>
         </nav>

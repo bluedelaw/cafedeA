@@ -319,9 +319,7 @@ export default function InquiryForm() {
                   </div>
                   <div>
                     <span className="font-bold text-gray-900 block text-xs uppercase tracking-wider">Service Hours</span>
-                    <span>Mon–Sat: 8:00 AM – 10:00 PM</span>
-                    <br />
-                    <span>Sun: 8:00 AM – 9:30 PM</span>
+                    <span>Open Daily: 8:00 AM – 10:00 PM</span>
                   </div>
                 </div>
               </div>

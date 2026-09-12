@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import FeaturedSpecials from "@/components/FeaturedSpecials"
+import { featuredSpecials } from "@/lib/specials"
 import {
   Search,
   X,
@@ -115,6 +117,14 @@ const scannedSections: ScannedSection[] = [
     ],
   },
   {
+    id: "lunch-combo",
+    name: "Lunch Special",
+    chinese: "午餐套餐",
+    images: [
+      { id: 1, imgSrc: "/images/LunchSpecial/Lunch7.webp", alt: "Lunch special combo menu" },
+    ],
+  },
+  {
     id: "afternoon-tea",
     name: "Afternoon Tea",
     chinese: "下午茶",
@@ -151,6 +161,7 @@ const scannedSections: ScannedSection[] = [
     chinese: "港式特飲",
     images: [
       { id: 1, imgSrc: "/images/Drink/Drink.jpg", alt: "Drinks menu page 1" },
+      { id: 2, imgSrc: "/images/Drink/Drink2.webp", alt: "Drinks menu page 2" },
     ],
   },
   {
@@ -160,20 +171,45 @@ const scannedSections: ScannedSection[] = [
     images: [
       { id: 1, imgSrc: "/images/Special/Month.webp", alt: "Monthly specials" },
       { id: 2, imgSrc: "/images/Special/ChefRec.webp", alt: "Chef's recommendation" },
+      { id: 3, imgSrc: "/images/Special/MidWeekSpecial.webp", alt: "Mid-week specials" },
+      { id: 4, imgSrc: "/images/Special/SeasonalLobster.webp", alt: "Seasonal lobster special" },
+      { id: 5, imgSrc: "/images/Special/LobsterSpecial.webp", alt: "Lobster baked rice special" },
     ],
   },
 ]
 
 // Category configuration for navigation tabs
 const categoryNavItems = [
-  { id: "breakfast", label: "Breakfast", chinese: "早餐", time: "8am–11am", icon: Coffee },
-  { id: "lunch", label: "Lunch", chinese: "午餐", time: "11am–5pm", icon: Utensils },
-  { id: "afternoon-tea", label: "Afternoon Tea", chinese: "下午茶", time: "2:30pm–5pm", icon: Coffee },
-  { id: "dinner", label: "Dinner", chinese: "晚餐", time: "5pm–Close", icon: Utensils },
-  { id: "bbq", label: "BBQ Meats", chinese: "港式燒味", time: "All Day", icon: Flame },
-  { id: "drinks", label: "Drinks", chinese: "港式特飲", time: "All Day", icon: Coffee },
-  { id: "specials", label: "Specials", chinese: "廚師推介", time: "Limited Time", icon: Sparkles },
+  { id: "breakfast", label: "Breakfast", mobileLabel: "Breakfast", chinese: "早餐", time: "8am–11am", icon: Coffee },
+  { id: "lunch", label: "Lunch", mobileLabel: "Lunch", chinese: "午餐", time: "11am–2:30pm", icon: Utensils },
+  {
+    id: "lunch-combo",
+    label: "Lunch Special",
+    mobileLabel: "Lunch Special",
+    chinese: "午餐套餐",
+    time: "11am–2:30pm",
+    icon: Sparkles,
+  },
+  { id: "afternoon-tea", label: "Afternoon Tea", mobileLabel: "Afternoon Tea", chinese: "下午茶", time: "2:30pm–5:30pm", icon: Coffee },
+  { id: "dinner", label: "Dinner", mobileLabel: "Dinner", chinese: "晚餐", time: "5:30pm–Close", icon: Utensils },
+  { id: "bbq", label: "BBQ Meats", mobileLabel: "BBQ", chinese: "港式燒味", time: "All Day", icon: Flame },
+  { id: "drinks", label: "Drinks", mobileLabel: "Drinks", chinese: "港式特飲", time: "All Day", icon: Coffee },
+  { id: "specials", label: "Specials", mobileLabel: "Specials", chinese: "最新推介", time: "Limited Time", icon: Sparkles },
 ]
+
+function resolveCategoryFromParam(sectionParam: string | null): string {
+  if (!sectionParam) return "breakfast"
+
+  const normalized = sectionParam.toLowerCase().trim().replace(/_/g, "-")
+  const match = categoryNavItems.find(
+    (c) =>
+      c.id.toLowerCase() === normalized ||
+      c.label.toLowerCase() === normalized ||
+      c.id.toLowerCase().replace(/-/g, " ") === normalized.replace(/-/g, " ")
+  )
+
+  return match?.id ?? "breakfast"
+}
 
 export default function Menu() {
   const searchParams = useSearchParams()
@@ -182,6 +218,8 @@ export default function Menu() {
   const [activeCategory, setActiveCategory] = useState("breakfast")
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"text" | "scans">("text")
+  const categoryTabsRef = useRef<HTMLDivElement>(null)
+  const hasInitializedTabsRef = useRef(false)
 
   // Modal state for scan gallery zoom
   const [modalState, setModalState] = useState<{
@@ -218,19 +256,62 @@ export default function Menu() {
     const sectionParam = searchParams.get("section")
     const viewParam = searchParams.get("view")
 
-    if (sectionParam) {
-      const match = categoryNavItems.find(
-        (c) => c.id.toLowerCase() === sectionParam.toLowerCase() || c.label.toLowerCase() === sectionParam.toLowerCase()
-      )
-      if (match) {
-        setActiveCategory(match.id)
-      }
-    }
+    setActiveCategory(resolveCategoryFromParam(sectionParam))
 
     if (viewParam === "scans") {
       setViewMode("scans")
     }
   }, [searchParams])
+
+  const [scrollToTabsToken, setScrollToTabsToken] = useState(0)
+
+  const handleCategoryChange = useCallback((categoryId: string, options?: { scrollToContent?: boolean }) => {
+    setActiveCategory(categoryId)
+
+    const tabsContainer = categoryTabsRef.current
+    if (tabsContainer) {
+      const activeTab = tabsContainer.querySelector<HTMLButtonElement>(
+        `[data-category-id="${categoryId}"]`
+      )
+      if (activeTab) {
+        tabsContainer.scrollLeft = Math.max(0, activeTab.offsetLeft - 16)
+      }
+    }
+
+    if (options?.scrollToContent) {
+      setScrollToTabsToken((token) => token + 1)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!scrollToTabsToken || searchQuery.trim()) return
+
+    const target = document.getElementById("menu-category-tabs")
+    if (!target) return
+
+    const headerOffset = window.matchMedia("(min-width: 1024px)").matches ? 80 : 64
+    const y = target.getBoundingClientRect().top + window.scrollY - headerOffset
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
+
+    const tabsContainer = categoryTabsRef.current
+    const activeTab = tabsContainer?.querySelector<HTMLButtonElement>(
+      `[data-category-id="${activeCategory}"]`
+    )
+    if (activeTab && tabsContainer) {
+      tabsContainer.scrollLeft = Math.max(0, activeTab.offsetLeft - 16)
+    }
+  }, [scrollToTabsToken, searchQuery, activeCategory])
+
+  // On first visit to /menu, keep the breakfast tab visible in the horizontal strip
+  useEffect(() => {
+    if (hasInitializedTabsRef.current || searchQuery.trim()) return
+
+    const tabsContainer = categoryTabsRef.current
+    if (!tabsContainer) return
+
+    hasInitializedTabsRef.current = true
+    tabsContainer.scrollLeft = 0
+  }, [searchQuery, isLoading])
 
   // Lightbox navigation handlers
   const openModal = useCallback((sectionId: string, imageIndex: number) => {
@@ -411,6 +492,14 @@ export default function Menu() {
           </div>
         </div>
 
+        <FeaturedSpecials
+          variant="banner"
+          onViewAll={() => {
+            setSearchQuery("")
+            handleCategoryChange("specials", { scrollToContent: true })
+          }}
+        />
+
         {/* 2. Search Bar */}
         <div className="mt-6 max-w-2xl">
           <div className="relative">
@@ -498,24 +587,17 @@ export default function Menu() {
       ) : (
         <>
           {/* Sticky Category Tabs Bar */}
-          <div className="sticky top-16 lg:top-20 z-30 bg-[#faf8f5]/95 backdrop-blur-md border-y border-gray-200 shadow-sm py-3 mb-8">
+          <div id="menu-category-tabs" className="sticky top-16 lg:top-20 z-30 bg-[#faf8f5]/95 backdrop-blur-md border-y border-gray-200 shadow-sm py-3 mb-8">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
+              <div ref={categoryTabsRef} className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
                 {categoryNavItems.map((cat) => {
                   const isActive = activeCategory === cat.id
                   const Icon = cat.icon
                   return (
                     <button
                       key={cat.id}
-                      onClick={() => {
-                        setActiveCategory(cat.id)
-                        const elem = document.getElementById(`category-content-${cat.id}`)
-                        if (elem) {
-                          const yOffset = -140
-                          const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset
-                          window.scrollTo({ top: y, behavior: "smooth" })
-                        }
-                      }}
+                      data-category-id={cat.id}
+                      onClick={() => handleCategoryChange(cat.id)}
                       className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 ${
                         isActive
                           ? "bg-teal-600 text-white shadow-md font-semibold scale-105"
@@ -523,7 +605,8 @@ export default function Menu() {
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isActive ? "text-teal-200" : "text-teal-600"}`} />
-                      <span>{cat.label}</span>
+                      <span className="sm:hidden">{cat.mobileLabel}</span>
+                      <span className="hidden sm:inline">{cat.label}</span>
                       <span className={`font-chinese text-xs ${isActive ? "text-teal-100" : "text-gray-500"}`}>
                         {cat.chinese}
                       </span>
@@ -583,6 +666,38 @@ export default function Menu() {
                         </div>
                       )}
                     </div>
+                  </div>
+                )}
+
+                {/* Poster-based specials (featured promotions) */}
+                {activeCategory === "specials" && (
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {featuredSpecials.map((special) => (
+                      <div
+                        key={special.id}
+                        className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
+                      >
+                        <div className="relative aspect-[3/4] bg-gray-100">
+                          <Image
+                            src={special.image}
+                            alt={special.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                          {special.badge && (
+                            <span className="absolute left-3 top-3 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                              {special.badge}
+                            </span>
+                          )}
+                        </div>
+                        <div className="space-y-1 border-t border-gray-100 p-5">
+                          <h3 className="text-lg font-bold text-gray-900">{special.title}</h3>
+                          <p className="text-sm font-semibold text-teal-700 font-chinese">{special.chineseTitle}</p>
+                          <p className="text-xs leading-relaxed text-gray-600">{special.description}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
 
@@ -688,6 +803,11 @@ export default function Menu() {
                             {section.note && (
                               <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-md mt-2 inline-block font-medium">
                                 {section.note}
+                              </p>
+                            )}
+                            {section.availableTime && (
+                              <p className="text-xs text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-md mt-2 inline-block font-medium whitespace-pre-line">
+                                {section.availableTime}
                               </p>
                             )}
                           </div>

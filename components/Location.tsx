@@ -36,7 +36,7 @@ export default function Location() {
       setCurrentDayName(daysOfWeek[day])
 
       const openMinutes = 8 * 60 // 8:00 AM = 480 mins
-      const closeMinutes = day === 0 ? 21 * 60 + 30 : 22 * 60 // Sun: 9:30 PM (1290 mins), Mon-Sat: 10:00 PM (1320 mins)
+      const closeMinutes = 22 * 60 // 10:00 PM
 
       const open = timeInMinutes >= openMinutes && timeInMinutes < closeMinutes
       setIsOpenNow(open)
@@ -52,7 +52,7 @@ export default function Location() {
     { day: "Thursday", hours: "8:00 AM – 10:00 PM", note: "Breakfast, Lunch, Tea, Dinner" },
     { day: "Friday", hours: "8:00 AM – 10:00 PM", note: "Breakfast, Lunch, Tea, Dinner" },
     { day: "Saturday", hours: "8:00 AM – 10:00 PM", note: "Breakfast, Lunch, Tea, Dinner" },
-    { day: "Sunday", hours: "8:00 AM – 9:30 PM", note: "Breakfast, Lunch, Tea, Dinner" },
+    { day: "Sunday", hours: "8:00 AM – 10:00 PM", note: "Breakfast, Lunch, Tea, Dinner" },
   ]
 
   return (
@@ -226,8 +226,9 @@ export default function Location() {
               <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 space-y-1">
                 <span className="font-bold block text-amber-950">Daily Meal Timings:</span>
                 <p>• <strong>Breakfast:</strong> 8:00 AM – 11:00 AM</p>
-                <p>• <strong>Lunch & Afternoon Tea:</strong> 11:00 AM – 5:00 PM (Afternoon Tea starts 2:30 PM)</p>
-                <p>• <strong>Dinner & BBQ Meats:</strong> 5:00 PM – Close</p>
+                <p>• <strong>Lunch:</strong> 11:00 AM – 2:30 PM</p>
+                <p>• <strong>Afternoon Tea:</strong> 2:30 PM – 5:30 PM</p>
+                <p>• <strong>Dinner & BBQ Meats:</strong> 5:30 PM – Close</p>
               </div>
             </div>
           </div>

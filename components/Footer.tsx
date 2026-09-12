@@ -110,19 +110,17 @@ export default function Footer() {
             </h3>
             <div className="space-y-2 text-sm text-gray-300">
               <div className="flex justify-between py-1 border-b border-white/5">
-                <span>Monday – Saturday</span>
+                <span>Daily</span>
                 <span className="font-medium text-white">8:00 AM – 10:00 PM</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span>Sunday</span>
-                <span className="font-medium text-white">8:00 AM – 9:30 PM</span>
               </div>
               <div className="pt-2 text-xs text-gray-400 leading-relaxed">
                 <span className="text-teal-400 font-medium">Breakfast:</span> 8:00 AM – 11:00 AM
                 <br />
-                <span className="text-teal-400 font-medium">Lunch & Tea:</span> 11:00 AM – 5:00 PM
+                <span className="text-teal-400 font-medium">Lunch:</span> 11:00 AM – 2:30 PM
                 <br />
-                <span className="text-teal-400 font-medium">Dinner:</span> 5:00 PM – Close
+                <span className="text-teal-400 font-medium">Afternoon Tea:</span> 2:30 PM – 5:30 PM
+                <br />
+                <span className="text-teal-400 font-medium">Dinner:</span> 5:30 PM – Close
               </div>
             </div>
           </div>

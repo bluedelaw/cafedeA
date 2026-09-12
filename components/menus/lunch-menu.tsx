@@ -180,7 +180,7 @@ export function LunchMenu() {
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b-2 border-accent">
           <h1 className="text-5xl font-bold tracking-tight mb-2">LUNCH MENU</h1>
-          <p className="text-muted-foreground text-lg">Available 11:00 AM – 5:00 PM</p>
+          <p className="text-muted-foreground text-lg">Available 11:00 AM – 2:30 PM</p>
         </div>
 
         {/* Menu Sections */}

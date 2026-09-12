@@ -205,9 +205,7 @@ export default function Order() {
               <div>
                 <h3 className="font-bold text-gray-900 text-sm">Operating Hours</h3>
                 <p className="text-xs text-gray-600 mt-1">
-                  Monday–Saturday: 8:00 AM – 10:00 PM
-                  <br />
-                  Sunday: 8:00 AM – 9:30 PM
+                  Open Daily: 8:00 AM – 10:00 PM
                 </p>
               </div>
             </div>

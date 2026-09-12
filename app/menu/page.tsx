@@ -2,6 +2,7 @@ import Menu from "@/components/Menu"
 import type { Metadata } from "next"
 import ErrorBoundary from "@/components/ErrorBoundary"
 import Script from "next/script"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: "Restaurant Menu | café de A Authentic Hong Kong Food Richmond",
@@ -46,7 +47,9 @@ export default function MenuPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <Menu />
+      <Suspense fallback={<div className="min-h-screen bg-[#faf8f5] pt-24" />}>
+        <Menu />
+      </Suspense>
     </ErrorBoundary>
   )
 }

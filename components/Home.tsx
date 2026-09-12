@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { 
+import FeaturedSpecials from "@/components/FeaturedSpecials"
+import {
   MapPin, 
   ChevronDown, 
-  Sparkles, 
   Phone, 
   Mail, 
   UtensilsCrossed, 
@@ -17,29 +16,10 @@ import {
   Coffee, 
   Award, 
   ArrowRight, 
-  X, 
-  ZoomIn,
   CheckCircle2
 } from "lucide-react"
 
 export default function Home() {
-  const [selectedPoster, setSelectedPoster] = useState<{ image: string; alt: string; title: string } | null>(null)
-
-  const promotionalPosters = [
-    {
-      image: "/images/Special/Month.webp",
-      alt: "Monthly Featured Specials",
-      title: "Featured Monthly Specials · 本月特介",
-      description: "Seasonal chef specials and limited-time dishes curated every month.",
-    },
-    {
-      image: "/images/Special/ChefRec.webp",
-      alt: "Chef's Recommendations",
-      title: "Chef's Recommendations · 廚師推介",
-      description: "Signature recipes perfected with time-honored Cantonese culinary techniques.",
-    },
-  ]
-
   const specialties = [
     {
       icon: Flame,
@@ -156,7 +136,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Restaurant Specialties & Essence */}
+      {/* 2. Featured Specials — high visibility for new promotions */}
+      <FeaturedSpecials variant="showcase" />
+
+      {/* 3. Restaurant Specialties & Essence */}
       <section className="py-16 md:py-24 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="text-center max-w-3xl mx-auto mb-14 md:mb-16 space-y-3">
@@ -214,7 +197,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Barbecue Meat Specialty Showcase */}
+      {/* 4. Barbecue Meat Specialty Showcase */}
       <section className="py-16 md:py-24 bg-[#faf8f5] overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -295,62 +278,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Current Specials & Chef's Recommendations */}
-      <section className="py-16 md:py-24 bg-[#1a1f29] text-white relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-teal-900/50 border border-teal-500/30 text-teal-300 text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Chef's Craft & Seasonal Highlights</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold font-tempus text-white">
-              Featured Monthly Specials
-            </h2>
-            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              Click on any poster to zoom in and view our seasonal culinary features and chef recommendations.
-            </p>
-          </div>
-
-          {/* Specials Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {promotionalPosters.map((poster, idx) => (
-              <div
-                key={idx}
-                onClick={() => setSelectedPoster(poster)}
-                className="group relative rounded-2xl overflow-hidden bg-[#242b38] border border-white/10 shadow-xl cursor-pointer hover:border-teal-500/60 transition-all duration-300 flex flex-col"
-              >
-                {/* Poster Image Container */}
-                <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-gray-900 overflow-hidden">
-                  <Image
-                    src={poster.image}
-                    alt={poster.alt}
-                    fill
-                    className="object-contain sm:object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  {/* Hover Overlay with Zoom Icon */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-gray-900 text-sm font-semibold shadow-lg">
-                      <ZoomIn className="w-4 h-4" />
-                      <span>Click to view full poster</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Poster Info */}
-                <div className="p-5 bg-[#1e2430] border-t border-white/5 flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-white text-base sm:text-lg">{poster.title}</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">{poster.description}</p>
-                  </div>
-                  <ZoomIn className="w-5 h-5 text-teal-400 shrink-0 ml-3" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 5. Destination & Action Hub (Location, Dining, Inquiries) */}
       <section className="py-16 md:py-24 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -381,7 +308,7 @@ export default function Home() {
                   </p>
                   <p className="flex items-start gap-2">
                     <strong className="text-gray-900 shrink-0">Hours:</strong>
-                    <span>Monday–Saturday: 8am–10pm · Sunday: 8am–9:30pm</span>
+                    <span>Open Daily: 8:00 AM – 10:00 PM</span>
                   </p>
                 </div>
               </div>
@@ -453,54 +380,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Poster Zoom Modal */}
-      {selectedPoster && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-          onClick={() => setSelectedPoster(null)}
-        >
-          <div
-            className="relative max-w-4xl max-h-[90vh] bg-[#1a1f29] rounded-2xl overflow-hidden shadow-2xl flex flex-col border border-white/20"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 bg-[#232936] text-white border-b border-white/10">
-              <h3 className="font-bold text-base sm:text-lg">{selectedPoster.title}</h3>
-              <button
-                onClick={() => setSelectedPoster(null)}
-                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Image Display */}
-            <div className="relative flex-1 min-h-[50vh] max-h-[75vh] w-auto overflow-auto p-2 sm:p-4 flex items-center justify-center bg-black/50">
-              <Image
-                src={selectedPoster.image}
-                alt={selectedPoster.alt}
-                width={900}
-                height={1200}
-                className="max-h-[70vh] w-auto object-contain rounded-lg shadow-lg"
-                priority
-              />
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-3 bg-[#232936] text-xs text-gray-300 text-center border-t border-white/10 flex items-center justify-between px-6">
-              <span>Prices and items subject to daily restaurant availability.</span>
-              <button
-                onClick={() => setSelectedPoster(null)}
-                className="text-teal-400 hover:text-teal-300 font-semibold"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

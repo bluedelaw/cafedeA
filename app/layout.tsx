@@ -156,16 +156,11 @@ const structuredDataGraph = {
             "Wednesday",
             "Thursday",
             "Friday",
-            "Saturday"
+            "Saturday",
+            "Sunday"
           ],
           "opens": "08:00",
           "closes": "22:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Sunday",
-          "opens": "08:00",
-          "closes": "21:30"
         }
       ],
       "sameAs": [

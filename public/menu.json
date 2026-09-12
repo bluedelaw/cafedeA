@@ -533,7 +533,7 @@
     ]
   },
   "lunch-combo": {
-    "name": "Lunch Combo",
+    "name": "Lunch Special",
     "chineseName": "午餐套餐",
     "sections": [
       {
@@ -541,7 +541,7 @@
         "chineseCategory": "午餐客飯套餐（跟白飯，中湯及熱咖啡或茶）",
         "note": "改凍飲+$1.50（Cold Drink +$1.50）",
         "price": "$19.95",
-        "availableTime": "套餐套餐供應時間為11:00 am 至 5:00 pm\nLunch Special Combo available between 11:00 am to 5:00 pm",
+        "availableTime": "套餐供應時間為11:00 am 至 2:30 pm\nLunch Special available between 11:00 am to 2:30 pm",
         "items": [
           { "id": "261", "chineseName": "柱侯牛腩生菜", "name": "Beef Brisket Stew" },
           { "id": "262", "chineseName": "紅燒豆腐", "name": "Fried Tofu in Oyster Sauce" },
@@ -1536,21 +1536,30 @@
     ]
   },
   "specials": {
-    "name": "Specials",
-    "chineseName": "特色菜",
+    "name": "Featured Specials",
+    "chineseName": "最新推介",
+    "subtitle": "Seasonal dishes, chef picks, and limited-time promotions",
     "type": "posters",
     "posters": [
       {
-        "image": "/images/Special/holiday-special.webp",
-        "alt": "Special Promotion 1"
+        "image": "/images/Special/Month.webp",
+        "alt": "Monthly featured specials at café de A"
       },
       {
-        "image": "/images/Special/lamb-hotpot-special.webp",
-        "alt": "Special Promotion 2"
+        "image": "/images/Special/ChefRec.webp",
+        "alt": "Chef's recommendations at café de A"
       },
       {
-        "image": "/images/Special/weekday-special.webp",
-        "alt": "Special Promotion 3"
+        "image": "/images/Special/MidWeekSpecial.webp",
+        "alt": "Mid-week specials Monday through Thursday at café de A"
+      },
+      {
+        "image": "/images/Special/SeasonalLobster.webp",
+        "alt": "Seasonal lobster special at café de A"
+      },
+      {
+        "image": "/images/Special/LobsterSpecial.webp",
+        "alt": "Lobster special baked rice with basa and salmon at café de A"
       }
     ]
   }
