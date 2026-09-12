@@ -18,7 +18,7 @@ const navigationItems = [
 const socialLinks = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/cafedea_ironwood/",
+    href: "https://www.instagram.com/cafedea_richmond/",
     icon: Instagram,
   },
   {
