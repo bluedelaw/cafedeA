@@ -274,15 +274,18 @@ export async function POST(request: Request) {
         await resend.emails.send({
           from: "Cafe de A <noreply@cafedea.ca>",
           to: [email],
-          subject: "Your Cafe de A reservation",
+          subject:
+            reservationStatus === "pending"
+              ? "Reservation request received — not confirmed yet"
+              : "Your Cafe de A reservation is confirmed",
           html: `
             <p>Hi ${name},</p>
             <p>${
               reservationStatus === "pending"
-                ? `We received your request for ${partySize} guests on ${reservationDate} at ${reservationTime}. Parties of 7 or more need staff to confirm. We'll text you when it's confirmed.`
-                : `Your reservation for ${partySize} guests on ${reservationDate} at ${reservationTime} is confirmed. We also sent a text to your phone.`
+                ? `This is not a confirmed table. We received your request for ${partySize} guests on ${reservationDate} at ${reservationTime}. Parties of 7 or more need staff to accept the booking. We'll text you if it's confirmed — please don't come in until you get that second text.`
+                : `Your reservation for ${partySize} guests on ${reservationDate} at ${reservationTime} is confirmed. We also sent a text to your phone. You can change the date, time, or party size until 2 hours before arrival. After that, only notes and cancel stay open.`
             }</p>
-            <p>You can change or cancel it here:</p>
+            <p>${reservationStatus === "pending" ? "You can view or cancel this request here:" : "You can change or cancel it here:"}</p>
             <p><a href="${manageUrl}">${manageUrl}</a></p>
             <p>Cafe de A<br/>(604) 276-7800</p>
           `,

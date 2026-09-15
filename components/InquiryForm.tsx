@@ -12,6 +12,7 @@ import {
   MapPin,
   Clock,
   CheckCircle2,
+  AlertTriangle,
   Sparkles,
   ArrowRight,
 } from "lucide-react"
@@ -193,7 +194,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
           </h1>
           <p className="text-gray-600 text-base md:text-lg">
             {initialSubject === "reservation"
-              ? "Pick a date, time, and party size. Parties of 1–6 are confirmed if the time is open. Larger parties are confirmed by staff."
+              ? "Parties of 1–6 are confirmed if the time is open. Parties of 7 or more are a request only — not a table until staff confirm."
               : "Have questions regarding party catering trays, group reservations, or menu customizations? We're here to help."}
           </p>
         </header>
@@ -204,29 +205,45 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
           <div className="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 lg:p-10 border border-gray-200 shadow-sm">
             {submitted ? (
               <div className="text-center py-10 space-y-5">
-                <div className="w-16 h-16 bg-teal-50 border border-teal-200 rounded-2xl flex items-center justify-center mx-auto text-teal-600">
-                  <CheckCircle2 className="w-8 h-8" />
+                <div
+                  className={`w-16 h-16 border rounded-2xl flex items-center justify-center mx-auto ${
+                    formData.subject === "reservation" && reservationStatus === "pending"
+                      ? "bg-amber-50 border-amber-200 text-amber-700"
+                      : "bg-teal-50 border-teal-200 text-teal-600"
+                  }`}
+                >
+                  {formData.subject === "reservation" && reservationStatus === "pending" ? (
+                    <AlertTriangle className="w-8 h-8" />
+                  ) : (
+                    <CheckCircle2 className="w-8 h-8" />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <h2 className="text-2xl font-bold text-gray-900 font-tempus">
                     {formData.subject === "reservation"
                       ? reservationStatus === "pending"
-                        ? "Reservation requested"
+                        ? "Request received — not confirmed"
                         : "Reservation confirmed"
                       : "Thank You for Your Message!"}
                   </h2>
-                  <p className="text-sm font-semibold text-teal-700 font-chinese">
+                  <p
+                    className={`text-sm font-semibold font-chinese ${
+                      formData.subject === "reservation" && reservationStatus === "pending"
+                        ? "text-amber-800"
+                        : "text-teal-700"
+                    }`}
+                  >
                     {formData.subject === "reservation"
                       ? reservationStatus === "pending"
-                        ? "訂座已送出，待確認"
+                        ? "尚未確認 · 請等餐廳回覆"
                         : "訂座已確認"
                       : "感謝您的查詢"}
                   </p>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
                     {formData.subject === "reservation"
                       ? reservationStatus === "pending"
-                        ? "Parties of 7 or more need staff to confirm a table. We'll text this phone number when it's confirmed. Use the link below to change or cancel."
-                        : "Your table is confirmed. We sent a text to this phone number with a link to change or cancel."
+                        ? "This is not a confirmed table. Parties of 7 or more need staff to accept the request. We'll text this number if it's confirmed. Please don't come in until you get that second text."
+                        : "Your table is confirmed. We sent a text with a link to change or cancel. Date, time, and party size can be changed until 2 hours before arrival; after that only notes and cancel stay open."
                       : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
@@ -234,9 +251,13 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                   {formData.subject === "reservation" && manageUrl && (
                     <a
                       href={manageUrl}
-                      className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-teal-600 text-teal-800 text-sm font-semibold rounded-xl"
+                      className={`inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-sm font-semibold rounded-xl ${
+                        reservationStatus === "pending"
+                          ? "border border-amber-600 text-amber-900"
+                          : "border border-teal-600 text-teal-800"
+                      }`}
                     >
-                      Change or cancel reservation
+                      {reservationStatus === "pending" ? "View or cancel this request" : "Change or cancel reservation"}
                     </a>
                   )}
                   <button
@@ -373,7 +394,9 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                 </div>
 
                 {formData.subject === "reservation" && (
-                  <div className="space-y-4 rounded-2xl border border-teal-100 bg-teal-50/40 p-4">
+                  <div className={`space-y-4 rounded-2xl border p-4 ${
+                    Number(formData.partySize) >= 7 ? "border-amber-200 bg-amber-50/60" : "border-teal-100 bg-teal-50/40"
+                  }`}>
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
                         Party size <span className="text-rose-500">*</span>
@@ -392,6 +415,12 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                           </button>
                         ))}
                       </div>
+                      {Number(formData.partySize) >= 7 && (
+                        <p className="mt-3 text-sm font-medium text-amber-950 bg-amber-100 border border-amber-300 rounded-xl px-3 py-3">
+                          Parties of 7 or more are a request only. This does not reserve a table until staff confirm. You will get a second text if it is accepted.
+                          <span className="block mt-1 font-chinese text-amber-900">7位或以上只是申請，需餐廳確認後才算訂座成功。</span>
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="reservationDate" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
@@ -499,10 +528,14 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                 </div>
 
                 {formData.subject === "reservation" && formData.reservationDate && formData.reservationTime && (
-                  <p className="text-sm text-teal-900 bg-teal-50 border border-teal-200 rounded-xl px-4 py-3">
+                  <p className={`text-sm rounded-xl px-4 py-3 border ${
+                    Number(formData.partySize) >= 7
+                      ? "text-amber-950 bg-amber-50 border-amber-300"
+                      : "text-teal-900 bg-teal-50 border-teal-200"
+                  }`}>
                     {Number(formData.partySize) >= 7
-                      ? "Parties of 7 or more are sent to staff to confirm. We'll text you when the table is set. You don't need to call."
-                      : "If the time shows available, your table is confirmed. We'll text a link to this phone number so you can change or cancel."}
+                      ? "Submitting does not confirm this table. Staff still have to accept parties of 7 or more. We'll text you if it's confirmed — please don't arrive until then."
+                      : "If the time shows available, your table is confirmed. You can change date, time, or party size until 2 hours before arrival. After that, only notes and cancel stay open."
                   </p>
                 )}
 
@@ -529,7 +562,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                       <span>
                         {formData.subject === "reservation"
                           ? Number(formData.partySize) >= 7
-                            ? "Request this time"
+                            ? "Request this time (not confirmed)"
                             : "Book this time"
                           : "Submit Inquiry"}
                       </span>
