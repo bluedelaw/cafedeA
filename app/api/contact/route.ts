@@ -101,6 +101,8 @@ export async function POST(request: Request) {
     }
 
     const isReservation = subject === "reservation"
+    let manageUrl = ""
+    let reservationId = ""
     if (isReservation) {
       const notes = String(message || "").trim()
       if (notes.length > 500) {
@@ -130,6 +132,8 @@ export async function POST(request: Request) {
           { status: booked.status || 400 },
         )
       }
+      reservationId = String(booked.data.id || "")
+      manageUrl = String(booked.data.manageUrl || "")
     } else if (!message || message.length < 10 || message.length > 5000) {
       console.log("[v0] Message length invalid:", message?.length)
       return NextResponse.json({ error: "Message must be between 10 and 5000 characters" }, { status: 400 })
@@ -150,7 +154,7 @@ export async function POST(request: Request) {
     if (!process.env.RESEND_API_KEY) {
       console.error("[v0] RESEND_API_KEY is not configured")
       if (isReservation) {
-        return NextResponse.json({ success: true, booked: true, emailSent: false })
+        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl })
       }
       return NextResponse.json(
         { error: "Email service is not configured. Please contact us directly at 604-276-7800." },
@@ -244,7 +248,7 @@ export async function POST(request: Request) {
                 <div style="background-color: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
                   <p style="color: #6b7280; font-size: 12px; margin: 0;">
                     ${subject === "reservation"
-                      ? "This booking was added to the waitlist reservations page as pending."
+                      ? `This booking was added to the waitlist reservations page as pending.${manageUrl ? ` Guest link: ${manageUrl}` : ""}`
                       : "This inquiry was sent from the Cafe de A website contact form."}
                   </p>
                 </div>
@@ -258,13 +262,37 @@ export async function POST(request: Request) {
     if (error) {
       console.error("[v0] Resend error:", error)
       if (subject === "reservation") {
-        return NextResponse.json({ success: true, booked: true, emailSent: false })
+        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl })
       }
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
     }
 
+    if (isReservation && manageUrl) {
+      try {
+        await resend.emails.send({
+          from: "Cafe de A <noreply@cafedea.ca>",
+          to: [email],
+          subject: "Your Cafe de A reservation",
+          html: `
+            <p>Hi ${name},</p>
+            <p>We have your request for ${partySize} guests on ${reservationDate} at ${reservationTime}.</p>
+            <p>It is pending until staff confirm. You can change or cancel it here:</p>
+            <p><a href="${manageUrl}">${manageUrl}</a></p>
+            <p>Cafe de A<br/>(604) 276-7800</p>
+          `,
+        })
+      } catch (guestEmailError) {
+        console.error("[v0] Guest reservation email failed:", guestEmailError)
+      }
+    }
+
     console.log("[v0] Email sent successfully:", data?.id)
-    return NextResponse.json({ success: true, id: data?.id })
+    return NextResponse.json({
+      success: true,
+      id: isReservation ? reservationId : data?.id,
+      manageUrl: manageUrl || undefined,
+      booked: isReservation,
+    })
   } catch (error) {
     console.error("[v0] Contact API error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

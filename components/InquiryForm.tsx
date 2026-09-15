@@ -22,7 +22,8 @@ type SlotOption = {
   time: string
   label: string
   available: boolean
-  seatsLeft: number
+  tableLabel?: string | null
+  seatsLeft?: number
   reason: string | null
 }
 
@@ -48,6 +49,7 @@ export default function InquiryForm() {
     reservationDate: restaurantToday(),
     reservationTime: "",
   })
+  const [manageUrl, setManageUrl] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -145,6 +147,7 @@ export default function InquiryForm() {
         throw new Error(data.error || "Failed to send inquiry")
       }
 
+      setManageUrl(typeof data.manageUrl === "string" ? data.manageUrl : "")
       setSubmitted(true)
     } catch (submitError) {
       setError(
@@ -197,14 +200,23 @@ export default function InquiryForm() {
                   </p>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
                     {formData.subject === "reservation"
-                      ? "We'll hold that time as pending. Staff will confirm if we need to change anything."
+                      ? "We'll hold that time as pending. Staff will confirm if we need to change anything. Use the link below to change or cancel."
                       : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
-                <div className="pt-4">
+                <div className="pt-4 space-y-3">
+                  {formData.subject === "reservation" && manageUrl && (
+                    <a
+                      href={manageUrl}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-teal-600 text-teal-800 text-sm font-semibold rounded-xl"
+                    >
+                      Change or cancel reservation
+                    </a>
+                  )}
                   <button
                     onClick={() => {
                       setSubmitted(false)
+                      setManageUrl("")
                       setFormData({
                         name: "",
                         email: "",
@@ -395,7 +407,7 @@ export default function InquiryForm() {
                             >
                               <span className="block font-semibold">{slot.label}</span>
                               <span className="block text-[11px] opacity-80">
-                                {slot.available ? `${slot.seatsLeft} seats` : slot.reason || "Full"}
+                                {slot.available ? "Available" : slot.reason || "Full"}
                               </span>
                             </button>
                           ))}

@@ -33,7 +33,7 @@ export async function fetchWaitlistSlots(date: string, partySize: number) {
     date: string
     today: string
     config: { maxPartySize: number; bookableDays: number }
-    slots: Array<{ time: string; label: string; available: boolean; seatsLeft: number; reason: string | null }>
+    slots: Array<{ time: string; label: string; available: boolean; tableLabel: string | null; reason: string | null }>
   }
 }
 
