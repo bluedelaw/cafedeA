@@ -535,7 +535,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                   }`}>
                     {Number(formData.partySize) >= 7
                       ? "Submitting does not confirm this table. Staff still have to accept parties of 7 or more. We'll text you if it's confirmed — please don't arrive until then."
-                      : "If the time shows available, your table is confirmed. You can change date, time, or party size until 2 hours before arrival. After that, only notes and cancel stay open."
+                      : "If the time shows available, your table is confirmed. You can change date, time, or party size until 2 hours before arrival. After that, only notes and cancel stay open."}
                   </p>
                 )}
 
