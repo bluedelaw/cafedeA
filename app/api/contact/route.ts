@@ -1,5 +1,6 @@
 import { Resend } from "resend"
 import { NextResponse } from "next/server"
+import { createWaitlistReservation, waitlistReservationConfigured } from "@/lib/waitlist-reservation"
 
 const rateLimit = new Map<string, { count: number; timestamp: number }>()
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     console.log("[v0] Request body:", JSON.stringify(body, null, 2))
 
-    const { name, email, phone, subject, message, website } = body
+    const { name, email, phone, subject, message, website, reservationDate, reservationTime, partySize } = body
 
     if (website) {
       console.log("[v0] Honeypot triggered")
@@ -72,13 +73,16 @@ export async function POST(request: Request) {
     }
 
     // Validate required fields
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !subject) {
       console.log("[v0] Missing required fields:", {
         name: !!name,
         email: !!email,
         subject: !!subject,
-        message: !!message,
       })
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    if (subject !== "reservation" && !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
@@ -88,7 +92,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 })
     }
 
-    if (isSpamMessage(message, email)) {
+    if (isSpamMessage(String(message || ""), email)) {
       console.log("[v0] Spam detected")
       return NextResponse.json(
         { error: "Your message was flagged as spam. Please contact us directly at 604-276-7800." },
@@ -96,8 +100,38 @@ export async function POST(request: Request) {
       )
     }
 
-    if (message.length < 10 || message.length > 5000) {
-      console.log("[v0] Message length invalid:", message.length)
+    const isReservation = subject === "reservation"
+    if (isReservation) {
+      const notes = String(message || "").trim()
+      if (notes.length > 500) {
+        return NextResponse.json({ error: "Notes must be 500 characters or fewer" }, { status: 400 })
+      }
+      if (!waitlistReservationConfigured()) {
+        return NextResponse.json(
+          { error: "Online reservations are unavailable. Please call us at (604) 276-7800." },
+          { status: 503 },
+        )
+      }
+
+      const booked = await createWaitlistReservation({
+        name,
+        email,
+        phone,
+        partySize,
+        reservationDate,
+        reservationTime,
+        specialRequests: notes,
+        website,
+      })
+
+      if (!booked.ok) {
+        return NextResponse.json(
+          { error: booked.data.error || "That time is unavailable. Please pick another slot or call us." },
+          { status: booked.status || 400 },
+        )
+      }
+    } else if (!message || message.length < 10 || message.length > 5000) {
+      console.log("[v0] Message length invalid:", message?.length)
       return NextResponse.json({ error: "Message must be between 10 and 5000 characters" }, { status: 400 })
     }
 
@@ -115,6 +149,9 @@ export async function POST(request: Request) {
 
     if (!process.env.RESEND_API_KEY) {
       console.error("[v0] RESEND_API_KEY is not configured")
+      if (isReservation) {
+        return NextResponse.json({ success: true, booked: true, emailSent: false })
+      }
       return NextResponse.json(
         { error: "Email service is not configured. Please contact us directly at 604-276-7800." },
         { status: 503 },
@@ -182,6 +219,18 @@ export async function POST(request: Request) {
                     `
                         : ""
                     }
+                    ${
+                      subject === "reservation"
+                        ? `
+                    <tr>
+                      <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb;">
+                        <strong style="color: #6b7280; font-size: 12px; text-transform: uppercase;">Reservation</strong>
+                        <div style="color: #111827; font-size: 16px; margin-top: 4px;">${partySize} guests · ${reservationDate} · ${reservationTime}</div>
+                      </td>
+                    </tr>
+                    `
+                        : ""
+                    }
                   </table>
 
                   <!-- Message -->
@@ -194,7 +243,9 @@ export async function POST(request: Request) {
                 <!-- Footer -->
                 <div style="background-color: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
                   <p style="color: #6b7280; font-size: 12px; margin: 0;">
-                    This inquiry was sent from the Cafe de A website contact form.
+                    ${subject === "reservation"
+                      ? "This booking was added to the waitlist reservations page as pending."
+                      : "This inquiry was sent from the Cafe de A website contact form."}
                   </p>
                 </div>
               </div>
@@ -206,6 +257,9 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("[v0] Resend error:", error)
+      if (subject === "reservation") {
+        return NextResponse.json({ success: true, booked: true, emailSent: false })
+      }
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
     }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   Send, 
   Utensils, 
@@ -18,6 +18,24 @@ import {
 
 type SubjectType = "catering" | "reservation" | "general"
 
+type SlotOption = {
+  time: string
+  label: string
+  available: boolean
+  seatsLeft: number
+  reason: string | null
+}
+
+function restaurantToday() {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
+}
+
+function addDays(date: string, days: number) {
+  const [year, month, day] = date.split("-").map(Number)
+  const next = new Date(Date.UTC(year, month - 1, day + days))
+  return next.toISOString().slice(0, 10)
+}
+
 export default function InquiryForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -25,11 +43,17 @@ export default function InquiryForm() {
     phone: "",
     subject: "general" as SubjectType,
     message: "",
-    website: "", // Honeypot field
+    website: "",
+    partySize: "2",
+    reservationDate: restaurantToday(),
+    reservationTime: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [slots, setSlots] = useState<SlotOption[]>([])
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const [slotsError, setSlotsError] = useState("")
 
   const subjects = [
     {
@@ -44,7 +68,7 @@ export default function InquiryForm() {
       label: "Reservation",
       chineseLabel: "訂座查詢",
       icon: CalendarDays,
-      description: "Large tables & special gatherings",
+      description: "Pick a date, time, and party size",
     },
     {
       id: "general" as SubjectType,
@@ -55,10 +79,57 @@ export default function InquiryForm() {
     },
   ]
 
+  useEffect(() => {
+    if (formData.subject !== "reservation") return
+
+    const controller = new AbortController()
+    const loadSlots = async () => {
+      setSlotsLoading(true)
+      setSlotsError("")
+      try {
+        const params = new URLSearchParams({
+          date: formData.reservationDate,
+          partySize: formData.partySize,
+        })
+        const response = await fetch(`/api/reservation-slots?${params}`, { signal: controller.signal })
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data.error || "Could not load available times")
+        }
+        setSlots(data.slots || [])
+        if (formData.reservationTime && !(data.slots || []).some((slot: SlotOption) => slot.time === formData.reservationTime && slot.available)) {
+          setFormData((prev) => ({ ...prev, reservationTime: "" }))
+        }
+      } catch (loadError) {
+        if (controller.signal.aborted) return
+        setSlots([])
+        setSlotsError(loadError instanceof Error ? loadError.message : "Could not load available times")
+      } finally {
+        if (!controller.signal.aborted) setSlotsLoading(false)
+      }
+    }
+
+    void loadSlots()
+    return () => controller.abort()
+  }, [formData.subject, formData.reservationDate, formData.partySize])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
+
+    if (formData.subject === "reservation") {
+      if (!formData.phone.replace(/\D/g, "") || formData.phone.replace(/\D/g, "").length !== 10) {
+        setError("A 10-digit phone number is required for reservations.")
+        setIsSubmitting(false)
+        return
+      }
+      if (!formData.reservationDate || !formData.reservationTime) {
+        setError("Choose a date and an available time slot.")
+        setIsSubmitting(false)
+        return
+      }
+    }
 
     try {
       const response = await fetch("/api/contact", {
@@ -69,13 +140,18 @@ export default function InquiryForm() {
         body: JSON.stringify(formData),
       })
 
+      const data = await response.json().catch(() => ({}))
       if (!response.ok) {
-        throw new Error("Failed to send inquiry")
+        throw new Error(data.error || "Failed to send inquiry")
       }
 
       setSubmitted(true)
-    } catch {
-      setError("Failed to send your message online. Please try again or call us directly at (604) 276-7800.")
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Failed to send your message online. Please try again or call us directly at (604) 276-7800.",
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -113,17 +189,33 @@ export default function InquiryForm() {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-gray-900 font-tempus">Thank You for Your Message!</h2>
-                  <p className="text-sm font-semibold text-teal-700 font-chinese">感謝您的查詢</p>
+                  <h2 className="text-2xl font-bold text-gray-900 font-tempus">
+                    {formData.subject === "reservation" ? "You're on our reservation list" : "Thank You for Your Message!"}
+                  </h2>
+                  <p className="text-sm font-semibold text-teal-700 font-chinese">
+                    {formData.subject === "reservation" ? "已為您登記訂座" : "感謝您的查詢"}
+                  </p>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                    We have received your inquiry and our team will get back to you within 24 to 48 hours.
+                    {formData.subject === "reservation"
+                      ? "We'll hold that time as pending. Staff will confirm if we need to change anything."
+                      : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
                 <div className="pt-4">
                   <button
                     onClick={() => {
                       setSubmitted(false)
-                      setFormData({ name: "", email: "", phone: "", subject: "general", message: "", website: "" })
+                      setFormData({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        subject: "general",
+                        message: "",
+                        website: "",
+                        partySize: "2",
+                        reservationDate: restaurantToday(),
+                        reservationTime: "",
+                      })
                     }}
                     className="inline-flex items-center gap-2 px-6 py-2.5 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-xl transition-colors"
                   >
@@ -165,7 +257,7 @@ export default function InquiryForm() {
                         <button
                           key={subject.id}
                           type="button"
-                          onClick={() => setFormData((prev) => ({ ...prev, subject: subject.id }))}
+                          onClick={() => setFormData((prev) => ({ ...prev, subject: subject.id, reservationTime: "" }))}
                           className={`p-3.5 rounded-2xl border-2 text-left transition-all ${
                             isSelected
                               ? "border-teal-600 bg-teal-50/70 shadow-sm"
@@ -221,12 +313,18 @@ export default function InquiryForm() {
                 {/* Phone */}
                 <div>
                   <label htmlFor="phone" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                    Phone Number <span className="text-gray-400 font-normal">(Optional for faster response)</span>
+                    Phone Number{" "}
+                    {formData.subject === "reservation" ? (
+                      <span className="text-rose-500">*</span>
+                    ) : (
+                      <span className="text-gray-400 font-normal">(Optional for faster response)</span>
+                    )}
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     name="phone"
+                    required={formData.subject === "reservation"}
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-[#faf8f5]/50 focus:bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm transition-all"
@@ -234,16 +332,95 @@ export default function InquiryForm() {
                   />
                 </div>
 
+                {formData.subject === "reservation" && (
+                  <div className="space-y-4 rounded-2xl border border-teal-100 bg-teal-50/40 p-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                        Party size <span className="text-rose-500">*</span>
+                      </label>
+                      <div className="grid grid-cols-6 gap-2">
+                        {Array.from({ length: 12 }, (_, index) => String(index + 1)).map((size) => (
+                          <button
+                            key={size}
+                            type="button"
+                            onClick={() => setFormData((prev) => ({ ...prev, partySize: size, reservationTime: "" }))}
+                            className={`h-11 rounded-xl text-sm font-bold ${
+                              formData.partySize === size ? "bg-teal-600 text-white" : "bg-white text-gray-800 border border-gray-200"
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="reservationDate" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                        Date <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        id="reservationDate"
+                        name="reservationDate"
+                        required
+                        min={restaurantToday()}
+                        max={addDays(restaurantToday(), 30)}
+                        value={formData.reservationDate}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, reservationDate: e.target.value, reservationTime: "" }))}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                        Time <span className="text-rose-500">*</span>
+                      </label>
+                      {slotsLoading ? (
+                        <p className="text-sm text-gray-500">Loading available times…</p>
+                      ) : slotsError ? (
+                        <p className="text-sm text-rose-700">{slotsError}</p>
+                      ) : (
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                          {slots.map((slot) => (
+                            <button
+                              key={slot.time}
+                              type="button"
+                              disabled={!slot.available}
+                              onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
+                              className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
+                                formData.reservationTime === slot.time
+                                  ? "bg-teal-600 border-teal-600 text-white"
+                                  : slot.available
+                                    ? "bg-white border-gray-200 text-gray-900"
+                                    : "bg-gray-100 border-gray-200 text-gray-400"
+                              }`}
+                            >
+                              <span className="block font-semibold">{slot.label}</span>
+                              <span className="block text-[11px] opacity-80">
+                                {slot.available ? `${slot.seatsLeft} seats` : slot.reason || "Full"}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Message */}
                 <div>
                   <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                    Message Details <span className="text-rose-500">*</span>
+                    {formData.subject === "reservation" ? "Notes" : "Message Details"}{" "}
+                    {formData.subject === "reservation" ? (
+                      <span className="text-gray-400 font-normal">(Optional)</span>
+                    ) : (
+                      <span className="text-rose-500">*</span>
+                    )}
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    required
+                    required={formData.subject !== "reservation"}
                     rows={4}
+                    maxLength={formData.subject === "reservation" ? 500 : 5000}
                     value={formData.message}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-[#faf8f5]/50 focus:bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm transition-all resize-none"
@@ -251,7 +428,7 @@ export default function InquiryForm() {
                       formData.subject === "catering"
                         ? "Please let us know: event date, estimated number of guests, preferred dishes or party trays..."
                         : formData.subject === "reservation"
-                          ? "Please specify: requested date, time, party size, high chairs needed, etc..."
+                          ? "High chair, window seat, allergies..."
                           : "How can we help you?"
                     }
                   />
@@ -260,18 +437,18 @@ export default function InquiryForm() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting || !formData.subject}
+                  disabled={isSubmitting || !formData.subject || (formData.subject === "reservation" && (slotsLoading || Boolean(slotsError) || !formData.reservationTime))}
                   className="w-full bg-teal-600 hover:bg-teal-500 text-white py-3.5 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-tempus"
                 >
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Sending Message...</span>
+                      <span>{formData.subject === "reservation" ? "Booking..." : "Sending Message..."}</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>Submit Inquiry</span>
+                      <span>{formData.subject === "reservation" ? "Book this time" : "Submit Inquiry"}</span>
                     </>
                   )}
                 </button>
