@@ -236,14 +236,21 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Mobile: Reserve + menu */}
+            {/* Mobile: Reserve + Order + menu */}
             <div className="flex lg:hidden items-center gap-1.5">
               <Link
                 href="/reservation"
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-500 rounded-lg transition-colors"
               >
-                <CalendarDays className="w-3.5 h-3.5" />
+                <CalendarDays className="hidden sm:block w-3.5 h-3.5" />
                 <span>Reserve</span>
+              </Link>
+              <Link
+                href="/order"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-500 rounded-lg transition-colors"
+              >
+                <ShoppingBag className="hidden sm:block w-3.5 h-3.5" />
+                <span>Order</span>
               </Link>
               <button
                 ref={menuButtonRef}
