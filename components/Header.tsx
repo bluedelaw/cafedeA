@@ -11,6 +11,7 @@ const navigationItems = [
   { name: "Home", chinese: "主頁", href: "/", description: "Welcome to café de A" },
   { name: "Menu", chinese: "菜單", href: "/menu", description: "Authentic HK dishes & BBQ" },
   { name: "Order", chinese: "點餐", href: "/order", description: "Pickup & Delivery" },
+  { name: "Reserve", chinese: "訂座", href: "/reservation", description: "Book a table online" },
   { name: "Location", chinese: "位置及營業時間", href: "/location", description: "Ironwood Plaza, Richmond" },
   { name: "Contact", chinese: "聯絡我們", href: "/contact", description: "Catering & Inquiries" },
 ] as const
@@ -190,14 +191,14 @@ export default function Header() {
             </Link>
 
             {/* Center: Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
               {navigationItems.map((item) => {
                 const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`relative px-3.5 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                    className={`relative px-2.5 xl:px-3.5 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                       isActive
                         ? "text-white bg-white/10 shadow-sm"
                         : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -217,7 +218,6 @@ export default function Header() {
 
             {/* Right: Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Waitlist Button */}
               <a
                 href="https://cafedeawaitlist.vercel.app/join"
                 target="_blank"
@@ -274,26 +274,36 @@ export default function Header() {
         >
           <div className="p-6 space-y-6">
             {/* Fast Order & Waitlist CTA cards */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               <Link
                 href="/order"
                 onClick={closeMenu}
-                className="flex flex-col items-center justify-center gap-1.5 p-3.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
               >
                 <ShoppingBag className="w-5 h-5" />
-                <span>Order Now</span>
-                <span className="text-[11px] text-teal-100 font-normal">自取 / 外賣</span>
+                <span>Order</span>
+                <span className="text-[11px] text-teal-100 font-normal">點餐</span>
+              </Link>
+
+              <Link
+                href="/reservation"
+                onClick={closeMenu}
+                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-teal-500/40 rounded-xl font-semibold text-sm transition-colors"
+              >
+                <CalendarDays className="w-5 h-5 text-teal-300" />
+                <span>Reserve</span>
+                <span className="text-[11px] text-gray-300 font-normal">訂座</span>
               </Link>
 
               <a
                 href="https://cafedeawaitlist.vercel.app/join"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center justify-center gap-1.5 p-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl font-semibold text-sm transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl font-semibold text-sm transition-colors"
               >
-                <CalendarDays className="w-5 h-5 text-teal-400" />
-                <span>Join Waitlist</span>
-                <span className="text-[11px] text-gray-300 font-normal">現場排隊</span>
+                <CalendarDays className="w-5 h-5 text-amber-300" />
+                <span>Waitlist</span>
+                <span className="text-[11px] text-gray-300 font-normal">排隊</span>
               </a>
             </div>
 

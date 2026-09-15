@@ -197,15 +197,22 @@ const structuredDataGraph = {
         {
           "@type": "SiteNavigationElement",
           "position": 4,
+          "name": "Reserve a Table",
+          "description": "Book a table online at café de A",
+          "url": "https://cafedea.ca/reservation"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
           "name": "Location & Hours",
           "description": "Directions, parking, map, and daily hours at Ironwood Plaza",
           "url": "https://cafedea.ca/location"
         },
         {
           "@type": "SiteNavigationElement",
-          "position": 5,
+          "position": 6,
           "name": "Contact & Catering",
-          "description": "Get in touch for table reservations, group dining, and custom catering",
+          "description": "Get in touch for group dining and custom catering",
           "url": "https://cafedea.ca/contact"
         }
       ]

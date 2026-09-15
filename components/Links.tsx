@@ -34,6 +34,14 @@ const actions = [
   },
   {
     icon: CalendarDays,
+    label: "Reserve a Table",
+    chinese: "網上訂座",
+    href: "/reservation",
+    internal: true,
+    highlight: false,
+  },
+  {
+    icon: CalendarDays,
     label: "Join Live Waitlist",
     chinese: "堂食實時排隊",
     href: "https://cafedeawaitlist.vercel.app/join",

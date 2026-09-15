@@ -1,6 +1,6 @@
 const OPEN_MINUTES = 8 * 60
 const LAST_SLOT_MINUTES = 21 * 60
-const INTERVAL = 30
+const INTERVAL = 15
 const BOOKABLE_DAYS = 30
 const WINDOW_MINUTES = 120
 
@@ -82,9 +82,8 @@ function slotMinutes(time: string) {
 }
 
 export function defaultAroundTime(date: string) {
-  const dinner = "18:00"
-  if (!isSlotInPast(date, dinner)) return dinner
-  return generateReservationSlots().find((slot) => !isSlotInPast(date, slot)) || dinner
+  if (date > restaurantToday()) return "18:00"
+  return generateReservationSlots().find((slot) => !isSlotInPast(date, slot)) || "12:00"
 }
 
 export function nearbySlotTimes(preferredTime: string, date: string) {

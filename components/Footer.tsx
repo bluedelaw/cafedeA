@@ -76,6 +76,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/reservation" className="text-gray-300 hover:text-teal-400 transition-colors inline-flex items-center gap-1.5">
+                  <ArrowRight className="w-3.5 h-3.5 text-teal-500" />
+                  <span>Reserve a Table 網上訂座</span>
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://cafedeawaitlist.vercel.app/join"
                   target="_blank"

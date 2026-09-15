@@ -103,6 +103,7 @@ export async function POST(request: Request) {
     const isReservation = subject === "reservation"
     let manageUrl = ""
     let reservationId = ""
+    let reservationStatus: "pending" | "confirmed" | "" = ""
     if (isReservation) {
       const notes = String(message || "").trim()
       if (notes.length > 500) {
@@ -134,6 +135,7 @@ export async function POST(request: Request) {
       }
       reservationId = String(booked.data.id || "")
       manageUrl = String(booked.data.manageUrl || "")
+      reservationStatus = booked.data.status === "pending" ? "pending" : "confirmed"
     } else if (!message || message.length < 10 || message.length > 5000) {
       console.log("[v0] Message length invalid:", message?.length)
       return NextResponse.json({ error: "Message must be between 10 and 5000 characters" }, { status: 400 })
@@ -142,7 +144,7 @@ export async function POST(request: Request) {
     // Format subject line
     const subjectLabels: Record<string, string> = {
       catering: "Catering Inquiry",
-      reservation: "Reservation Request",
+      reservation: "Reservation",
       general: "General Inquiry",
     }
 
@@ -154,7 +156,7 @@ export async function POST(request: Request) {
     if (!process.env.RESEND_API_KEY) {
       console.error("[v0] RESEND_API_KEY is not configured")
       if (isReservation) {
-        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl })
+        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl, status: reservationStatus })
       }
       return NextResponse.json(
         { error: "Email service is not configured. Please contact us directly at 604-276-7800." },
@@ -248,7 +250,7 @@ export async function POST(request: Request) {
                 <div style="background-color: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
                   <p style="color: #6b7280; font-size: 12px; margin: 0;">
                     ${subject === "reservation"
-                      ? `This booking was added to the waitlist reservations page as pending.${manageUrl ? ` Guest link: ${manageUrl}` : ""}`
+                      ? `This booking is ${reservationStatus === "pending" ? "pending staff confirmation" : "confirmed"} on the waitlist reservations page.${manageUrl ? ` Guest link: ${manageUrl}` : ""}`
                       : "This inquiry was sent from the Cafe de A website contact form."}
                   </p>
                 </div>
@@ -262,7 +264,7 @@ export async function POST(request: Request) {
     if (error) {
       console.error("[v0] Resend error:", error)
       if (subject === "reservation") {
-        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl })
+        return NextResponse.json({ success: true, booked: true, emailSent: false, id: reservationId, manageUrl, status: reservationStatus })
       }
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
     }
@@ -275,8 +277,12 @@ export async function POST(request: Request) {
           subject: "Your Cafe de A reservation",
           html: `
             <p>Hi ${name},</p>
-            <p>We have your request for ${partySize} guests on ${reservationDate} at ${reservationTime}.</p>
-            <p>It is pending until staff confirm. You can change or cancel it here:</p>
+            <p>${
+              reservationStatus === "pending"
+                ? `We received your request for ${partySize} guests on ${reservationDate} at ${reservationTime}. Parties of 7 or more need staff to confirm. We'll text you when it's confirmed.`
+                : `Your reservation for ${partySize} guests on ${reservationDate} at ${reservationTime} is confirmed. We also sent a text to your phone.`
+            }</p>
+            <p>You can change or cancel it here:</p>
             <p><a href="${manageUrl}">${manageUrl}</a></p>
             <p>Cafe de A<br/>(604) 276-7800</p>
           `,
@@ -291,6 +297,7 @@ export async function POST(request: Request) {
       success: true,
       id: isReservation ? reservationId : data?.id,
       manageUrl: manageUrl || undefined,
+      status: reservationStatus || undefined,
       booked: isReservation,
     })
   } catch (error) {

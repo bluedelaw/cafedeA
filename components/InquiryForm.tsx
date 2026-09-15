@@ -36,12 +36,12 @@ type SlotOption = {
   reason: string | null
 }
 
-export default function InquiryForm() {
+export default function InquiryForm({ initialSubject = "general" }: { initialSubject?: SubjectType }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    subject: "general" as SubjectType,
+    subject: initialSubject,
     message: "",
     website: "",
     partySize: "2",
@@ -49,6 +49,7 @@ export default function InquiryForm() {
     reservationTime: "",
   })
   const [manageUrl, setManageUrl] = useState("")
+  const [reservationStatus, setReservationStatus] = useState<"pending" | "confirmed" | "">("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -117,8 +118,6 @@ export default function InquiryForm() {
 
   const nearbyTimes = nearbySlotTimes(aroundTime, formData.reservationDate)
   const visibleSlots = slots.filter((slot) => nearbyTimes.includes(slot.time))
-  const windowFirst = visibleSlots[0]
-  const windowLast = visibleSlots[visibleSlots.length - 1]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -153,6 +152,7 @@ export default function InquiryForm() {
       }
 
       setManageUrl(typeof data.manageUrl === "string" ? data.manageUrl : "")
+      setReservationStatus(data.status === "pending" ? "pending" : formData.subject === "reservation" ? "confirmed" : "")
       setSubmitted(true)
     } catch (submitError) {
       setError(
@@ -177,13 +177,17 @@ export default function InquiryForm() {
         <header className="max-w-3xl mx-auto text-center space-y-3 mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-            <span>GET IN TOUCH · 聯絡我們與到會服務</span>
+            <span>
+              {initialSubject === "reservation" ? "RESERVE A TABLE · 網上訂座" : "GET IN TOUCH · 聯絡我們與到會服務"}
+            </span>
           </div>
           <h1 className="font-tempus text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-            Contact & Catering Inquiries
+            {initialSubject === "reservation" ? "Reserve a Table" : "Contact & Catering Inquiries"}
           </h1>
           <p className="text-gray-600 text-base md:text-lg">
-            Have questions regarding party catering trays, group reservations, or menu customizations? We're here to help.
+            {initialSubject === "reservation"
+              ? "Pick a date, time, and party size. Parties of 1–6 are confirmed if the time is open. Larger parties are confirmed by staff."
+              : "Have questions regarding party catering trays, group reservations, or menu customizations? We're here to help."}
           </p>
         </header>
 
@@ -198,14 +202,24 @@ export default function InquiryForm() {
                 </div>
                 <div className="space-y-2">
                   <h2 className="text-2xl font-bold text-gray-900 font-tempus">
-                    {formData.subject === "reservation" ? "You're on our reservation list" : "Thank You for Your Message!"}
+                    {formData.subject === "reservation"
+                      ? reservationStatus === "pending"
+                        ? "Reservation requested"
+                        : "Reservation confirmed"
+                      : "Thank You for Your Message!"}
                   </h2>
                   <p className="text-sm font-semibold text-teal-700 font-chinese">
-                    {formData.subject === "reservation" ? "已為您登記訂座" : "感謝您的查詢"}
+                    {formData.subject === "reservation"
+                      ? reservationStatus === "pending"
+                        ? "訂座已送出，待確認"
+                        : "訂座已確認"
+                      : "感謝您的查詢"}
                   </p>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
                     {formData.subject === "reservation"
-                      ? "We'll hold that time as pending. Staff will confirm if we need to change anything. Use the link below to change or cancel."
+                      ? reservationStatus === "pending"
+                        ? "Parties of 7 or more need staff to confirm a table. We'll text this phone number when it's confirmed. Use the link below to change or cancel."
+                        : "Your table is confirmed. We sent a text to this phone number with a link to change or cancel."
                       : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
@@ -222,12 +236,13 @@ export default function InquiryForm() {
                     onClick={() => {
                       setSubmitted(false)
                       setManageUrl("")
+                      setReservationStatus("")
                       setAroundTime(defaultAroundTime(restaurantToday()))
                       setFormData({
                         name: "",
                         email: "",
                         phone: "",
-                        subject: "general",
+                        subject: initialSubject,
                         message: "",
                         website: "",
                         partySize: "2",
@@ -357,7 +372,7 @@ export default function InquiryForm() {
                         Party size <span className="text-rose-500">*</span>
                       </label>
                       <div className="grid grid-cols-6 gap-2">
-                        {Array.from({ length: 12 }, (_, index) => String(index + 1)).map((size) => (
+                      {Array.from({ length: 12 }, (_, index) => String(index + 1)).map((size) => (
                           <button
                             key={size}
                             type="button"
@@ -417,40 +432,33 @@ export default function InquiryForm() {
                         <p className="text-sm text-gray-500">Loading available times…</p>
                       ) : slotsError ? (
                         <p className="text-sm text-rose-700">{slotsError}</p>
+                      ) : visibleSlots.length === 0 ? (
+                        <p className="text-xs text-gray-500 mb-2">
+                          No upcoming times around {formatSlotLabel(aroundTime)}. Pick a later time.
+                        </p>
                       ) : (
-                        <>
-                          {windowFirst && windowLast ? (
-                            <p className="text-xs text-gray-500 mb-2">
-                              Showing {windowFirst.label || formatSlotLabel(windowFirst.time)}–{windowLast.label || formatSlotLabel(windowLast.time)}
-                            </p>
-                          ) : (
-                            <p className="text-xs text-gray-500 mb-2">
-                              No upcoming times around {formatSlotLabel(aroundTime)}. Pick a later time.
-                            </p>
-                          )}
-                          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
-                            {visibleSlots.map((slot) => (
-                              <button
-                                key={slot.time}
-                                type="button"
-                                disabled={!slot.available}
-                                onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
-                                className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
-                                  formData.reservationTime === slot.time
-                                    ? "bg-teal-600 border-teal-600 text-white"
-                                    : slot.available
-                                      ? "bg-white border-gray-200 text-gray-900"
-                                      : "bg-gray-100 border-gray-200 text-gray-400"
-                                }`}
-                              >
-                                <span className="block font-semibold">{slot.label || formatSlotLabel(slot.time)}</span>
-                                <span className="block text-[11px] opacity-80">
-                                  {slot.available ? "Available" : slot.reason || "Full"}
-                                </span>
-                              </button>
-                            ))}
-                          </div>
-                        </>
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                          {visibleSlots.map((slot) => (
+                            <button
+                              key={slot.time}
+                              type="button"
+                              disabled={!slot.available}
+                              onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
+                              className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
+                                formData.reservationTime === slot.time
+                                  ? "bg-teal-600 border-teal-600 text-white"
+                                  : slot.available
+                                    ? "bg-white border-gray-200 text-gray-900"
+                                    : "bg-gray-100 border-gray-200 text-gray-400"
+                              }`}
+                            >
+                              <span className="block font-semibold">{slot.label || formatSlotLabel(slot.time)}</span>
+                              <span className="block text-[11px] opacity-80">
+                                {slot.available ? "Available" : slot.reason || "Full"}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -485,6 +493,14 @@ export default function InquiryForm() {
                   />
                 </div>
 
+                {formData.subject === "reservation" && formData.reservationDate && formData.reservationTime && (
+                  <p className="text-sm text-teal-900 bg-teal-50 border border-teal-200 rounded-xl px-4 py-3">
+                    {Number(formData.partySize) >= 7
+                      ? "Parties of 7 or more are sent to staff to confirm. We'll text you when the table is set. You don't need to call."
+                      : "If the time shows available, your table is confirmed. We'll text a link to this phone number so you can change or cancel."}
+                  </p>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
@@ -494,12 +510,24 @@ export default function InquiryForm() {
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>{formData.subject === "reservation" ? "Booking..." : "Sending Message..."}</span>
+                      <span>
+                        {formData.subject === "reservation"
+                          ? Number(formData.partySize) >= 7
+                            ? "Sending request..."
+                            : "Booking..."
+                          : "Sending Message..."}
+                      </span>
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      <span>{formData.subject === "reservation" ? "Book this time" : "Submit Inquiry"}</span>
+                      <span>
+                        {formData.subject === "reservation"
+                          ? Number(formData.partySize) >= 7
+                            ? "Request this time"
+                            : "Book this time"
+                          : "Submit Inquiry"}
+                      </span>
                     </>
                   )}
                 </button>

@@ -101,6 +101,14 @@ export default function Home() {
             </Link>
 
             <Link
+              href="/reservation"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-base backdrop-blur-sm transition-all"
+            >
+              <CalendarDays className="w-5 h-5 text-teal-300" />
+              <span>Reserve a Table</span>
+            </Link>
+
+            <Link
               href="/order"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-base backdrop-blur-sm transition-all"
             >
@@ -362,18 +370,17 @@ export default function Home() {
 
               <div className="pt-8 mt-6 border-t border-gray-200 flex flex-wrap gap-3">
                 <Link
-                  href="/contact"
+                  href="/reservation"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-xl transition-colors font-tempus"
                 >
-                  <span>Inquiry & Reservation Form</span>
+                  <span>Reserve a Table</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/order"
+                  href="/contact"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 text-sm font-semibold rounded-xl transition-colors"
                 >
-                  <ShoppingBag className="w-4 h-4 text-teal-600" />
-                  <span>Order Online</span>
+                  <span>Catering & Inquiry</span>
                 </Link>
               </div>
             </div>
