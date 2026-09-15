@@ -243,7 +243,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                     {formData.subject === "reservation"
                       ? reservationStatus === "pending"
                         ? "This is not a confirmed table. Parties of 7 or more need staff to accept the request. We'll text this number if it's confirmed. Please don't come in until you get that second text."
-                        : "Your table is confirmed. We sent a text with a link to change or cancel. Date, time, and party size can be changed until 2 hours before arrival; after that only notes and cancel stay open."
+                        : "Your table is confirmed. We sent a text to this phone number with a link to change or cancel."
                       : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
@@ -527,15 +527,12 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                   />
                 </div>
 
-                {formData.subject === "reservation" && formData.reservationDate && formData.reservationTime && (
-                  <p className={`text-sm rounded-xl px-4 py-3 border ${
-                    Number(formData.partySize) >= 7
-                      ? "text-amber-950 bg-amber-50 border-amber-300"
-                      : "text-teal-900 bg-teal-50 border-teal-200"
-                  }`}>
-                    {Number(formData.partySize) >= 7
-                      ? "Submitting does not confirm this table. Staff still have to accept parties of 7 or more. We'll text you if it's confirmed — please don't arrive until then."
-                      : "If the time shows available, your table is confirmed. You can change date, time, or party size until 2 hours before arrival. After that, only notes and cancel stay open."}
+                {formData.subject === "reservation" &&
+                  formData.reservationDate &&
+                  formData.reservationTime &&
+                  Number(formData.partySize) >= 7 && (
+                  <p className="text-sm rounded-xl px-4 py-3 border text-amber-950 bg-amber-50 border-amber-300">
+                    Submitting does not confirm this table. Staff still have to accept parties of 7 or more. We'll text you if it's confirmed — please don't arrive until then.
                   </p>
                 )}
 
@@ -562,7 +559,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                       <span>
                         {formData.subject === "reservation"
                           ? Number(formData.partySize) >= 7
-                            ? "Request this time (not confirmed)"
+                            ? "Request this time"
                             : "Book this time"
                           : "Submit Inquiry"}
                       </span>
