@@ -247,11 +247,11 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                       : "We have received your inquiry and our team will get back to you within 24 to 48 hours."}
                   </p>
                 </div>
-                <div className="pt-4 space-y-3">
+                <div className="pt-4 flex flex-col sm:flex-row gap-3">
                   {formData.subject === "reservation" && manageUrl && (
                     <a
                       href={manageUrl}
-                      className={`inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-sm font-semibold rounded-xl ${
+                      className={`w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-sm font-semibold rounded-xl ${
                         reservationStatus === "pending"
                           ? "border border-amber-600 text-amber-900"
                           : "border border-teal-600 text-teal-800"
@@ -278,7 +278,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                         reservationTime: "",
                       })
                     }}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-xl transition-colors"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-xl transition-colors"
                   >
                     <span>Send Another Inquiry</span>
                     <ArrowRight className="w-4 h-4" />
