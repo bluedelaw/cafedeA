@@ -217,16 +217,14 @@ export default function Header() {
             </nav>
 
             {/* Right: Actions */}
-            <div className="hidden md:flex items-center gap-3">
-              <a
-                href="https://cafedeawaitlist.vercel.app/join"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="hidden lg:flex items-center gap-3">
+              <Link
+                href="/reservation"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-200 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg transition-colors"
               >
                 <CalendarDays className="w-3.5 h-3.5 text-teal-300" />
-                <span>Join Waitlist</span>
-              </a>
+                <span>Reserve</span>
+              </Link>
 
               {/* Order Online CTA */}
               <Link
@@ -238,21 +236,30 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              ref={menuButtonRef}
-              type="button"
-              onClick={(event) => {
-                event.preventDefault()
-                event.stopPropagation()
-                toggleMenu()
-              }}
-              className="relative z-20 lg:hidden p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
-              aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isMenuOpen}
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile: Reserve + menu */}
+            <div className="flex lg:hidden items-center gap-1.5">
+              <Link
+                href="/reservation"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-500 rounded-lg transition-colors"
+              >
+                <CalendarDays className="w-3.5 h-3.5" />
+                <span>Reserve</span>
+              </Link>
+              <button
+                ref={menuButtonRef}
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault()
+                  event.stopPropagation()
+                  toggleMenu()
+                }}
+                className="relative z-20 p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isMenuOpen}
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
 

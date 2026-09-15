@@ -81,15 +81,25 @@ function slotMinutes(time: string) {
   return (Number.isFinite(hours) ? hours : 0) * 60 + (Number.isFinite(minutes) ? minutes : 0)
 }
 
+export function isSlotTooSoon(date: string, time: string, minAdvanceMinutes = 60) {
+  if (date > restaurantToday()) return false
+  if (date < restaurantToday()) return true
+  return slotMinutes(time) - restaurantNowMinutes() < minAdvanceMinutes
+}
+
 export function defaultAroundTime(date: string) {
   if (date > restaurantToday()) return "18:00"
-  return generateReservationSlots().find((slot) => !isSlotInPast(date, slot)) || "12:00"
+  return generateReservationSlots().find((slot) => !isSlotInPast(date, slot) && !isSlotTooSoon(date, slot)) || "12:00"
 }
 
 export function nearbySlotTimes(preferredTime: string, date: string) {
   const center = slotMinutes(preferredTime || defaultAroundTime(date))
   return generateReservationSlots().filter((slot) => {
-    if (isSlotInPast(date, slot)) return false
+    if (isSlotInPast(date, slot) || isSlotTooSoon(date, slot)) return false
     return Math.abs(slotMinutes(slot) - center) <= WINDOW_MINUTES
   })
+}
+
+export function aroundTimeOptions(date: string) {
+  return generateReservationSlots().filter((slot) => !isSlotInPast(date, slot) && !isSlotTooSoon(date, slot))
 }

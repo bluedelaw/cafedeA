@@ -16,11 +16,10 @@ import {
   ArrowRight,
 } from "lucide-react"
 import {
+  aroundTimeOptions,
   bookableDateOptions,
   defaultAroundTime,
   formatSlotLabel,
-  generateReservationSlots,
-  isSlotInPast,
   nearbySlotTimes,
   restaurantToday,
 } from "@/lib/reservation-when"
@@ -116,8 +115,16 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
     return () => controller.abort()
   }, [formData.subject, formData.reservationDate, formData.partySize])
 
-  const nearbyTimes = nearbySlotTimes(aroundTime, formData.reservationDate)
-  const visibleSlots = slots.filter((slot) => nearbyTimes.includes(slot.time))
+  const aroundOptions = aroundTimeOptions(formData.reservationDate)
+  const aroundValue = aroundOptions.includes(aroundTime) ? aroundTime : aroundOptions[0] || aroundTime
+  const nearbyTimes = nearbySlotTimes(aroundValue, formData.reservationDate)
+  const visibleSlots = slots.filter((slot) => nearbyTimes.includes(slot.time) && slot.available)
+
+  useEffect(() => {
+    const options = aroundTimeOptions(formData.reservationDate)
+    if (options.length === 0) return
+    if (!options.includes(aroundTime)) setAroundTime(options[0])
+  }, [aroundTime, formData.reservationDate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -171,10 +178,10 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
   }
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] text-gray-900 pt-28 md:pt-32 pb-20">
+    <div className="min-h-screen bg-[#faf8f5] text-gray-900 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
-        <header className="max-w-3xl mx-auto text-center space-y-3 mb-12">
+        <header className="max-w-3xl mx-auto text-center space-y-3 mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-teal-600" />
             <span>
@@ -194,7 +201,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left / Main: Form Container */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-10 border border-gray-200 shadow-sm">
+          <div className="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 lg:p-10 border border-gray-200 shadow-sm">
             {submitted ? (
               <div className="text-center py-10 space-y-5">
                 <div className="w-16 h-16 bg-teal-50 border border-teal-200 rounded-2xl flex items-center justify-center mx-auto text-teal-600">
@@ -371,7 +378,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                       <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
                         Party size <span className="text-rose-500">*</span>
                       </label>
-                      <div className="grid grid-cols-6 gap-2">
+                      <div className="grid grid-cols-6 gap-1.5 sm:gap-2">
                       {Array.from({ length: 12 }, (_, index) => String(index + 1)).map((size) => (
                           <button
                             key={size}
@@ -415,15 +422,15 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                       </label>
                       <select
                         id="aroundTime"
-                        value={aroundTime}
+                        value={aroundValue}
                         onChange={(e) => {
                           setAroundTime(e.target.value)
                           setFormData((prev) => ({ ...prev, reservationTime: "" }))
                         }}
                         className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm mb-3"
                       >
-                        {generateReservationSlots().map((slot) => (
-                          <option key={slot} value={slot} disabled={isSlotInPast(formData.reservationDate, slot)}>
+                        {aroundOptions.map((slot) => (
+                          <option key={slot} value={slot}>
                             {formatSlotLabel(slot)}
                           </option>
                         ))}
@@ -432,30 +439,28 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                         <p className="text-sm text-gray-500">Loading available times…</p>
                       ) : slotsError ? (
                         <p className="text-sm text-rose-700">{slotsError}</p>
+                      ) : aroundOptions.length === 0 ? (
+                        <p className="text-xs text-gray-500 mb-2">
+                          Online reservations need at least 1 hour notice. Please pick another date.
+                        </p>
                       ) : visibleSlots.length === 0 ? (
                         <p className="text-xs text-gray-500 mb-2">
-                          No upcoming times around {formatSlotLabel(aroundTime)}. Pick a later time.
+                          No open times around {formatSlotLabel(aroundValue)}. Try a different time.
                         </p>
                       ) : (
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
                           {visibleSlots.map((slot) => (
                             <button
                               key={slot.time}
                               type="button"
-                              disabled={!slot.available}
                               onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
-                              className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
+                              className={`min-h-12 rounded-xl border px-2 py-2.5 text-center text-sm font-semibold ${
                                 formData.reservationTime === slot.time
                                   ? "bg-teal-600 border-teal-600 text-white"
-                                  : slot.available
-                                    ? "bg-white border-gray-200 text-gray-900"
-                                    : "bg-gray-100 border-gray-200 text-gray-400"
+                                  : "bg-white border-gray-200 text-gray-900"
                               }`}
                             >
-                              <span className="block font-semibold">{slot.label || formatSlotLabel(slot.time)}</span>
-                              <span className="block text-[11px] opacity-80">
-                                {slot.available ? "Available" : slot.reason || "Full"}
-                              </span>
+                              {slot.label || formatSlotLabel(slot.time)}
                             </button>
                           ))}
                         </div>
@@ -582,6 +587,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
             </div>
 
             {/* Catering Services Box */}
+            {initialSubject !== "reservation" && (
             <div className="bg-[#1a1f29] text-white rounded-3xl p-6 sm:p-8 shadow-md border border-white/10 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold">
                 <Utensils className="w-3.5 h-3.5" />
@@ -602,6 +608,7 @@ export default function InquiryForm({ initialSubject = "general" }: { initialSub
                 </li>
               </ul>
             </div>
+            )}
           </div>
         </div>
       </div>

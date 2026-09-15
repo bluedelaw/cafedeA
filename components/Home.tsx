@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#faf8f5]">
       {/* 1. Hero Section */}
-      <section className="relative min-h-[92vh] lg:min-h-[96vh] flex flex-col items-center justify-center overflow-hidden bg-[#131720] text-white pt-24 pb-16">
+      <section className="relative min-h-[100svh] lg:min-h-[96vh] flex flex-col items-center justify-center overflow-hidden bg-[#131720] text-white pt-20 pb-10 sm:pt-24 sm:pb-16">
         {/* Background Image with Dark Vignette */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -73,7 +73,7 @@ export default function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center space-y-8 my-auto">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center space-y-5 sm:space-y-8 my-auto">
           {/* Bilingual Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-950/80 border border-teal-500/30 text-teal-300 text-xs sm:text-sm font-medium tracking-wide shadow-lg backdrop-blur-sm">
             <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
@@ -91,39 +91,39 @@ export default function Home() {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 max-w-xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-2 w-full max-w-sm sm:max-w-3xl mx-auto">
             <Link
               href="/menu"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-base shadow-lg hover:shadow-teal-500/25 transition-all font-tempus"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm sm:text-base shadow-lg hover:shadow-teal-500/25 transition-all font-tempus"
             >
-              <UtensilsCrossed className="w-5 h-5" />
-              <span>Explore Our Menu</span>
+              <UtensilsCrossed className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Menu</span>
             </Link>
 
             <Link
               href="/reservation"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-base backdrop-blur-sm transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all"
             >
-              <CalendarDays className="w-5 h-5 text-teal-300" />
-              <span>Reserve a Table</span>
+              <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-teal-300" />
+              <span>Reserve</span>
             </Link>
 
             <Link
               href="/order"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-base backdrop-blur-sm transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all"
             >
-              <ShoppingBag className="w-5 h-5 text-teal-300" />
-              <span>Order Pickup / Delivery</span>
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-teal-300" />
+              <span>Order</span>
             </Link>
 
             <a
               href="https://cafedeawaitlist.vercel.app/join"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 rounded-xl font-semibold text-base backdrop-blur-sm transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all"
             >
-              <CalendarDays className="w-5 h-5 text-amber-400" />
-              <span>Join Waitlist</span>
+              <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+              <span>Waitlist</span>
             </a>
           </div>
 

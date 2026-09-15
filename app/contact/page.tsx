@@ -39,7 +39,7 @@ const breadcrumbSchema = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen flex flex-col pt-24">
+    <div className="min-h-screen flex flex-col">
       <Script
         id="breadcrumb-schema-contact"
         type="application/ld+json"

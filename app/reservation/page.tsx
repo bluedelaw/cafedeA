@@ -40,7 +40,7 @@ const breadcrumbSchema = {
 
 export default function ReservationPage() {
   return (
-    <div className="min-h-screen flex flex-col pt-24">
+    <div className="min-h-screen flex flex-col">
       <Script
         id="breadcrumb-schema-reservation"
         type="application/ld+json"
