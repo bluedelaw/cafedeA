@@ -2,19 +2,28 @@
 
 import type React from "react"
 import { useEffect, useState } from "react"
-import { 
-  Send, 
-  Utensils, 
-  CalendarDays, 
-  MessageSquare, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
+import {
+  Send,
+  Utensils,
+  CalendarDays,
+  MessageSquare,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
   CheckCircle2,
   Sparkles,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react"
+import {
+  bookableDateOptions,
+  defaultAroundTime,
+  formatSlotLabel,
+  generateReservationSlots,
+  isSlotInPast,
+  nearbySlotTimes,
+  restaurantToday,
+} from "@/lib/reservation-when"
 
 type SubjectType = "catering" | "reservation" | "general"
 
@@ -25,16 +34,6 @@ type SlotOption = {
   tableLabel?: string | null
   seatsLeft?: number
   reason: string | null
-}
-
-function restaurantToday() {
-  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
-}
-
-function addDays(date: string, days: number) {
-  const [year, month, day] = date.split("-").map(Number)
-  const next = new Date(Date.UTC(year, month - 1, day + days))
-  return next.toISOString().slice(0, 10)
 }
 
 export default function InquiryForm() {
@@ -56,6 +55,7 @@ export default function InquiryForm() {
   const [slots, setSlots] = useState<SlotOption[]>([])
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [slotsError, setSlotsError] = useState("")
+  const [aroundTime, setAroundTime] = useState(() => defaultAroundTime(restaurantToday()))
 
   const subjects = [
     {
@@ -114,6 +114,11 @@ export default function InquiryForm() {
     void loadSlots()
     return () => controller.abort()
   }, [formData.subject, formData.reservationDate, formData.partySize])
+
+  const nearbyTimes = nearbySlotTimes(aroundTime, formData.reservationDate)
+  const visibleSlots = slots.filter((slot) => nearbyTimes.includes(slot.time))
+  const windowFirst = visibleSlots[0]
+  const windowLast = visibleSlots[visibleSlots.length - 1]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -217,6 +222,7 @@ export default function InquiryForm() {
                     onClick={() => {
                       setSubmitted(false)
                       setManageUrl("")
+                      setAroundTime(defaultAroundTime(restaurantToday()))
                       setFormData({
                         name: "",
                         email: "",
@@ -369,49 +375,82 @@ export default function InquiryForm() {
                       <label htmlFor="reservationDate" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
                         Date <span className="text-rose-500">*</span>
                       </label>
-                      <input
-                        type="date"
+                      <select
                         id="reservationDate"
                         name="reservationDate"
                         required
-                        min={restaurantToday()}
-                        max={addDays(restaurantToday(), 30)}
                         value={formData.reservationDate}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, reservationDate: e.target.value, reservationTime: "" }))}
+                        onChange={(e) => {
+                          const date = e.target.value
+                          setAroundTime(defaultAroundTime(date))
+                          setFormData((prev) => ({ ...prev, reservationDate: date, reservationTime: "" }))
+                        }}
                         className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm"
-                      />
+                      >
+                        {bookableDateOptions().map((option) => (
+                          <option key={option.date} value={option.date}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                        Time <span className="text-rose-500">*</span>
+                      <label htmlFor="aroundTime" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                        Around <span className="text-rose-500">*</span>
                       </label>
+                      <select
+                        id="aroundTime"
+                        value={aroundTime}
+                        onChange={(e) => {
+                          setAroundTime(e.target.value)
+                          setFormData((prev) => ({ ...prev, reservationTime: "" }))
+                        }}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none text-sm mb-3"
+                      >
+                        {generateReservationSlots().map((slot) => (
+                          <option key={slot} value={slot} disabled={isSlotInPast(formData.reservationDate, slot)}>
+                            {formatSlotLabel(slot)}
+                          </option>
+                        ))}
+                      </select>
                       {slotsLoading ? (
                         <p className="text-sm text-gray-500">Loading available times…</p>
                       ) : slotsError ? (
                         <p className="text-sm text-rose-700">{slotsError}</p>
                       ) : (
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
-                          {slots.map((slot) => (
-                            <button
-                              key={slot.time}
-                              type="button"
-                              disabled={!slot.available}
-                              onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
-                              className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
-                                formData.reservationTime === slot.time
-                                  ? "bg-teal-600 border-teal-600 text-white"
-                                  : slot.available
-                                    ? "bg-white border-gray-200 text-gray-900"
-                                    : "bg-gray-100 border-gray-200 text-gray-400"
-                              }`}
-                            >
-                              <span className="block font-semibold">{slot.label}</span>
-                              <span className="block text-[11px] opacity-80">
-                                {slot.available ? "Available" : slot.reason || "Full"}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
+                        <>
+                          {windowFirst && windowLast ? (
+                            <p className="text-xs text-gray-500 mb-2">
+                              Showing {windowFirst.label || formatSlotLabel(windowFirst.time)}–{windowLast.label || formatSlotLabel(windowLast.time)}
+                            </p>
+                          ) : (
+                            <p className="text-xs text-gray-500 mb-2">
+                              No upcoming times around {formatSlotLabel(aroundTime)}. Pick a later time.
+                            </p>
+                          )}
+                          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                            {visibleSlots.map((slot) => (
+                              <button
+                                key={slot.time}
+                                type="button"
+                                disabled={!slot.available}
+                                onClick={() => setFormData((prev) => ({ ...prev, reservationTime: slot.time }))}
+                                className={`min-h-14 rounded-xl border px-2 py-2 text-center text-sm ${
+                                  formData.reservationTime === slot.time
+                                    ? "bg-teal-600 border-teal-600 text-white"
+                                    : slot.available
+                                      ? "bg-white border-gray-200 text-gray-900"
+                                      : "bg-gray-100 border-gray-200 text-gray-400"
+                                }`}
+                              >
+                                <span className="block font-semibold">{slot.label || formatSlotLabel(slot.time)}</span>
+                                <span className="block text-[11px] opacity-80">
+                                  {slot.available ? "Available" : slot.reason || "Full"}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
