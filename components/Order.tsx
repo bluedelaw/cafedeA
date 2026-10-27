@@ -29,6 +29,12 @@ const deliveryOptions = [
     url: "https://www.doordash.com/en-CA/store/cafe-de-a-11666-steveston-highway-apt-3050-richmond-49725843/114745349/?preview=1",
     tag: "Delivery Partner",
   },
+  {
+    name: "SkipTheDishes",
+    chinese: "Skip 外賣",
+    url: "https://www.skipthedishes.com/cafe-de-a?serviceType=collection&utm_source=google&utm_medium=organic&utm_campaign=foodorder", // paste café de A store URL
+    tag: "Delivery Partner",
+  },
 ]
 
 export default function Order() {
