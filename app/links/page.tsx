@@ -4,6 +4,10 @@ import Links from "@/components/Links"
 export const metadata: Metadata = {
   title: "Connect with café de A | Links",
   description: "All the ways to connect with café de A - View menu, join waitlist, follow us on social media",
+  robots: {
+    index: false,
+    follow: true,
+  },
 }
 
 export default function LinksPage() {

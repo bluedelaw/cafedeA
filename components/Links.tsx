@@ -44,8 +44,8 @@ const actions = [
     icon: CalendarDays,
     label: "Join Live Waitlist",
     chinese: "堂食實時排隊",
-    href: "https://cafedeawaitlist.vercel.app/join",
-    internal: false,
+    href: "/waitlist",
+    internal: true,
     highlight: false,
   },
   {

@@ -82,16 +82,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="https://cafedeawaitlist.vercel.app/join"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-300 hover:text-teal-400 transition-colors inline-flex items-center gap-1.5"
-                >
+                <Link href="/waitlist" className="text-gray-300 hover:text-teal-400 transition-colors inline-flex items-center gap-1.5">
                   <ArrowRight className="w-3.5 h-3.5 text-teal-500" />
                   <span>Join Waitlist 實時排隊</span>
-                  <ExternalLink className="w-3 h-3 opacity-60" />
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/location" className="text-gray-300 hover:text-teal-400 transition-colors inline-flex items-center gap-1.5">

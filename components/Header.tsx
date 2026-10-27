@@ -309,16 +309,14 @@ export default function Header() {
                 <span className="text-[11px] text-gray-300 font-normal">訂座</span>
               </Link>
 
-              <a
-                href="https://cafedeawaitlist.vercel.app/join"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/waitlist"
                 className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl font-semibold text-sm transition-colors"
               >
                 <CalendarDays className="w-5 h-5 text-amber-300" />
                 <span>Waitlist</span>
                 <span className="text-[11px] text-gray-300 font-normal">排隊</span>
-              </a>
+              </Link>
             </div>
 
             {/* Navigation links list */}

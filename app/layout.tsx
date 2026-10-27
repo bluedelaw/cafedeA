@@ -30,9 +30,6 @@ export const metadata: Metadata = {
     "richmond bc chinese restaurant",
     "油尖旺冰室",
   ],
-  alternates: {
-    canonical: "https://cafedea.ca",
-  },
   openGraph: {
     title: "café de A | Authentic Hong Kong Cuisine Richmond BC",
     description:

@@ -190,15 +190,12 @@ export default function Order() {
             </div>
 
             <div className="pt-6 mt-6 border-t border-gray-100">
-              <a
-                href="https://cafedeawaitlist.vercel.app/join"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/waitlist"
                 className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 hover:bg-amber-500 px-5 py-3.5 text-center text-sm sm:text-base font-bold text-white shadow-md transition-colors font-tempus"
               >
                 <span>Join Live Waitlist</span>
-                <ExternalLink className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </section>
         </div>

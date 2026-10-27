@@ -116,15 +116,13 @@ export default function Home() {
               <span>Order</span>
             </Link>
 
-            <a
-              href="https://cafedeawaitlist.vercel.app/join"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/waitlist"
               className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all"
             >
               <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
               <span>Waitlist</span>
-            </a>
+            </Link>
           </div>
 
           {/* Live Status Bar */}

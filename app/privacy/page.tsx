@@ -5,6 +5,9 @@ import Script from "next/script"
 export const metadata: Metadata = {
   title: "Privacy Policy | café de A Richmond BC",
   description: "Read café de A's privacy policy to learn how we collect, use, and protect your personal information.",
+  alternates: {
+    canonical: "https://cafedea.ca/privacy",
+  },
 }
 
 const breadcrumbSchema = {
