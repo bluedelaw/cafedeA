@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Sparkles, ZoomIn, X, ArrowRight } from "lucide-react"
+import { X } from "lucide-react"
 import { featuredSpecials, type FeaturedSpecial } from "@/lib/specials"
 
 interface FeaturedSpecialsProps {
@@ -16,67 +16,48 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
 
   if (variant === "banner") {
     return (
-      <section className="mb-8">
-        <div className="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-white to-teal-50 p-5 sm:p-6 shadow-sm">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-900">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>New &amp; Limited-Time · 最新推介</span>
+      <section>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-chinese text-sm text-[#e8c9b8]">最新推介</p>
+            <h2 className="font-tempus text-2xl text-[#f2ead9] sm:text-3xl">This week</h2>
+          </div>
+          {onViewAll ? (
+            <button
+              type="button"
+              onClick={onViewAll}
+              className="text-sm font-semibold text-[#f2ead9] underline underline-offset-4"
+            >
+              All specials
+            </button>
+          ) : (
+            <Link href="/menu?section=specials" className="text-sm font-semibold text-[#f2ead9] underline underline-offset-4">
+              All specials
+            </Link>
+          )}
+        </div>
+
+        <div className="mt-6 flex gap-4 overflow-x-auto pb-1 scrollbar-hide">
+          {featuredSpecials.map((special) => (
+            <button
+              key={special.id}
+              type="button"
+              onClick={() => setSelectedPoster(special)}
+              className="w-40 shrink-0 text-left sm:w-48"
+            >
+              <div className="relative aspect-[3/4] overflow-hidden border border-[#f2ead9]/30 bg-white">
+                <Image
+                  src={special.image}
+                  alt={special.alt}
+                  fill
+                  className="object-cover"
+                  sizes="192px"
+                />
               </div>
-              <h2 className="font-tempus text-2xl font-bold text-gray-900 sm:text-3xl">Featured Specials</h2>
-              <p className="max-w-xl text-sm text-gray-600">
-                See what&apos;s new this month — seasonal dishes, chef picks, and limited-run promotions.
-              </p>
-            </div>
-
-            {onViewAll ? (
-              <button
-                type="button"
-                onClick={onViewAll}
-                className="inline-flex shrink-0 items-center gap-2 self-start rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500 lg:self-center"
-              >
-                <span>View All Specials</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <Link
-                href="/menu?section=specials"
-                className="inline-flex shrink-0 items-center gap-2 self-start rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500 lg:self-center"
-              >
-                <span>View All Specials</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
-          </div>
-
-          <div className="mt-5 flex gap-4 overflow-x-auto pb-1 scrollbar-hide">
-            {featuredSpecials.map((special) => (
-              <button
-                key={special.id}
-                type="button"
-                onClick={() => setSelectedPoster(special)}
-                className="group w-44 shrink-0 text-left sm:w-52"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all group-hover:border-teal-500 group-hover:shadow-md">
-                  <Image
-                    src={special.image}
-                    alt={special.alt}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="208px"
-                  />
-                  {special.badge && (
-                    <span className="absolute left-2 top-2 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                      {special.badge}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-2 text-sm font-semibold text-gray-900">{special.title}</p>
-                <p className="text-xs text-teal-700 font-chinese">{special.chineseTitle}</p>
-              </button>
-            ))}
-          </div>
+              <p className="mt-2 font-chinese text-sm text-[#f2ead9]">{special.chineseTitle}</p>
+              <p className="text-xs text-[#f2ead9]/65">{special.title}</p>
+            </button>
+          ))}
         </div>
 
         <PosterModal poster={selectedPoster} onClose={() => setSelectedPoster(null)} />
@@ -85,66 +66,39 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#1a1f29] py-16 text-white md:py-20">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(20,184,166,0.15),transparent_50%)]" />
-
-      <div className="container relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-10 max-w-2xl space-y-3 text-center md:mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>New &amp; Limited-Time · 最新推介</span>
+    <section className="border-b border-[#1c1410]/15 bg-[#f2ead9] py-14 text-[#1c1410] md:py-16">
+      <div className="container mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-chinese text-sm text-[#c41e3a]">本月特介</p>
+            <h2 className="font-tempus text-3xl sm:text-4xl">On the wall this month</h2>
           </div>
-          <h2 className="font-tempus text-3xl font-bold text-white md:text-5xl">Featured Specials</h2>
-          <p className="text-sm leading-relaxed text-gray-300 md:text-base">
-            Discover our latest seasonal dishes, chef recommendations, and limited-run promotions — updated regularly.
-          </p>
+          <Link href="/menu?section=specials" className="text-sm font-semibold underline underline-offset-4">
+            Menu
+          </Link>
         </div>
 
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide md:grid md:grid-cols-5 md:overflow-visible">
           {featuredSpecials.map((special) => (
             <button
               key={special.id}
               type="button"
               onClick={() => setSelectedPoster(special)}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#242b38] text-left shadow-xl transition-all hover:border-teal-500/60"
+              className="w-40 shrink-0 text-left md:w-auto"
             >
-              <div className="relative aspect-[3/4] overflow-hidden bg-gray-900">
+              <div className="relative aspect-[3/4] overflow-hidden border border-[#1c1410]/20 bg-white shadow-[3px_3px_0_#1c1410]/10">
                 <Image
                   src={special.image}
                   alt={special.alt}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 160px, 20vw"
                 />
-                {special.badge && (
-                  <span className="absolute left-3 top-3 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow">
-                    {special.badge}
-                  </span>
-                )}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-lg">
-                    <ZoomIn className="h-4 w-4" />
-                    <span>View poster</span>
-                  </span>
-                </div>
               </div>
-              <div className="border-t border-white/5 p-5">
-                <h3 className="text-lg font-bold text-white">{special.title}</h3>
-                <p className="mt-0.5 text-sm font-chinese text-teal-300">{special.chineseTitle}</p>
-                <p className="mt-2 text-xs leading-relaxed text-gray-400">{special.description}</p>
-              </div>
+              <p className="mt-2 font-chinese text-sm">{special.chineseTitle}</p>
+              <p className="text-xs text-[#1c1410]/65">{special.title}</p>
             </button>
           ))}
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <Link
-            href="/menu?section=specials"
-            className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-teal-500"
-          >
-            <span>See Full Specials Menu</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </div>
 
@@ -164,21 +118,21 @@ function PosterModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-2 backdrop-blur-md sm:p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-2 sm:p-4"
       onClick={onClose}
     >
       <button
         type="button"
         onClick={onClose}
-        className="absolute right-4 top-4 z-[102] rounded-full bg-white/10 p-2.5 text-white transition-colors hover:bg-white/20"
+        className="absolute right-4 top-4 z-[102] p-2 text-white"
         aria-label="Close"
       >
         <X className="h-6 w-6" />
       </button>
 
-      <div className="absolute left-4 top-4 z-[102] max-w-[min(72vw,28rem)] rounded-full bg-black/60 px-4 py-2 text-white backdrop-blur-sm">
-        <p className="text-xs font-semibold">{poster.title}</p>
-        <p className="text-[11px] font-chinese text-teal-200">{poster.chineseTitle}</p>
+      <div className="absolute left-4 top-4 z-[102] text-white">
+        <p className="font-chinese text-sm">{poster.chineseTitle}</p>
+        <p className="text-xs opacity-80">{poster.title}</p>
       </div>
 
       <div
@@ -190,7 +144,7 @@ function PosterModal({
           alt={poster.alt}
           width={1200}
           height={1600}
-          className="max-h-[86vh] max-w-[92vw] rounded-lg object-contain shadow-2xl"
+          className="max-h-[86vh] max-w-[92vw] object-contain"
           sizes="92vw"
           priority
         />

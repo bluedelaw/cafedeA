@@ -1,14 +1,12 @@
-import type { Metadata } from "next"
 import Links from "@/components/Links"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Connect with café de A | Links",
-  description: "All the ways to connect with café de A - View menu, join waitlist, follow us on social media",
-  robots: {
-    index: false,
-    follow: true,
-  },
-}
+export const metadata = pageMetadata({
+  path: "/links",
+  title: "Links | café de A",
+  description: "Menu, ordering, reservations, and social accounts for café de A.",
+  index: false,
+})
 
 export default function LinksPage() {
   return <Links />

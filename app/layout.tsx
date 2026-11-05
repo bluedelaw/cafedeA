@@ -12,13 +12,13 @@ import DevTools from "@/components/DevTools"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cafedea.ca"),
+  metadataBase: new URL("https://www.cafedea.ca"),
   title: {
-    default: "café de A | Authentic Hong Kong Cuisine Richmond BC",
+    default: "café de A | Richmond, BC",
     template: "%s | café de A",
   },
   description:
-    "Experience authentic Hong Kong cuisine and Cantonese BBQ at café de A in Ironwood Plaza, Richmond BC. Breakfast, lunch, afternoon tea, dinner & wok-hei classics.",
+    "Hong Kong café and Cantonese barbecue at Ironwood Plaza in Richmond. Open daily 8:00 AM to 10:00 PM.",
   keywords: [
     "café de A",
     "cafe de a richmond",
@@ -31,10 +31,10 @@ export const metadata: Metadata = {
     "油尖旺冰室",
   ],
   openGraph: {
-    title: "café de A | Authentic Hong Kong Cuisine Richmond BC",
+    title: "café de A | Richmond, BC",
     description:
-      "Experience authentic Hong Kong cuisine and Cantonese BBQ at café de A in Ironwood Plaza, Richmond BC.",
-    url: "https://cafedea.ca",
+      "Hong Kong café and Cantonese barbecue at Ironwood Plaza in Richmond. Open daily 8:00 AM to 10:00 PM.",
+    url: "https://www.cafedea.ca",
     siteName: "café de A",
     locale: "en_CA",
     type: "website",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "café de A | Authentic Hong Kong Cuisine Richmond BC",
+    title: "café de A | Richmond, BC",
     description:
-      "Experience authentic Hong Kong cuisine and Cantonese BBQ at café de A in Ironwood Plaza, Richmond BC.",
+      "Hong Kong café and Cantonese barbecue at Ironwood Plaza in Richmond. Open daily 8:00 AM to 10:00 PM.",
     images: ["/images/Home/cafedea.jpg"],
   },
   icons: {
@@ -86,8 +86,8 @@ const structuredDataGraph = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://cafedea.ca/#website",
-      "url": "https://cafedea.ca",
+      "@id": "https://www.cafedea.ca/#website",
+      "url": "https://www.cafedea.ca",
       "name": "café de A",
       "alternateName": [
         "café de A",
@@ -101,23 +101,23 @@ const structuredDataGraph = {
     },
     {
       "@type": "Restaurant",
-      "@id": "https://cafedea.ca/#restaurant",
+      "@id": "https://www.cafedea.ca/#restaurant",
       "name": "café de A",
       "alternateName": "油尖旺冰室",
-      "url": "https://cafedea.ca",
-      "logo": "https://cafedea.ca/images/logo.png",
-      "image": "https://cafedea.ca/images/Home/cafedea.jpg",
+      "url": "https://www.cafedea.ca",
+      "logo": "https://www.cafedea.ca/images/logo.png",
+      "image": "https://www.cafedea.ca/images/Home/cafedea.jpg",
       "description":
-        "Authentic Hong Kong cuisine and Cantonese BBQ in Ironwood Plaza, Richmond, BC. Fresh ingredients, chef specialties, milk tea, and all-day dining.",
+        "Hong Kong café and Cantonese barbecue in Ironwood Plaza, Richmond, BC.",
       "priceRange": "$$",
       "servesCuisine": ["Hong Kong", "Cantonese", "Chinese", "Barbecue"],
-      "hasMenu": "https://cafedea.ca/menu",
+      "hasMenu": "https://www.cafedea.ca/menu",
       "potentialAction": [
         {
           "@type": "OrderAction",
           "target": {
             "@type": "EntryPoint",
-            "urlTemplate": "https://cafedea.ca/order",
+            "urlTemplate": "https://www.cafedea.ca/order",
             "inLanguage": "en-CA",
             "actionPlatform": [
               "http://schema.org/DesktopWebPlatform",
@@ -167,7 +167,7 @@ const structuredDataGraph = {
     },
     {
       "@type": "ItemList",
-      "@id": "https://cafedea.ca/#sitenavigation",
+      "@id": "https://www.cafedea.ca/#sitenavigation",
       "name": "Site Navigation",
       "itemListElement": [
         {
@@ -175,42 +175,42 @@ const structuredDataGraph = {
           "position": 1,
           "name": "Home",
           "description": "Welcome to café de A Hong Kong Café",
-          "url": "https://cafedea.ca"
+          "url": "https://www.cafedea.ca"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 2,
           "name": "Menu",
           "description": "Explore our full Hong Kong café menu and Cantonese BBQ",
-          "url": "https://cafedea.ca/menu"
+          "url": "https://www.cafedea.ca/menu"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 3,
           "name": "Order Pickup & Delivery",
           "description": "Direct online pickup ordering and delivery via Uber Eats & DoorDash",
-          "url": "https://cafedea.ca/order"
+          "url": "https://www.cafedea.ca/order"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 4,
           "name": "Reserve a Table",
           "description": "Book a table online at café de A",
-          "url": "https://cafedea.ca/reservation"
+          "url": "https://www.cafedea.ca/reservation"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 5,
           "name": "Location & Hours",
           "description": "Directions, parking, map, and daily hours at Ironwood Plaza",
-          "url": "https://cafedea.ca/location"
+          "url": "https://www.cafedea.ca/location"
         },
         {
           "@type": "SiteNavigationElement",
           "position": 6,
           "name": "Contact & Catering",
           "description": "Get in touch for group dining and custom catering",
-          "url": "https://cafedea.ca/contact"
+          "url": "https://www.cafedea.ca/contact"
         }
       ]
     }

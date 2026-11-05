@@ -1,40 +1,21 @@
 import InquiryForm from "@/components/InquiryForm"
-import type { Metadata } from "next"
 import Script from "next/script"
+import { absoluteUrl, pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Contact, Catering & Inquiries | café de A Richmond BC",
-  description: "Contact café de A for group reservations, custom event catering, and general inquiries. Phone: (604) 276-7800. Located in Ironwood Plaza, Richmond BC.",
-  alternates: {
-    canonical: "https://cafedea.ca/contact",
-  },
-  openGraph: {
-    title: "Contact & Catering | café de A Richmond",
-    description: "Contact café de A for reservations, catering, or inquiries. Phone: (604) 276-7800.",
-    url: "https://cafedea.ca/contact",
-    siteName: "café de A",
-    locale: "en_CA",
-    type: "website",
-  },
-}
+export const metadata = pageMetadata({
+  path: "/contact",
+  title: "Contact | café de A",
+  description:
+    "Call (604) 276-7800 or send a message to café de A in Ironwood Plaza, Richmond.",
+})
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://cafedea.ca"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Contact",
-      "item": "https://cafedea.ca/contact"
-    }
-  ]
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Contact", item: absoluteUrl("/contact") },
+  ],
 }
 
 export default function ContactPage() {

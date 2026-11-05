@@ -16,7 +16,7 @@ export const featuredSpecials: FeaturedSpecial[] = [
     alt: "Monthly featured specials at café de A",
     title: "Monthly Specials",
     chineseTitle: "本月特介",
-    description: "Seasonal dishes and limited-time offerings, refreshed throughout the month.",
+    description: "This month’s dishes, posted in the restaurant.",
     badge: "Featured",
   },
   {
@@ -25,7 +25,7 @@ export const featuredSpecials: FeaturedSpecial[] = [
     alt: "Chef's recommendations at café de A",
     title: "Chef's Recommendations",
     chineseTitle: "廚師推介",
-    description: "Signature recipes perfected with time-honored Cantonese techniques.",
+    description: "Kitchen picks, written on the poster.",
     badge: "Chef's Pick",
   },
   {

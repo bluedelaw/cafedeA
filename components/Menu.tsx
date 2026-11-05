@@ -4,29 +4,10 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import FeaturedSpecials from "@/components/FeaturedSpecials"
-import { featuredSpecials } from "@/lib/specials"
-import {
-  Search,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn,
-  ShoppingBag,
-  Clock,
-  Coffee,
-  Flame,
-  Utensils,
-  Sparkles,
-  Printer,
-  Info,
-  CheckCircle2,
-  Phone,
-  LayoutGrid,
-  FileText
-} from "lucide-react"
+import { featuredSpecials, type FeaturedSpecial } from "@/lib/specials"
+import menuJson from "@/public/menu.json"
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react"
 
-// Types for parsed JSON menu
 interface MenuItem {
   id?: string | number
   name?: string
@@ -40,9 +21,6 @@ interface MenuItem {
   size?: string
   description?: string
   chineseDescription?: string
-  image?: string
-  sides?: Array<{ name?: string; options?: string[] }>
-  addons?: Array<{ name?: string; price?: string }>
 }
 
 interface MenuSectionGroup {
@@ -53,11 +31,8 @@ interface MenuSectionGroup {
   chineseCategory?: string
   price?: string
   note?: string
-  bottomNote?: string
   description?: string
-  subtitle?: string
   availableTime?: string
-  cookingMethods?: Array<{ name?: string; chineseName?: string }>
   subItems?: Array<{ name?: string; chineseName?: string; englishName?: string; price?: string }>
   items?: MenuItem[]
 }
@@ -72,15 +47,12 @@ interface MenuCategoryData {
   price?: string
   items?: MenuItem[]
   sections?: MenuSectionGroup[]
-  type?: string
-  posters?: Array<{ image: string; alt: string }>
 }
 
 interface MenuData {
   [key: string]: MenuCategoryData
 }
 
-// Scanned Menu Pages Configuration
 interface ScannedPage {
   id: number
   imgSrc: string
@@ -120,17 +92,13 @@ const scannedSections: ScannedSection[] = [
     id: "lunch-combo",
     name: "Lunch Special",
     chinese: "午餐套餐",
-    images: [
-      { id: 1, imgSrc: "/images/LunchSpecial/Lunch7.webp", alt: "Lunch special combo menu" },
-    ],
+    images: [{ id: 1, imgSrc: "/images/LunchSpecial/Lunch7.webp", alt: "Lunch special combo menu" }],
   },
   {
     id: "afternoon-tea",
     name: "Afternoon Tea",
     chinese: "下午茶",
-    images: [
-      { id: 1, imgSrc: "/images/AfternoonTea/Afternoon1LQ.webp", alt: "Afternoon tea menu" },
-    ],
+    images: [{ id: 1, imgSrc: "/images/AfternoonTea/Afternoon1LQ.webp", alt: "Afternoon tea menu" }],
   },
   {
     id: "dinner",
@@ -178,28 +146,19 @@ const scannedSections: ScannedSection[] = [
   },
 ]
 
-// Category configuration for navigation tabs
 const categoryNavItems = [
-  { id: "breakfast", label: "Breakfast", mobileLabel: "Breakfast", chinese: "早餐", time: "8am–11am", icon: Coffee },
-  { id: "lunch", label: "Lunch", mobileLabel: "Lunch", chinese: "午餐", time: "11am–2:30pm", icon: Utensils },
-  {
-    id: "lunch-combo",
-    label: "Lunch Special",
-    mobileLabel: "Lunch Special",
-    chinese: "午餐套餐",
-    time: "11am–2:30pm",
-    icon: Sparkles,
-  },
-  { id: "afternoon-tea", label: "Afternoon Tea", mobileLabel: "Afternoon Tea", chinese: "下午茶", time: "2:30pm–5:30pm", icon: Coffee },
-  { id: "dinner", label: "Dinner", mobileLabel: "Dinner", chinese: "晚餐", time: "5:30pm–Close", icon: Utensils },
-  { id: "bbq", label: "BBQ Meats", mobileLabel: "BBQ", chinese: "港式燒味", time: "All Day", icon: Flame },
-  { id: "drinks", label: "Drinks", mobileLabel: "Drinks", chinese: "港式特飲", time: "All Day", icon: Coffee },
-  { id: "specials", label: "Specials", mobileLabel: "Specials", chinese: "最新推介", time: "Limited Time", icon: Sparkles },
+  { id: "breakfast", label: "Breakfast", chinese: "早餐", time: "8:00–11:00" },
+  { id: "lunch", label: "Lunch", chinese: "午餐", time: "11:00–2:30" },
+  { id: "lunch-combo", label: "Lunch special", chinese: "午餐套餐", time: "11:00–2:30" },
+  { id: "afternoon-tea", label: "Afternoon tea", chinese: "下午茶", time: "2:30–5:30" },
+  { id: "dinner", label: "Dinner", chinese: "晚餐", time: "5:30–close" },
+  { id: "bbq", label: "BBQ", chinese: "燒味", time: "All day" },
+  { id: "drinks", label: "Drinks", chinese: "飲品", time: "All day" },
+  { id: "specials", label: "Specials", chinese: "推介", time: "Posted" },
 ]
 
 function resolveCategoryFromParam(sectionParam: string | null): string {
   if (!sectionParam) return "breakfast"
-
   const normalized = sectionParam.toLowerCase().trim().replace(/_/g, "-")
   const match = categoryNavItems.find(
     (c) =>
@@ -207,113 +166,91 @@ function resolveCategoryFromParam(sectionParam: string | null): string {
       c.label.toLowerCase() === normalized ||
       c.id.toLowerCase().replace(/-/g, " ") === normalized.replace(/-/g, " ")
   )
-
   return match?.id ?? "breakfast"
+}
+
+function chipClass(active: boolean) {
+  return `inline-flex h-11 items-center justify-center rounded-md border px-3 text-[13px] font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D5A52F] focus-visible:ring-offset-2 ${
+    active
+      ? "border-[#302117] bg-[#302117] text-white"
+      : "border-[#302117]/20 bg-[#FFF9F0] text-[#302117] hover:border-[#302117]"
+  }`
+}
+
+function extraPrice(item: MenuItem) {
+  const bits: string[] = []
+  if (item.hotPrice) bits.push(`熱 ${item.hotPrice}`)
+  if (item.coldPrice) bits.push(`凍 ${item.coldPrice}`)
+  if (item.halfPrice) bits.push(`半 ${item.halfPrice}`)
+  if (item.wholePrice) bits.push(`隻 ${item.wholePrice}`)
+  return bits.join("  ·  ")
+}
+
+function DishRow({ item }: { item: MenuItem }) {
+  const zh = item.chineseName
+  const en = item.name || item.englishName
+  const extras = extraPrice(item)
+
+  return (
+    <div className="break-inside-avoid border-b border-[#302117]/10 py-3 lg:py-2.5">
+      <div className="flex items-baseline gap-4">
+        <div className="min-w-0 flex-1">
+          <p className="font-chinese text-[15px] leading-snug text-[#302117]">
+            {item.id ? <span className="mr-1.5 text-[#9A7420]">{item.id}</span> : null}
+            {zh || en}
+          </p>
+          {zh && en ? <p className="mt-0.5 text-[13px] leading-snug text-[#302117]/55">{en}</p> : null}
+        </div>
+        {item.price ? (
+          <span className="shrink-0 font-tempus text-[15px] tabular-nums text-[#302117]">{item.price}</span>
+        ) : null}
+      </div>
+      {extras ? <p className="mt-1 text-xs text-[#302117]/55">{extras}</p> : null}
+      {item.description ? (
+        <p className="mt-1 text-xs leading-relaxed text-[#302117]/55 whitespace-pre-line">{item.description}</p>
+      ) : null}
+    </div>
+  )
 }
 
 export default function Menu() {
   const searchParams = useSearchParams()
-  const [menuData, setMenuData] = useState<MenuData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [menuData] = useState<MenuData>(menuJson as MenuData)
   const [activeCategory, setActiveCategory] = useState("breakfast")
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"text" | "scans">("text")
   const categoryTabsRef = useRef<HTMLDivElement>(null)
-  const hasInitializedTabsRef = useRef(false)
-
-  // Modal state for scan gallery zoom
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean
-    sectionId: string
-    imageIndex: number
-  }>({
+  const [poster, setPoster] = useState<FeaturedSpecial | null>(null)
+  const [modalState, setModalState] = useState({
     isOpen: false,
     sectionId: "breakfast",
     imageIndex: 0,
   })
 
-  // Fetch menu JSON
-  useEffect(() => {
-    async function loadMenu() {
-      try {
-        setIsLoading(true)
-        const res = await fetch("/menu.json")
-        if (res.ok) {
-          const data = await res.json()
-          setMenuData(data)
-        }
-      } catch (e) {
-        console.error("Failed to load menu.json", e)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadMenu()
-  }, [])
-
-  // Sync with URL params (e.g., ?section=BBQ or ?view=scans)
   useEffect(() => {
     const sectionParam = searchParams.get("section")
     const viewParam = searchParams.get("view")
-
     setActiveCategory(resolveCategoryFromParam(sectionParam))
-
-    if (viewParam === "scans") {
-      setViewMode("scans")
-    }
+    if (viewParam === "scans") setViewMode("scans")
   }, [searchParams])
 
-  const [scrollToTabsToken, setScrollToTabsToken] = useState(0)
-
-  const handleCategoryChange = useCallback((categoryId: string, options?: { scrollToContent?: boolean }) => {
+  const handleCategoryChange = useCallback((categoryId: string) => {
+    setSearchQuery("")
     setActiveCategory(categoryId)
-
     const tabsContainer = categoryTabsRef.current
-    if (tabsContainer) {
-      const activeTab = tabsContainer.querySelector<HTMLButtonElement>(
-        `[data-category-id="${categoryId}"]`
-      )
-      if (activeTab) {
-        tabsContainer.scrollLeft = Math.max(0, activeTab.offsetLeft - 16)
-      }
-    }
-
-    if (options?.scrollToContent) {
-      setScrollToTabsToken((token) => token + 1)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!scrollToTabsToken || searchQuery.trim()) return
-
-    const target = document.getElementById("menu-category-tabs")
-    if (!target) return
-
-    const headerOffset = window.matchMedia("(min-width: 1024px)").matches ? 80 : 64
-    const y = target.getBoundingClientRect().top + window.scrollY - headerOffset
-    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
-
-    const tabsContainer = categoryTabsRef.current
-    const activeTab = tabsContainer?.querySelector<HTMLButtonElement>(
-      `[data-category-id="${activeCategory}"]`
-    )
+    const activeTab = tabsContainer?.querySelector<HTMLButtonElement>(`[data-category-id="${categoryId}"]`)
     if (activeTab && tabsContainer) {
       tabsContainer.scrollLeft = Math.max(0, activeTab.offsetLeft - 16)
     }
-  }, [scrollToTabsToken, searchQuery, activeCategory])
+    if (window.matchMedia("(max-width: 1023px)").matches) {
+      const sheet = document.getElementById("menu-sheet")
+      if (sheet) {
+        const y = sheet.getBoundingClientRect().top + window.scrollY - 120
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
+      }
+    }
+  }, [])
 
-  // On first visit to /menu, keep the breakfast tab visible in the horizontal strip
-  useEffect(() => {
-    if (hasInitializedTabsRef.current || searchQuery.trim()) return
-
-    const tabsContainer = categoryTabsRef.current
-    if (!tabsContainer) return
-
-    hasInitializedTabsRef.current = true
-    tabsContainer.scrollLeft = 0
-  }, [searchQuery, isLoading])
-
-  // Lightbox navigation handlers
   const openModal = useCallback((sectionId: string, imageIndex: number) => {
     setModalState({ isOpen: true, sectionId, imageIndex })
   }, [])
@@ -326,21 +263,13 @@ export default function Menu() {
     setModalState((prev) => {
       const section = scannedSections.find((s) => s.id === prev.sectionId)
       if (!section) return prev
-
       const total = section.images.length
-      let newIdx = prev.imageIndex
-
-      if (direction === "next") {
-        newIdx = (prev.imageIndex + 1) % total
-      } else {
-        newIdx = (prev.imageIndex - 1 + total) % total
-      }
-
+      const newIdx =
+        direction === "next" ? (prev.imageIndex + 1) % total : (prev.imageIndex - 1 + total) % total
       return { ...prev, imageIndex: newIdx }
     })
   }, [])
 
-  // Keyboard navigation
   useEffect(() => {
     if (!modalState.isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -352,716 +281,364 @@ export default function Menu() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [modalState.isOpen, navigateImage, closeModal])
 
-  // Current category data
   const currentCategoryData = menuData ? menuData[activeCategory] : null
   const currentScannedSection = scannedSections.find((s) => s.id === activeCategory) || scannedSections[0]
+  const activeNav = categoryNavItems.find((c) => c.id === activeCategory)
 
-  // Global search filtering across all categories
   const searchResults = useMemo(() => {
     if (!menuData || !searchQuery.trim()) return null
     const q = searchQuery.toLowerCase().trim()
-
-    const results: Array<{
-      categoryKey: string
-      categoryName: string
-      sectionName?: string
-      item: MenuItem
-    }> = []
+    const results: Array<{ categoryName: string; sectionName?: string; item: MenuItem }> = []
 
     Object.entries(menuData).forEach(([catKey, catData]) => {
       const catName = catData.name || catKey
-
-      // 1. Direct items in category
       catData.items?.forEach((item) => {
-        const textToSearch = `${item.name || ""} ${item.chineseName || ""} ${item.englishName || ""} ${item.description || ""} ${item.id || ""}`.toLowerCase()
-        if (textToSearch.includes(q)) {
-          results.push({ categoryKey: catKey, categoryName: catName, item })
-        }
+        const text = `${item.name || ""} ${item.chineseName || ""} ${item.englishName || ""} ${item.description || ""} ${item.id || ""}`.toLowerCase()
+        if (text.includes(q)) results.push({ categoryName: catName, item })
       })
-
-      // 2. Items inside sections
       catData.sections?.forEach((sec) => {
-        const secName = sec.name || sec.category || ""
-        const secChinese = sec.chineseName || sec.chineseCategory || ""
-        const fullSecTitle = `${secName} ${secChinese}`
-
-        // Check if section itself is an item (e.g. Breakfast A, B, C)
+        const fullSecTitle = `${sec.name || sec.category || ""} ${sec.chineseName || ""}`
         if (sec.description) {
-          const secText = `${secName} ${secChinese} ${sec.description}`.toLowerCase()
+          const secText = `${fullSecTitle} ${sec.description}`.toLowerCase()
           if (secText.includes(q)) {
             results.push({
-              categoryKey: catKey,
               categoryName: catName,
               sectionName: fullSecTitle,
-              item: {
-                id: sec.id,
-                name: sec.name,
-                chineseName: sec.chineseName,
-                price: sec.price,
-                description: sec.description,
-              },
+              item: { id: sec.id, name: sec.name, chineseName: sec.chineseName, price: sec.price, description: sec.description },
             })
           }
         }
-
-        // Check items in section
         sec.items?.forEach((item) => {
-          const textToSearch = `${item.name || ""} ${item.chineseName || ""} ${item.englishName || ""} ${item.description || ""} ${item.id || ""}`.toLowerCase()
-          if (textToSearch.includes(q)) {
-            results.push({ categoryKey: catKey, categoryName: catName, sectionName: fullSecTitle, item })
-          }
+          const text = `${item.name || ""} ${item.chineseName || ""} ${item.englishName || ""} ${item.description || ""} ${item.id || ""}`.toLowerCase()
+          if (text.includes(q)) results.push({ categoryName: catName, sectionName: fullSecTitle, item })
         })
-
-        // Check subItems in section
         sec.subItems?.forEach((sub) => {
-          const textToSearch = `${sub.name || ""} ${sub.chineseName || ""} ${sub.englishName || ""}`.toLowerCase()
-          if (textToSearch.includes(q)) {
+          const text = `${sub.name || ""} ${sub.chineseName || ""} ${sub.englishName || ""}`.toLowerCase()
+          if (text.includes(q)) {
             results.push({
-              categoryKey: catKey,
               categoryName: catName,
               sectionName: fullSecTitle,
-              item: {
-                name: sub.name,
-                chineseName: sub.chineseName,
-                englishName: sub.englishName,
-                price: sub.price,
-              },
+              item: { name: sub.name, chineseName: sub.chineseName, englishName: sub.englishName, price: sub.price },
             })
           }
         })
       })
     })
-
     return results
   }, [menuData, searchQuery])
 
+  const pickupButton = (
+    <Link
+      href="/order"
+      className="inline-flex h-12 w-full items-center justify-center rounded-md bg-[#302117] px-4 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#1C2029] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D5A52F] focus-visible:ring-offset-2 motion-reduce:transition-none"
+    >
+      Order pickup
+    </Link>
+  )
+
   return (
-    <div className="min-h-screen bg-[#faf8f5] text-gray-900 pt-24 md:pt-28 pb-20">
-      {/* 1. Page Header & View Mode Switcher */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mb-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-200">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-              <span>AUTHENTIC HONG KONG RECIPES · 港式美饌</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-tempus text-gray-900">
-              Restaurant Menu
-            </h1>
-            <p className="text-gray-600 text-sm sm:text-base mt-1.5 max-w-2xl">
-              Freshly prepared Cantonese specialties, barbecue meats, comforting combos, and traditional tea beverages.
-            </p>
-          </div>
+    <div className="min-h-screen bg-[#F7F0E3] text-[#302117] pt-20 md:pt-28">
+      <div className="mx-auto max-w-6xl px-4 pb-28 sm:px-8 lg:pb-16">
+        <header className="max-w-2xl pb-8">
+          <p className="text-sm font-medium text-[#9A7420]">café de A · Ironwood Plaza</p>
+          <h1 className="mt-2 font-tempus text-4xl leading-tight sm:text-5xl">Menu</h1>
+          <p className="mt-4 text-[15px] leading-relaxed text-[#302117]/75">
+            Breakfast through dinner, barbecue, drinks, and what’s on the wall this week.
+          </p>
+        </header>
 
-          {/* View Mode & Order Action */}
-          <div className="flex flex-wrap items-center gap-3">
-            {/* View Mode Switcher */}
-            <div className="inline-flex p-1 bg-white border border-gray-200 rounded-xl shadow-sm">
-              <button
-                onClick={() => setViewMode("text")}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === "text"
-                    ? "bg-teal-600 text-white shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Interactive Menu</span>
-              </button>
-              <button
-                onClick={() => setViewMode("scans")}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === "scans"
-                    ? "bg-teal-600 text-white shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span>Menu Scans (圖文版)</span>
-              </button>
+        <div className="relative lg:grid lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+          <aside className="lg:sticky lg:top-28">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#302117]/40" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="叉燒, milk tea…"
+                className="h-12 w-full rounded-md border border-[#302117]/20 bg-[#FFF9F0] py-2.5 pl-10 pr-10 text-base text-[#302117] outline-none transition-colors duration-150 placeholder:text-[#302117]/35 focus:border-[#302117] focus-visible:ring-2 focus-visible:ring-[#D5A52F] focus-visible:ring-offset-2 lg:text-sm"
+              />
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#302117]/40"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
             </div>
 
-            {/* Direct Order Link */}
-            <Link
-              href="/order"
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition-colors"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Order Pickup</span>
-            </Link>
-          </div>
-        </div>
-
-        <FeaturedSpecials
-          variant="banner"
-          onViewAll={() => {
-            setSearchQuery("")
-            handleCategoryChange("specials", { scrollToContent: true })
-          }}
-        />
-
-        {/* 2. Search Bar */}
-        <div className="mt-6 max-w-2xl">
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search dishes by name in English or Chinese (e.g. Satay Beef, 叉燒, Milk Tea, Congee, 炒飯)..."
-              className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 shadow-sm"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+            <div className="sticky top-16 z-30 mt-4 rounded-md border border-[#302117]/12 bg-[#FFF9F0] p-3 md:top-[6.5rem] lg:static">
+              <nav
+                ref={categoryTabsRef}
+                className="flex snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-hide lg:flex-col lg:items-stretch lg:overflow-visible"
               >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Search Results Overlay or Normal Category Navigation */}
-      {searchQuery.trim() && searchResults ? (
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-sm space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900">
-                Search Results for "{searchQuery}" ({searchResults.length} {searchResults.length === 1 ? "item" : "items"})
-              </h2>
-              <button
-                onClick={() => setSearchQuery("")}
-                className="text-xs text-teal-600 hover:underline font-semibold"
-              >
-                Clear Search
-              </button>
+                {categoryNavItems.map((cat) => {
+                  const isActive = !searchQuery.trim() && activeCategory === cat.id
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      data-category-id={cat.id}
+                      onClick={() => handleCategoryChange(cat.id)}
+                      className={`snap-start shrink-0 ${chipClass(isActive)}`}
+                    >
+                      {cat.label}
+                    </button>
+                  )
+                })}
+              </nav>
             </div>
 
-            {searchResults.length === 0 ? (
-              <div className="py-12 text-center text-gray-500 space-y-2">
-                <p className="text-base font-medium">No dishes found matching "{searchQuery}".</p>
-                <p className="text-xs">Try searching for ingredients like "beef", "duck", "noodle", or Chinese keywords like "飯", "麵", "雞".</p>
+            <div className="mt-4 rounded-md border border-[#302117]/12 bg-[#FFF9F0] p-3">
+              <p className="mb-2 text-sm text-[#302117]/55">List and photos</p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("text")}
+                  className={`flex-1 ${chipClass(viewMode === "text")}`}
+                >
+                  List
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("scans")}
+                  className={`flex-1 ${chipClass(viewMode === "scans")}`}
+                >
+                  Photos
+                </button>
+              </div>
+              <div className="mt-3 hidden md:block">{pickupButton}</div>
+            </div>
+          </aside>
+
+          <div id="menu-sheet" className="mt-6 overflow-hidden rounded-md border border-[#302117]/12 bg-[#FFF9F0] px-5 py-6 sm:px-8 lg:mt-0 lg:py-8">
+            {searchQuery.trim() && searchResults ? (
+              <div>
+                <p className="text-sm text-[#302117]/60">
+                  {searchResults.length} result{searchResults.length === 1 ? "" : "s"} for “{searchQuery}”
+                </p>
+                {searchResults.length === 0 ? (
+                  <p className="mt-8 text-sm text-[#302117]/60">Nothing matched. Try 飯, 麵, beef, or milk tea.</p>
+                ) : (
+                  <div className="mt-6 columns-1 lg:columns-2 lg:gap-x-12">
+                    {searchResults.map((res, i) => (
+                      <div key={i} className="break-inside-avoid">
+                        <p className="pt-2 text-[11px] text-[#9A7420]">
+                          {res.categoryName}
+                          {res.sectionName ? ` · ${res.sectionName}` : ""}
+                        </p>
+                        <DishRow item={res.item} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : viewMode === "scans" ? (
+              <div>
+                <header className="mb-5 lg:mb-6">
+                  <h2 className="font-tempus text-2xl lg:text-3xl">{currentScannedSection.name}</h2>
+                  <p className="mt-1 text-sm text-[#302117]/55">Tap a page to zoom.</p>
+                </header>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  {currentScannedSection.images.map((page, idx) => (
+                    <button
+                      key={page.id}
+                      type="button"
+                      onClick={() => openModal(currentScannedSection.id, idx)}
+                      className="text-left"
+                    >
+                      <div className="relative aspect-[3/4] overflow-hidden rounded-md border border-[#302117]/15 bg-white">
+                        <Image
+                          src={page.imgSrc}
+                          alt={page.alt}
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 640px) 100vw, 40vw"
+                        />
+                      </div>
+                      <p className="mt-2 text-xs text-[#302117]/50">
+                        {currentScannedSection.name} · {idx + 1}
+                      </p>
+                    </button>
+                  ))}
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {searchResults.map((res, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-xl bg-[#faf8f5] border border-gray-200/80 hover:border-teal-500 transition-colors flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="text-[11px] font-semibold text-teal-700 uppercase tracking-wider">
-                          {res.categoryName} {res.sectionName ? `· ${res.sectionName}` : ""}
-                        </span>
-                        {(res.item.price || res.item.halfPrice || res.item.wholePrice) && (
-                          <span className="font-bold text-teal-700 text-sm">
-                            {res.item.price || res.item.halfPrice || res.item.wholePrice}
-                          </span>
-                        )}
-                      </div>
+              <div>
+                <header className="mb-5 lg:mb-8">
+                  <h2 className="font-tempus text-2xl lg:text-4xl">
+                    {currentCategoryData?.name || activeNav?.label}
+                    {activeNav?.time ? (
+                      <span className="ml-3 font-sans text-sm font-normal text-[#302117]/50 lg:hidden">
+                        {activeNav.time}
+                      </span>
+                    ) : null}
+                  </h2>
+                  {activeNav?.time ? (
+                    <p className="mt-1 hidden text-sm text-[#302117]/55 lg:block">{activeNav.time}</p>
+                  ) : null}
+                  {currentCategoryData?.subtitle ? (
+                    <p className="mt-2 max-w-xl font-chinese text-sm leading-relaxed text-[#302117]/70 lg:hidden">
+                      {currentCategoryData.subtitle}
+                    </p>
+                  ) : null}
+                  {currentCategoryData?.englishSubtitle ? (
+                    <p className="mt-3 hidden max-w-xl text-sm leading-relaxed text-[#302117]/70 lg:block">
+                      {currentCategoryData.englishSubtitle}
+                    </p>
+                  ) : currentCategoryData?.subtitle ? (
+                    <p className="mt-3 hidden max-w-xl text-sm leading-relaxed text-[#302117]/70 lg:block">
+                      {currentCategoryData.subtitle}
+                    </p>
+                  ) : null}
+                  {currentCategoryData?.note ? (
+                    <p className="mt-2 text-xs text-[#302117]/55">{currentCategoryData.note}</p>
+                  ) : null}
+                </header>
 
-                      <h3 className="font-bold text-gray-900 text-base leading-snug">
-                        {res.item.name || res.item.englishName}
-                      </h3>
-                      {res.item.chineseName && (
-                        <p className="text-sm text-gray-600 font-chinese mt-0.5 font-medium">
-                          {res.item.chineseName}
-                        </p>
-                      )}
-
-                      {res.item.description && (
-                        <p className="text-xs text-gray-500 mt-2 leading-relaxed whitespace-pre-line line-clamp-3">
-                          {res.item.description}
-                        </p>
-                      )}
-                    </div>
+                {activeCategory === "specials" ? (
+                  <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                    {featuredSpecials.map((special) => (
+                      <button
+                        key={special.id}
+                        type="button"
+                        onClick={() => setPoster(special)}
+                        className="text-left"
+                      >
+                        <div className="relative aspect-[3/4] overflow-hidden rounded-md border border-[#302117]/15 bg-white">
+                          <Image src={special.image} alt={special.alt} fill className="object-cover" sizes="33vw" />
+                        </div>
+                        <p className="mt-2 font-chinese text-sm">{special.chineseTitle}</p>
+                        <p className="text-xs text-[#302117]/55">{special.title}</p>
+                      </button>
+                    ))}
                   </div>
+                ) : null}
+
+                {currentCategoryData?.items && currentCategoryData.items.length > 0 ? (
+                  <div className="columns-1 lg:columns-2 lg:gap-x-12">
+                    {currentCategoryData.items.map((item, idx) => (
+                      <DishRow key={idx} item={item} />
+                    ))}
+                  </div>
+                ) : null}
+
+                {currentCategoryData?.sections?.map((section, sIdx) => (
+                  <section key={sIdx} className="mb-10">
+                    <div className="mb-3 flex items-baseline justify-between gap-4 border-b border-[#302117]/20 pb-2">
+                      <div>
+                        <h3 className="text-lg font-medium">
+                          {section.id ? <span className="mr-2 text-[#9A7420]">{section.id}</span> : null}
+                          {section.name || section.category || section.chineseName || section.chineseCategory}
+                        </h3>
+                      </div>
+                      {section.price ? (
+                        <span className="shrink-0 font-tempus text-lg tabular-nums">{section.price}</span>
+                      ) : null}
+                    </div>
+                    {section.note ? <p className="mb-2 text-xs text-[#9A7420]">{section.note}</p> : null}
+                    {section.availableTime ? (
+                      <p className="mb-2 text-xs text-[#302117]/55 whitespace-pre-line">{section.availableTime}</p>
+                    ) : null}
+                    {section.description ? (
+                      <div className="mb-4 space-y-2 text-[13px] leading-relaxed text-[#302117]/70">
+                        {section.description.split(/\n\n+/).map((block, i) => (
+                          <p key={i} className="whitespace-pre-line">
+                            {block}
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+                    {section.items && section.items.length > 0 ? (
+                      <div className="columns-1 lg:columns-2 lg:gap-x-12">
+                        {section.items.map((item, itemIdx) => (
+                          <DishRow key={itemIdx} item={item} />
+                        ))}
+                      </div>
+                    ) : null}
+                    {section.subItems && section.subItems.length > 0 ? (
+                      <div className="mt-2 columns-1 lg:columns-2 lg:gap-x-12">
+                        {section.subItems.map((sub, subIdx) => (
+                          <DishRow key={subIdx} item={sub} />
+                        ))}
+                      </div>
+                    ) : null}
+                  </section>
                 ))}
               </div>
             )}
           </div>
         </div>
-      ) : (
-        <>
-          {/* Sticky Category Tabs Bar */}
-          <div id="menu-category-tabs" className="sticky top-16 lg:top-20 z-30 bg-[#faf8f5]/95 backdrop-blur-md border-y border-gray-200 shadow-sm py-3 mb-8">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-              <div ref={categoryTabsRef} className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
-                {categoryNavItems.map((cat) => {
-                  const isActive = activeCategory === cat.id
-                  const Icon = cat.icon
-                  return (
-                    <button
-                      key={cat.id}
-                      data-category-id={cat.id}
-                      onClick={() => handleCategoryChange(cat.id)}
-                      className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 ${
-                        isActive
-                          ? "bg-teal-600 text-white shadow-md font-semibold scale-105"
-                          : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200/80"
-                      }`}
-                    >
-                      <Icon className={`w-4 h-4 ${isActive ? "text-teal-200" : "text-teal-600"}`} />
-                      <span className="sm:hidden">{cat.mobileLabel}</span>
-                      <span className="hidden sm:inline">{cat.label}</span>
-                      <span className={`font-chinese text-xs ${isActive ? "text-teal-100" : "text-gray-500"}`}>
-                        {cat.chinese}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content Area */}
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            {viewMode === "text" ? (
-              /* INTERACTIVE TEXT VIEW */
-              <div id={`category-content-${activeCategory}`} className="space-y-10">
-                {/* Category Header Banner */}
-                {currentCategoryData && (
-                  <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-sm">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-3">
-                          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-tempus">
-                            {currentCategoryData.name}
-                          </h2>
-                          {currentCategoryData.chineseName && (
-                            <span className="text-xl sm:text-2xl text-teal-700 font-chinese font-bold">
-                              {currentCategoryData.chineseName}
-                            </span>
-                          )}
-                        </div>
-
-                        {currentCategoryData.englishSubtitle && (
-                          <p className="text-sm font-semibold text-gray-700 mt-2">
-                            {currentCategoryData.englishSubtitle}
-                          </p>
-                        )}
-                        {currentCategoryData.subtitleChinese && (
-                          <p className="text-xs text-teal-700 font-chinese mt-0.5">
-                            {currentCategoryData.subtitleChinese}
-                          </p>
-                        )}
-                        {currentCategoryData.subtitle && !currentCategoryData.englishSubtitle && (
-                          <p className="text-sm text-gray-600 mt-1">{currentCategoryData.subtitle}</p>
-                        )}
-                        {currentCategoryData.note && (
-                          <div className="inline-flex items-center gap-2 mt-3 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg text-xs font-medium">
-                            <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                            <span>{currentCategoryData.note}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {currentCategoryData.price && (
-                        <div className="shrink-0 p-3 bg-teal-50 border border-teal-200 rounded-xl text-center">
-                          <span className="text-xs text-teal-700 uppercase font-semibold">Special Set Price</span>
-                          <div className="text-xl font-bold text-teal-800">{currentCategoryData.price}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Poster-based specials (featured promotions) */}
-                {activeCategory === "specials" && (
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {featuredSpecials.map((special) => (
-                      <div
-                        key={special.id}
-                        className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
-                      >
-                        <div className="relative aspect-[3/4] bg-gray-100">
-                          <Image
-                            src={special.image}
-                            alt={special.alt}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                          />
-                          {special.badge && (
-                            <span className="absolute left-3 top-3 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-                              {special.badge}
-                            </span>
-                          )}
-                        </div>
-                        <div className="space-y-1 border-t border-gray-100 p-5">
-                          <h3 className="text-lg font-bold text-gray-900">{special.title}</h3>
-                          <p className="text-sm font-semibold text-teal-700 font-chinese">{special.chineseTitle}</p>
-                          <p className="text-xs leading-relaxed text-gray-600">{special.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* 1. Direct Items in Category */}
-                {currentCategoryData?.items && currentCategoryData.items.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {currentCategoryData.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-white rounded-xl p-5 border border-gray-200/90 shadow-sm hover:border-teal-500/60 hover:shadow-md transition-all flex flex-col justify-between"
-                      >
-                        <div className="space-y-1.5">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="flex-1">
-                              {item.id && (
-                                <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-700 mb-1">
-                                  #{item.id}
-                                </span>
-                              )}
-                              <h3 className="font-bold text-gray-900 text-base leading-snug">
-                                {item.name || item.englishName}
-                              </h3>
-                              {item.chineseName && (
-                                <p className="text-sm text-teal-700 font-chinese font-semibold mt-0.5">
-                                  {item.chineseName}
-                                </p>
-                              )}
-                            </div>
-
-                            {item.price && (
-                              <span className="font-bold text-teal-700 text-base shrink-0 bg-teal-50 px-2.5 py-1 rounded-lg">
-                                {item.price}
-                              </span>
-                            )}
-                          </div>
-
-                          {item.description && (
-                            <p className="text-xs text-gray-600 whitespace-pre-line leading-relaxed pt-1">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Multi-price options like Half/Whole or Hot/Cold */}
-                        {(item.halfPrice || item.wholePrice || item.hotPrice || item.coldPrice) && (
-                          <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2 text-xs">
-                            {item.hotPrice && (
-                              <span className="px-2 py-0.5 bg-gray-100 rounded text-gray-700">
-                                Hot: <strong className="text-gray-900">{item.hotPrice}</strong>
-                              </span>
-                            )}
-                            {item.coldPrice && (
-                              <span className="px-2 py-0.5 bg-blue-50 rounded text-blue-800">
-                                Cold: <strong className="text-blue-900">{item.coldPrice}</strong>
-                              </span>
-                            )}
-                            {item.halfPrice && (
-                              <span className="px-2 py-0.5 bg-gray-100 rounded text-gray-700">
-                                Half: <strong className="text-gray-900">{item.halfPrice}</strong>
-                              </span>
-                            )}
-                            {item.wholePrice && (
-                              <span className="px-2 py-0.5 bg-amber-50 rounded text-amber-800">
-                                Whole: <strong className="text-amber-900">{item.wholePrice}</strong>
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* 2. Structured Sections in Category */}
-                {currentCategoryData?.sections && currentCategoryData.sections.length > 0 && (
-                  <div className="space-y-8">
-                    {currentCategoryData.sections.map((section, sIdx) => (
-                      <div
-                        key={sIdx}
-                        className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-sm space-y-6"
-                      >
-                        {/* Section Title Header */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
-                          <div>
-                            <div className="flex items-center gap-3">
-                              {section.id && (
-                                <span className="w-8 h-8 rounded-lg bg-teal-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                                  {section.id}
-                                </span>
-                              )}
-                              <div>
-                                <h3 className="text-xl font-bold text-gray-900">
-                                  {section.name || section.category}
-                                </h3>
-                                {(section.chineseName || section.chineseCategory) && (
-                                  <p className="text-sm font-semibold text-teal-700 font-chinese mt-0.5">
-                                    {section.chineseName || section.chineseCategory}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-
-                            {section.note && (
-                              <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-md mt-2 inline-block font-medium">
-                                {section.note}
-                              </p>
-                            )}
-                            {section.availableTime && (
-                              <p className="text-xs text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-md mt-2 inline-block font-medium whitespace-pre-line">
-                                {section.availableTime}
-                              </p>
-                            )}
-                          </div>
-
-                          {section.price && (
-                            <div className="font-bold text-teal-700 text-xl bg-teal-50 px-3 py-1.5 rounded-xl self-start sm:self-center">
-                              {section.price}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Section Description (e.g. choice of eggs/toast) */}
-                        {section.description && (
-                          <div className="p-4 rounded-xl bg-[#faf8f5] border border-gray-200/80 text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                            {section.description}
-                          </div>
-                        )}
-
-                        {/* Items under section */}
-                        {section.items && section.items.length > 0 && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {section.items.map((item, itemIdx) => (
-                              <div
-                                key={itemIdx}
-                                className="p-4 rounded-xl bg-[#faf8f5] border border-gray-200/70 hover:border-teal-500/50 hover:bg-white transition-all flex flex-col justify-between"
-                              >
-                                <div>
-                                  <div className="flex items-start justify-between gap-2">
-                                    <div className="flex-1">
-                                      {item.id && (
-                                        <span className="text-[10px] font-bold text-gray-500 block mb-0.5">
-                                          #{item.id}
-                                        </span>
-                                      )}
-                                      <h4 className="font-bold text-gray-900 text-sm leading-snug">
-                                        {item.name || item.englishName}
-                                      </h4>
-                                      {item.chineseName && (
-                                        <p className="text-xs font-semibold text-teal-700 font-chinese mt-0.5">
-                                          {item.chineseName}
-                                        </p>
-                                      )}
-                                    </div>
-                                    {item.price && (
-                                      <span className="font-bold text-teal-700 text-sm shrink-0">
-                                        {item.price}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  {item.description && (
-                                    <p className="text-xs text-gray-600 mt-2 leading-relaxed">
-                                      {item.description}
-                                    </p>
-                                  )}
-                                </div>
-
-                                {(item.halfPrice || item.wholePrice || item.hotPrice || item.coldPrice) && (
-                                  <div className="mt-2.5 pt-2 border-t border-gray-200/60 flex flex-wrap gap-1.5 text-[11px]">
-                                    {item.hotPrice && <span className="text-gray-700">Hot: {item.hotPrice}</span>}
-                                    {item.coldPrice && <span className="text-blue-700">Cold: {item.coldPrice}</span>}
-                                    {item.halfPrice && <span className="text-gray-700">Half: {item.halfPrice}</span>}
-                                    {item.wholePrice && <span className="text-amber-800">Whole: {item.wholePrice}</span>}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Subitems under section (e.g. Congee add-ons, fried noodles) */}
-                        {section.subItems && section.subItems.length > 0 && (
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">
-                              Combo Options & Selections
-                            </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                              {section.subItems.map((sub, subIdx) => (
-                                <div
-                                  key={subIdx}
-                                  className="p-3 bg-[#faf8f5] rounded-xl border border-gray-200/80 flex items-center justify-between text-xs"
-                                >
-                                  <div>
-                                    <span className="font-bold text-gray-900 block">{sub.name || sub.englishName}</span>
-                                    {sub.chineseName && (
-                                      <span className="text-teal-700 font-chinese font-medium">{sub.chineseName}</span>
-                                    )}
-                                  </div>
-                                  {sub.price && (
-                                    <span className="font-bold text-teal-700 shrink-0 ml-2">{sub.price}</span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              /* SCANNED MENU GALLERY VIEW */
-              <div className="space-y-8">
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h2 className="text-2xl font-bold font-tempus text-gray-900">
-                      {currentScannedSection.name} · {currentScannedSection.chinese}
-                    </h2>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Showing {currentScannedSection.images.length} high-resolution scanned menu {currentScannedSection.images.length === 1 ? "page" : "pages"}. Click to zoom in.
-                    </p>
-                  </div>
-                  <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200">
-                    High Resolution Scans
-                  </span>
-                </div>
-
-                {/* Scanned Pages Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                  {currentScannedSection.images.map((page, idx) => (
-                    <div
-                      key={page.id}
-                      onClick={() => openModal(currentScannedSection.id, idx)}
-                      className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-gray-200 cursor-pointer hover:shadow-xl hover:border-teal-500 transition-all duration-300 flex flex-col"
-                    >
-                      {/* Page Badge */}
-                      <div className="absolute top-4 left-4 z-10 bg-black/70 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
-                        Page {idx + 1} of {currentScannedSection.images.length}
-                      </div>
-
-                      {/* Image Preview Container */}
-                      <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
-                        <Image
-                          src={page.imgSrc}
-                          alt={page.alt}
-                          fill
-                          className="object-contain group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          loading={idx === 0 ? "eager" : "lazy"}
-                        />
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-gray-900 text-xs font-bold shadow-lg">
-                            <ZoomIn className="w-4 h-4" />
-                            <span>Click to Zoom</span>
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Card Footer */}
-                      <div className="p-3 bg-gray-50 border-t border-gray-100 text-center text-xs font-medium text-gray-600">
-                        {currentScannedSection.name} - Page {idx + 1}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-
-      {/* 4. Bottom Order Reminder Bar */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl mt-16">
-        <div className="bg-gradient-to-r from-[#1d232e] to-[#252f3e] text-white rounded-3xl p-8 sm:p-10 shadow-xl border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center md:text-left">
-            <h3 className="text-2xl font-bold font-tempus">Ready to Taste Authentic Hong Kong Cuisine?</h3>
-            <p className="text-gray-300 text-sm">
-              Dine in with us at Ironwood Plaza, or order for quick takeaway and delivery.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <a
-              href="tel:6042767800"
-              className="inline-flex items-center gap-2 px-5 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold text-sm transition-colors border border-white/20"
-            >
-              <Phone className="w-4 h-4 text-teal-400" />
-              <span>Call (604) 276-7800</span>
-            </a>
-            <Link
-              href="/order"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm shadow-md transition-colors font-tempus"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Order Online Now</span>
-            </Link>
-          </div>
-        </div>
       </div>
 
-      {/* 5. High-Resolution Scan Zoom Modal */}
-      {modalState.isOpen && (
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#302117]/10 bg-[#FFF9F0]/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm md:hidden">
+        <div className="mx-auto max-w-6xl">{pickupButton}</div>
+      </div>
+
+      {poster ? (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3" onClick={() => setPoster(null)}>
+          <button type="button" className="absolute right-4 top-4 text-white" onClick={() => setPoster(null)} aria-label="Close">
+            <X className="h-6 w-6" />
+          </button>
+          <Image
+            src={poster.image}
+            alt={poster.alt}
+            width={1200}
+            height={1600}
+            className="max-h-[88vh] max-w-[92vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      ) : null}
+
+      {modalState.isOpen ? (
         <div
-          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-2 sm:p-4"
           onClick={closeModal}
         >
-          {/* Close Button */}
-          <button
-            onClick={closeModal}
-            className="absolute top-4 right-4 z-[102] p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-            aria-label="Close modal"
-          >
-            <X className="w-6 h-6" />
+          <button onClick={closeModal} className="absolute right-4 top-4 text-white" aria-label="Close">
+            <X className="h-6 w-6" />
           </button>
-
-          {/* Page Index Indicator */}
-          <div className="absolute top-4 left-4 z-[102] bg-black/60 px-4 py-2 rounded-full text-white text-xs font-semibold backdrop-blur-sm">
-            {scannedSections.find((s) => s.id === modalState.sectionId)?.name} — Page {modalState.imageIndex + 1}
+          <div className="absolute left-4 top-4 text-xs text-white/80">
+            {scannedSections.find((s) => s.id === modalState.sectionId)?.name} — {modalState.imageIndex + 1}
           </div>
-
-          {/* Prev / Next Navigation Buttons */}
           <button
             onClick={(e) => {
               e.stopPropagation()
               navigateImage("prev")
             }}
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-[102] p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all hover:scale-110"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-white sm:left-6"
             aria-label="Previous page"
           >
-            <ChevronLeft className="w-7 h-7" />
+            <ChevronLeft className="h-8 w-8" />
           </button>
-
           <button
             onClick={(e) => {
               e.stopPropagation()
               navigateImage("next")
             }}
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-[102] p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-all hover:scale-110"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white sm:right-6"
             aria-label="Next page"
           >
-            <ChevronRight className="w-7 h-7" />
+            <ChevronRight className="h-8 w-8" />
           </button>
-
-          {/* Modal Image Container */}
-          <div
-            className="relative max-w-[95vw] max-h-[90vh] flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {scannedSections.find((s) => s.id === modalState.sectionId)?.images[modalState.imageIndex] && (
+          <div className="relative flex max-h-[90vh] max-w-[95vw] items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            {scannedSections.find((s) => s.id === modalState.sectionId)?.images[modalState.imageIndex] ? (
               <Image
-                src={
-                  scannedSections.find((s) => s.id === modalState.sectionId)!.images[modalState.imageIndex].imgSrc
-                }
+                src={scannedSections.find((s) => s.id === modalState.sectionId)!.images[modalState.imageIndex].imgSrc}
                 alt="Scanned menu zoom"
                 width={1200}
                 height={1600}
-                className="max-w-[92vw] max-h-[86vh] object-contain rounded-lg shadow-2xl"
+                className="max-h-[86vh] max-w-[92vw] object-contain"
                 priority
               />
-            )}
+            ) : null}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

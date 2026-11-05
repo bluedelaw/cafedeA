@@ -4,22 +4,22 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Instagram, Facebook, Phone, MapPin, Clock, ExternalLink, CalendarDays, ShoppingBag } from "lucide-react"
+import { Menu, X, Instagram, Facebook, Phone, MapPin, Clock, CalendarDays, ShoppingBag } from "lucide-react"
 
 // Navigation items configuration with bilingual subtitles
 const navigationItems = [
-  { name: "Home", chinese: "主頁", href: "/", description: "Welcome to café de A" },
-  { name: "Menu", chinese: "菜單", href: "/menu", description: "Authentic HK dishes & BBQ" },
-  { name: "Order", chinese: "點餐", href: "/order", description: "Pickup & Delivery" },
-  { name: "Reserve", chinese: "訂座", href: "/reservation", description: "Book a table online" },
-  { name: "Location", chinese: "位置及營業時間", href: "/location", description: "Ironwood Plaza, Richmond" },
-  { name: "Contact", chinese: "聯絡我們", href: "/contact", description: "Catering & Inquiries" },
+  { name: "Home", href: "/", description: "Welcome to café de A" },
+  { name: "Menu", href: "/menu", description: "Authentic HK dishes & BBQ" },
+  { name: "Order", href: "/order", description: "Pickup & Delivery" },
+  { name: "Reserve", href: "/reservation", description: "Book a table online" },
+  { name: "Location", href: "/location", description: "Ironwood Plaza, Richmond" },
+  { name: "Contact", href: "/contact", description: "Catering & Inquiries" },
 ] as const
 
 const socialLinks = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/cafedea_richmond/",
+    href: "https://www.instagram.com/cafedea_ironwood/",
     icon: Instagram,
   },
   {
@@ -133,11 +133,11 @@ export default function Header() {
           <div className="container mx-auto flex items-center justify-between max-w-7xl">
             <div className="flex items-center gap-6">
               <span className="inline-flex items-center gap-1.5 text-gray-300">
-                <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-[#e8c9b8] shrink-0" />
                 <span>#3050-11666 Steveston Hwy, Richmond, BC (Ironwood Plaza)</span>
               </span>
               <span className="hidden lg:inline-flex items-center gap-1.5 text-gray-400">
-                <Clock className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <Clock className="w-3.5 h-3.5 text-[#e8c9b8] shrink-0" />
                 <span>Open Daily: 8:00 AM – 10:00 PM</span>
               </span>
             </div>
@@ -145,7 +145,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <a
                 href="tel:6042767800"
-                className="inline-flex items-center gap-1 text-teal-300 hover:text-teal-200 transition-colors font-medium"
+                className="inline-flex items-center gap-1 text-[#e8c9b8] hover:text-white transition-colors font-medium"
               >
                 <Phone className="w-3.5 h-3.5 shrink-0" />
                 <span>(604) 276-7800</span>
@@ -158,7 +158,7 @@ export default function Header() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-teal-300 transition-colors"
+                    className="text-gray-400 hover:text-[#e8c9b8] transition-colors"
                     aria-label={`Follow on ${social.name}`}
                   >
                     <social.icon className="w-3.5 h-3.5" />
@@ -175,7 +175,7 @@ export default function Header() {
             {/* Left: Brand Logo */}
             <Link
               href="/"
-              className="relative z-10 flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-lg py-1 max-w-[60%]"
+              className="relative z-10 flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e3a] rounded-lg py-1 max-w-[60%]"
               onClick={closeMenu}
               aria-label="café de A Homepage"
             >
@@ -198,18 +198,15 @@ export default function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`relative px-2.5 xl:px-3.5 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                    className={`relative whitespace-nowrap px-2.5 py-2 font-medium text-sm xl:px-3.5 ${
                       isActive
-                        ? "text-white bg-white/10 shadow-sm"
-                        : "text-gray-300 hover:text-white hover:bg-white/5"
+                        ? "text-white"
+                        : "text-gray-300 hover:text-white"
                     }`}
                   >
-                    <span className="flex items-center gap-1.5">
-                      <span>{item.name}</span>
-                      <span className="text-xs text-teal-400 font-normal font-chinese opacity-90">{item.chinese}</span>
-                    </span>
+                    <span>{item.name}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal-400 rounded-full" />
+                      <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#c41e3a] rounded-full" />
                     )}
                   </Link>
                 )
@@ -222,14 +219,14 @@ export default function Header() {
                 href="/reservation"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-200 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg transition-colors"
               >
-                <CalendarDays className="w-3.5 h-3.5 text-teal-300" />
+                <CalendarDays className="w-3.5 h-3.5 text-[#e8c9b8]" />
                 <span>Reserve</span>
               </Link>
 
               {/* Order Online CTA */}
               <Link
                 href="/order"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all font-tempus"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#c41e3a] hover:bg-[#a31830] text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all font-tempus"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>Order Now</span>
@@ -240,14 +237,14 @@ export default function Header() {
             <div className="flex lg:hidden items-center gap-1.5">
               <Link
                 href="/reservation"
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-500 rounded-lg transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-[#c41e3a] hover:bg-[#a31830] rounded-lg transition-colors"
               >
                 <CalendarDays className="hidden sm:block w-3.5 h-3.5" />
                 <span>Reserve</span>
               </Link>
               <Link
                 href="/order"
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-500 rounded-lg transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-[#c41e3a] hover:bg-[#a31830] rounded-lg transition-colors"
               >
                 <ShoppingBag className="hidden sm:block w-3.5 h-3.5" />
                 <span>Order</span>
@@ -260,7 +257,7 @@ export default function Header() {
                   event.stopPropagation()
                   toggleMenu()
                 }}
-                className="relative z-20 p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                className="relative z-20 p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e3a]"
                 aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={isMenuOpen}
               >
@@ -292,30 +289,28 @@ export default function Header() {
               <Link
                 href="/order"
                 onClick={closeMenu}
-                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#c41e3a] hover:bg-[#a31830] text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
               >
                 <ShoppingBag className="w-5 h-5" />
                 <span>Order</span>
-                <span className="text-[11px] text-teal-100 font-normal">點餐</span>
               </Link>
 
               <Link
                 href="/reservation"
                 onClick={closeMenu}
-                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-teal-500/40 rounded-xl font-semibold text-sm transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-[#c41e3a]/40 rounded-xl font-semibold text-sm transition-colors"
               >
-                <CalendarDays className="w-5 h-5 text-teal-300" />
+                <CalendarDays className="w-5 h-5 text-[#e8c9b8]" />
                 <span>Reserve</span>
-                <span className="text-[11px] text-gray-300 font-normal">訂座</span>
               </Link>
 
               <Link
                 href="/waitlist"
+                onClick={closeMenu}
                 className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-xl font-semibold text-sm transition-colors"
               >
                 <CalendarDays className="w-5 h-5 text-amber-300" />
                 <span>Waitlist</span>
-                <span className="text-[11px] text-gray-300 font-normal">排隊</span>
               </Link>
             </div>
 
@@ -330,18 +325,15 @@ export default function Header() {
                     onClick={closeMenu}
                     className={`flex items-center justify-between p-3.5 rounded-xl transition-colors ${
                       isActive
-                        ? "bg-teal-900/40 text-teal-300 border border-teal-500/30"
+                        ? "bg-[#c41e3a]/20 text-[#e8c9b8] border border-[#c41e3a]/40"
                         : "text-gray-200 hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-base">{item.name}</span>
-                        <span className="text-xs text-teal-400 font-chinese">{item.chinese}</span>
-                      </div>
+                      <span className="font-semibold text-base">{item.name}</span>
                       <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
                     </div>
-                    {isActive && <div className="w-2 h-2 rounded-full bg-teal-400" />}
+                    {isActive && <div className="w-2 h-2 rounded-full bg-[#c41e3a]" />}
                   </Link>
                 )
               })}
@@ -351,9 +343,9 @@ export default function Header() {
             <div className="p-4 bg-white/5 border border-white/10 rounded-xl space-y-3">
               <a
                 href="tel:6042767800"
-                className="flex items-center gap-3 text-sm text-teal-300 hover:text-teal-200 font-medium"
+                className="flex items-center gap-3 text-sm text-[#e8c9b8] hover:text-white font-medium"
               >
-                <div className="w-8 h-8 rounded-lg bg-teal-950/60 border border-teal-800 flex items-center justify-center text-teal-400">
+                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#e8c9b8]">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
@@ -368,7 +360,7 @@ export default function Header() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm text-gray-300 hover:text-white"
               >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-teal-400">
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-[#e8c9b8]">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -388,7 +380,7 @@ export default function Header() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-teal-400 hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-[#e8c9b8] hover:bg-white/5 rounded-lg transition-colors"
                   aria-label={social.name}
                 >
                   <social.icon className="w-5 h-5" />

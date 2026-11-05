@@ -114,10 +114,10 @@ export default function Links() {
             <span>QUICK CONNECT · 快速連結</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 font-tempus">
-            Connect with café de A
+            café de A
           </h1>
           <p className="text-xs text-gray-500">
-            Authentic Hong Kong Café & BBQ · Richmond, BC
+            Ironwood Plaza, Richmond
           </p>
         </div>
 

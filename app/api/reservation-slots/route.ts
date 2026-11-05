@@ -4,7 +4,10 @@ import { fetchWaitlistSlots, waitlistReservationConfigured } from "@/lib/waitlis
 export async function GET(request: Request) {
   try {
     if (!waitlistReservationConfigured()) {
-      return NextResponse.json({ error: "Reservation service is not configured" }, { status: 503 })
+      return NextResponse.json(
+        { error: "Online reservations are temporarily unavailable. Please call us at (604) 276-7800." },
+        { status: 503 },
+      )
     }
 
     const { searchParams } = new URL(request.url)
@@ -13,7 +16,10 @@ export async function GET(request: Request) {
     const data = await fetchWaitlistSlots(date, partySize)
     return NextResponse.json(data)
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Could not load available times"
+    const raw = error instanceof Error ? error.message : ""
+    const message = /not configured|reservation service/i.test(raw)
+      ? "Online reservations are temporarily unavailable. Please call us at (604) 276-7800."
+      : raw || "Could not load available times"
     return NextResponse.json({ error: message }, { status: 502 })
   }
 }

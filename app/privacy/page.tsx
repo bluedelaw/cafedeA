@@ -1,32 +1,20 @@
 import PrivacyPolicy from "@/components/PrivacyPolicy"
-import type { Metadata } from "next"
 import Script from "next/script"
+import { absoluteUrl, pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | café de A Richmond BC",
-  description: "Read café de A's privacy policy to learn how we collect, use, and protect your personal information.",
-  alternates: {
-    canonical: "https://cafedea.ca/privacy",
-  },
-}
+export const metadata = pageMetadata({
+  path: "/privacy",
+  title: "Privacy Policy | café de A",
+  description: "How café de A handles personal information from the website, reservations, and orders.",
+})
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://cafedea.ca"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Privacy Policy",
-      "item": "https://cafedea.ca/privacy"
-    }
-  ]
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Privacy Policy", item: absoluteUrl("/privacy") },
+  ],
 }
 
 export default function PrivacyPage() {

@@ -1,40 +1,20 @@
-import InquiryForm from "@/components/InquiryForm"
-import type { Metadata } from "next"
+import ReservationExperience from "@/components/reservation/ReservationExperience"
 import Script from "next/script"
+import { absoluteUrl, pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Reserve a Table | café de A Richmond BC",
+export const metadata = pageMetadata({
+  path: "/reservation",
+  title: "Reservations | café de A",
   description:
-    "Book a table online at café de A in Ironwood Plaza, Richmond BC. Pick a date, time, and party size. Parties of 1–6 are confirmed instantly when a time is open.",
-  alternates: {
-    canonical: "https://cafedea.ca/reservation",
-  },
-  openGraph: {
-    title: "Reserve a Table | café de A Richmond",
-    description: "Book a table online at café de A. Pick a date, time, and party size.",
-    url: "https://cafedea.ca/reservation",
-    siteName: "café de A",
-    locale: "en_CA",
-    type: "website",
-  },
-}
+    "Book a table at café de A in Richmond. Parties of 1 to 6 are confirmed when a time is available.",
+})
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: "https://cafedea.ca",
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Reserve",
-      item: "https://cafedea.ca/reservation",
-    },
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Reserve", item: absoluteUrl("/reservation") },
   ],
 }
 
@@ -46,7 +26,7 @@ export default function ReservationPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <InquiryForm initialSubject="reservation" />
+      <ReservationExperience />
     </div>
   )
 }

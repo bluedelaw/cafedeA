@@ -1,41 +1,22 @@
 import Location from "@/components/Location"
-import type { Metadata } from "next"
 import ErrorBoundary from "@/components/ErrorBoundary"
 import Script from "next/script"
+import { absoluteUrl, pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Location, Hours & Directions | café de A Ironwood Plaza Richmond",
-  description: "Find café de A at Ironwood Plaza (#3050-11666 Steveston Hwy, Richmond BC). Open daily 8 AM - 10 PM. Free parking, transit directions & map.",
-  alternates: {
-    canonical: "https://cafedea.ca/location",
-  },
-  openGraph: {
-    title: "Location, Hours & Directions | café de A Richmond",
-    description: "Find café de A at Ironwood Plaza Richmond BC. Open daily with free parking.",
-    url: "https://cafedea.ca/location",
-    siteName: "café de A",
-    locale: "en_CA",
-    type: "website",
-  },
-}
+export const metadata = pageMetadata({
+  path: "/location",
+  title: "Location & Hours | café de A",
+  description:
+    "café de A is in Ironwood Plaza at 11666 Steveston Hwy, Richmond. Open daily 8:00 AM to 10:00 PM.",
+})
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://cafedea.ca"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Location & Hours",
-      "item": "https://cafedea.ca/location"
-    }
-  ]
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 2, name: "Location & Hours", item: absoluteUrl("/location") },
+  ],
 }
 
 export default function LocationPage() {

@@ -103,3 +103,25 @@ export function nearbySlotTimes(preferredTime: string, date: string) {
 export function aroundTimeOptions(date: string) {
   return generateReservationSlots().filter((slot) => !isSlotInPast(date, slot) && !isSlotTooSoon(date, slot))
 }
+
+export function parseCivilDate(date: string) {
+  const [year, month, day] = String(date || "").split("-").map(Number)
+  return new Date(year || 1970, (month || 1) - 1, day || 1)
+}
+
+export function formatCivilYmd(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+}
+
+export function mealPeriod(time: string): "Morning" | "Lunch" | "Afternoon" | "Dinner" {
+  const [hours, minutes] = String(time || "").split(":").map(Number)
+  const value = (Number.isFinite(hours) ? hours : 0) * 60 + (Number.isFinite(minutes) ? minutes : 0)
+  if (value < 11 * 60) return "Morning"
+  if (value < 14 * 60 + 30) return "Lunch"
+  if (value < 17 * 60 + 30) return "Afternoon"
+  return "Dinner"
+}
+
+export function isFriendlyServiceError(message: string) {
+  return /not configured|temporarily unavailable|503|reservation service/i.test(message)
+}

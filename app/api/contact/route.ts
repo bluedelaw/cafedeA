@@ -120,7 +120,7 @@ export async function POST(request: Request) {
         name,
         email,
         phone,
-        partySize,
+        partySize: Number(partySize),
         reservationDate,
         reservationTime,
         specialRequests: notes,
