@@ -116,20 +116,26 @@ export default function Header() {
   const navRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
 
-  // Close menu when clicking outside
   useClickOutside([navRef, menuButtonRef], closeMenu, isMenuOpen)
+
+  useEffect(() => {
+    if (!isMenuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu()
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [isMenuOpen, closeMenu])
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1d232e] border-b max-lg:backdrop-blur-none ${
-          isScrolled
-            ? "lg:backdrop-blur-md shadow-md py-0 border-white/10"
-            : "border-white/5"
+        className={`fixed top-0 left-0 right-0 z-50 border-b bg-espresso transition-colors duration-200 max-lg:backdrop-blur-none ${
+          isScrolled ? "border-white/10" : "border-white/5"
         }`}
       >
         {/* Top Info Bar (Desktop & Tablet landscape) */}
-        <div className="hidden md:block bg-[#161a22] text-xs text-gray-300 border-b border-white/5 py-1.5 px-4 sm:px-6 lg:px-8">
+        <div className="hidden md:block bg-charcoal text-xs text-gray-300 border-b border-white/5 py-1.5 px-4 sm:px-6 lg:px-8">
           <div className="container mx-auto flex items-center justify-between max-w-7xl">
             <div className="flex items-center gap-6">
               <span className="inline-flex items-center gap-1.5 text-gray-300">
@@ -260,6 +266,7 @@ export default function Header() {
                 className="relative z-20 p-2 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e3a]"
                 aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={isMenuOpen}
+                aria-controls="mobile-nav"
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -277,7 +284,8 @@ export default function Header() {
 
         <nav
           ref={navRef}
-          className={`lg:hidden fixed top-16 md:top-[97px] right-0 bottom-0 w-full max-w-md bg-[#1a1f29] border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
+          id="mobile-nav"
+          className={`lg:hidden fixed top-16 md:top-[97px] right-0 bottom-0 w-full max-w-md bg-espresso border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
             isMenuOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"
           }`}
           aria-label="Mobile Navigation"

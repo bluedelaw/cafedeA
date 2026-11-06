@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { fetchWaitlistSlots, waitlistReservationConfigured } from "@/lib/waitlist-reservation"
+import { isBookableDate, slotQuerySchema } from "@/lib/contact-schema"
 
 export async function GET(request: Request) {
   try {
@@ -11,15 +12,21 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const date = searchParams.get("date") || ""
-    const partySize = Number(searchParams.get("partySize") || "2")
-    const data = await fetchWaitlistSlots(date, partySize)
+    const parsed = slotQuerySchema.safeParse({
+      date: searchParams.get("date") || "",
+      partySize: searchParams.get("partySize") || "2",
+    })
+
+    if (!parsed.success || !isBookableDate(parsed.data.date)) {
+      return NextResponse.json({ error: "Please choose a valid date and party size." }, { status: 400 })
+    }
+
+    const data = await fetchWaitlistSlots(parsed.data.date, parsed.data.partySize)
     return NextResponse.json(data)
-  } catch (error) {
-    const raw = error instanceof Error ? error.message : ""
-    const message = /not configured|reservation service/i.test(raw)
-      ? "Online reservations are temporarily unavailable. Please call us at (604) 276-7800."
-      : raw || "Could not load available times"
-    return NextResponse.json({ error: message }, { status: 502 })
+  } catch {
+    return NextResponse.json(
+      { error: "Could not load available times. Please call us at (604) 276-7800." },
+      { status: 502 },
+    )
   }
 }

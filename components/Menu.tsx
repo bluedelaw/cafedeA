@@ -271,15 +271,18 @@ export default function Menu() {
   }, [])
 
   useEffect(() => {
-    if (!modalState.isOpen) return
+    if (!modalState.isOpen && !poster) return
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") navigateImage("next")
-      if (e.key === "ArrowLeft") navigateImage("prev")
-      if (e.key === "Escape") closeModal()
+      if (e.key === "Escape") {
+        closeModal()
+        setPoster(null)
+      }
+      if (modalState.isOpen && e.key === "ArrowRight") navigateImage("next")
+      if (modalState.isOpen && e.key === "ArrowLeft") navigateImage("prev")
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [modalState.isOpen, navigateImage, closeModal])
+  }, [modalState.isOpen, poster, navigateImage, closeModal])
 
   const currentCategoryData = menuData ? menuData[activeCategory] : null
   const currentScannedSection = scannedSections.find((s) => s.id === activeCategory) || scannedSections[0]
@@ -579,7 +582,13 @@ export default function Menu() {
       </div>
 
       {poster ? (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3" onClick={() => setPoster(null)}>
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3"
+          onClick={() => setPoster(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={poster.title}
+        >
           <button type="button" className="absolute right-4 top-4 text-white" onClick={() => setPoster(null)} aria-label="Close">
             <X className="h-6 w-6" />
           </button>
@@ -598,6 +607,9 @@ export default function Menu() {
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-2 sm:p-4"
           onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Scanned menu"
         >
           <button onClick={closeModal} className="absolute right-4 top-4 text-white" aria-label="Close">
             <X className="h-6 w-6" />

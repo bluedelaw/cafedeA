@@ -114,7 +114,7 @@ export default function InquiryForm() {
                   />
 
                   {error ? (
-                    <div className="rounded-md border border-[#302117]/20 bg-[#F7F0E3] px-4 py-3 text-sm text-[#302117]">
+                    <div role="alert" className="rounded-md border border-[#302117]/20 bg-[#F7F0E3] px-4 py-3 text-sm text-[#302117]">
                       {error}
                     </div>
                   ) : null}
@@ -132,6 +132,7 @@ export default function InquiryForm() {
                         id="name"
                         name="name"
                         required
+                        maxLength={120}
                         value={formData.name}
                         onChange={handleInputChange}
                         className={fieldClass}
@@ -147,6 +148,7 @@ export default function InquiryForm() {
                         id="email"
                         name="email"
                         required
+                        maxLength={254}
                         value={formData.email}
                         onChange={handleInputChange}
                         className={fieldClass}

@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Noto_Sans_TC } from "next/font/google"
 import "./globals.css"
 
 import { Analytics } from "@vercel/analytics/react"
@@ -9,7 +9,13 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import DevTools from "@/components/DevTools"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], display: "swap" })
+const notoSansTc = Noto_Sans_TC({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+  variable: "--font-chinese",
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cafedea.ca"),
@@ -76,8 +82,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#F7F0E3" },
+    { media: "(prefers-color-scheme: dark)", color: "#302117" },
   ],
 }
 
@@ -140,8 +146,8 @@ const structuredDataGraph = {
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": "49.132195",
-        "longitude": "-123.095801"
+        "latitude": "49.132211",
+        "longitude": "-123.095451"
       },
       "telephone": "+1-604-276-7800",
       "openingHoursSpecification": [
@@ -224,7 +230,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} ${notoSansTc.variable}`} suppressHydrationWarning>
         <Header />
 
         <main>{children}</main>

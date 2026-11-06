@@ -41,7 +41,7 @@ export default function Order() {
           <div className="overflow-hidden rounded-md border border-[#302117]/12 bg-[#FFF9F0]">
             <section className="border-b border-[#302117]/10 px-5 py-8 sm:px-8">
               <h2 className="font-tempus text-2xl">Pickup</h2>
-              <p className="mt-1 text-sm text-[#302117]/60">From the kitchen. No extra app fees. About 15–20 minutes. Free parking.</p>
+              <p className="mt-1 text-sm text-[#302117]/60">From the kitchen. No extra app fees. Free parking in the plaza.</p>
               <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
                 <a href={pickupUrl} target="_blank" rel="noopener noreferrer" className={buttonPrimary}>
                   Start pickup order

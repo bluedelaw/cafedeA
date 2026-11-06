@@ -1,18 +1,13 @@
+import Image from "next/image"
+
 export default function Loading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-paper text-espresso">
       <div className="text-center">
-        {/* Logo */}
-        <div className="mb-8">
-          <img src="/images/logo.png" alt="café de A" className="w-32 h-auto mx-auto opacity-75" />
+        <div className="relative mx-auto mb-6 h-14 w-44">
+          <Image src="/images/logo.png" alt="café de A" fill className="object-contain" />
         </div>
-
-        {/* Loading Spinner */}
-        <div className="flex justify-center mb-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-        </div>
-
-        <p className="text-gray-600 font-tempus">Loading...</p>
+        <p className="font-tempus text-sm text-espresso/70">Loading</p>
       </div>
     </div>
   )

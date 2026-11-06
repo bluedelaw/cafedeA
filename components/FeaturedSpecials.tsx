@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { X } from "lucide-react"
@@ -46,13 +46,7 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
               className="w-40 shrink-0 text-left sm:w-48"
             >
               <div className="relative aspect-[3/4] overflow-hidden border border-[#f2ead9]/30 bg-white">
-                <Image
-                  src={special.image}
-                  alt={special.alt}
-                  fill
-                  className="object-cover"
-                  sizes="192px"
-                />
+                <Image src={special.image} alt={special.alt} fill className="object-cover" sizes="192px" />
               </div>
               <p className="mt-2 font-chinese text-sm text-[#f2ead9]">{special.chineseTitle}</p>
               <p className="text-xs text-[#f2ead9]/65">{special.title}</p>
@@ -66,11 +60,11 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
   }
 
   return (
-    <section className="border-b border-[#1c1410]/15 bg-[#f2ead9] py-14 text-[#1c1410] md:py-16">
+    <section className="border-b border-espresso/15 bg-paper py-14 text-espresso md:py-16">
       <div className="container mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-chinese text-sm text-[#c41e3a]">本月特介</p>
+            <p className="font-chinese text-sm text-burgundy">本月特介</p>
             <h2 className="font-tempus text-3xl sm:text-4xl">On the wall this month</h2>
           </div>
           <Link href="/menu?section=specials" className="text-sm font-semibold underline underline-offset-4">
@@ -86,7 +80,7 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
               onClick={() => setSelectedPoster(special)}
               className="w-40 shrink-0 text-left md:w-auto"
             >
-              <div className="relative aspect-[3/4] overflow-hidden border border-[#1c1410]/20 bg-white shadow-[3px_3px_0_#1c1410]/10">
+              <div className="relative aspect-[3/4] overflow-hidden border border-espresso/20 bg-white">
                 <Image
                   src={special.image}
                   alt={special.alt}
@@ -96,7 +90,7 @@ export default function FeaturedSpecials({ variant = "showcase", onViewAll }: Fe
                 />
               </div>
               <p className="mt-2 font-chinese text-sm">{special.chineseTitle}</p>
-              <p className="text-xs text-[#1c1410]/65">{special.title}</p>
+              <p className="text-xs text-espresso/65">{special.title}</p>
             </button>
           ))}
         </div>
@@ -114,6 +108,41 @@ function PosterModal({
   poster: FeaturedSpecial | null
   onClose: () => void
 }) {
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const previousFocus = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (!poster) return
+    previousFocus.current = document.activeElement as HTMLElement
+    closeRef.current?.focus()
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose()
+      if (event.key !== "Tab") return
+      const dialog = document.getElementById("poster-dialog")
+      const focusable = dialog?.querySelectorAll<HTMLElement>("button, [href], [tabindex]:not([tabindex='-1'])")
+      if (!focusable?.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    window.addEventListener("keydown", onKey)
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      document.body.style.overflow = previousOverflow
+      previousFocus.current?.focus()
+    }
+  }, [poster, onClose])
+
   if (!poster) return null
 
   return (
@@ -121,24 +150,29 @@ function PosterModal({
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-2 sm:p-4"
       onClick={onClose}
     >
-      <button
-        type="button"
-        onClick={onClose}
-        className="absolute right-4 top-4 z-[102] p-2 text-white"
-        aria-label="Close"
-      >
-        <X className="h-6 w-6" />
-      </button>
-
-      <div className="absolute left-4 top-4 z-[102] text-white">
-        <p className="font-chinese text-sm">{poster.chineseTitle}</p>
-        <p className="text-xs opacity-80">{poster.title}</p>
-      </div>
-
       <div
+        id="poster-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="poster-title"
         className="relative flex max-h-[90vh] max-w-[95vw] items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          className="absolute right-0 top-0 z-[102] -translate-y-full p-2 text-white sm:right-[-2.5rem] sm:top-0 sm:translate-y-0"
+          aria-label="Close poster"
+        >
+          <X className="h-6 w-6" />
+        </button>
+        <div className="absolute left-0 top-0 z-[102] -translate-y-full pb-2 text-white sm:left-0 sm:top-auto sm:bottom-full">
+          <p id="poster-title" className="font-chinese text-sm">
+            {poster.chineseTitle}
+          </p>
+          <p className="text-xs opacity-80">{poster.title}</p>
+        </div>
         <Image
           src={poster.image}
           alt={poster.alt}

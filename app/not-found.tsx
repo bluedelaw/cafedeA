@@ -1,56 +1,25 @@
-"use client"
-
 import Link from "next/link"
-import { Home, ArrowLeft } from "lucide-react"
+import Image from "next/image"
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="text-center max-w-md mx-auto">
-        {/* Logo */}
-        <div className="mb-8">
-          <img src="/images/logo.png" alt="café de A" className="w-32 h-auto mx-auto opacity-75" />
+    <div className="flex min-h-screen items-center justify-center bg-paper px-4 text-espresso">
+      <div className="mx-auto max-w-md text-center">
+        <div className="relative mx-auto mb-8 h-14 w-44">
+          <Image src="/images/logo.png" alt="café de A" fill className="object-contain" />
         </div>
-
-        {/* 404 Message */}
-        <div className="mb-8">
-          <h1 className="text-6xl font-bold text-gray-800 mb-4 font-tempus">404</h1>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
-          <p className="text-gray-600 mb-6">
-            Sorry, we couldn't find the page you're looking for. The page might have been moved, deleted, or you entered
-            the wrong URL.
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center bg-teal-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-700 transition duration-300"
-          >
-            <Home className="w-5 h-5 mr-2" />
-            Go Home
+        <h1 className="font-tempus text-5xl">404</h1>
+        <p className="mt-4 text-[15px] leading-relaxed text-espresso/75">That page is not on this site.</p>
+        <div className="mt-8 flex flex-wrap justify-center gap-5 text-sm font-semibold">
+          <Link href="/" className="underline underline-offset-4">
+            Home
           </Link>
-
-          <button
-            onClick={() => window.history.back()}
-            className="inline-flex items-center justify-center bg-gray-200 text-gray-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-300 transition duration-300"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Go Back
-          </button>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-sm text-gray-500 mb-4">Or visit one of these pages:</p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Link href="/menu" className="text-teal-600 hover:text-teal-700 hover:underline">
-              Menu
-            </Link>
-            <Link href="/location" className="text-teal-600 hover:text-teal-700 hover:underline">
-              Location
-            </Link>
-          </div>
+          <Link href="/menu" className="underline underline-offset-4">
+            Menu
+          </Link>
+          <Link href="/location" className="underline underline-offset-4">
+            Location
+          </Link>
         </div>
       </div>
     </div>

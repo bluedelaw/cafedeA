@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": ["components/TextMenu.tsx", "components/ui/calendar.tsx", "components/ui/drawer.tsx"],
+  "rules": {
+    "react/no-unescaped-entities": "off"
+  }
 }

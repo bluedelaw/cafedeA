@@ -34,6 +34,14 @@ export function pageMetadata({
       siteName: "café de A",
       locale: "en_CA",
       type: "website",
+      images: [
+        {
+          url: "/images/Home/cafedea.jpg",
+          width: 1200,
+          height: 630,
+          alt: "café de A in Ironwood Plaza, Richmond",
+        },
+      ],
     },
   }
 }

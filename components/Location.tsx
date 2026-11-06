@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { restaurantClock } from "@/lib/restaurant-clock"
 
 const mapsUrl = "https://maps.app.goo.gl/cWFJu98tEtuGss9J9"
-const mapsEmbed = "https://maps.google.com/maps?q=49.130546,-123.090333&z=16&output=embed"
+const mapsEmbed =
+  "https://maps.google.com/maps?q=caf%C3%A9+de+A+11666+Steveston+Hwy+%233050+Richmond+BC&z=17&output=embed"
 
 const buttonPrimary =
   "inline-flex h-12 items-center justify-center rounded-md bg-[#302117] px-5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#1C2029] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D5A52F] focus-visible:ring-offset-2 motion-reduce:transition-none"
@@ -17,16 +19,9 @@ export default function Location() {
 
   useEffect(() => {
     try {
-      const now = new Date()
-      const vancouverTimeStr = now.toLocaleString("en-US", { timeZone: "America/Vancouver" })
-      const vancouverDate = new Date(vancouverTimeStr)
-      const day = vancouverDate.getDay()
-      const hour = vancouverDate.getHours()
-      const minute = vancouverDate.getMinutes()
-      const timeInMinutes = hour * 60 + minute
-      const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-      setCurrentDayName(daysOfWeek[day])
-      setIsOpenNow(timeInMinutes >= 8 * 60 && timeInMinutes < 22 * 60)
+      const clock = restaurantClock()
+      setCurrentDayName(clock.dayName)
+      setIsOpenNow(clock.isOpen)
     } catch {
       setIsOpenNow(null)
     }
