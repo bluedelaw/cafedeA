@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter, Noto_Sans_TC } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 
 import { Analytics } from "@vercel/analytics/react"
@@ -10,12 +10,6 @@ import Footer from "@/components/Footer"
 import DevTools from "@/components/DevTools"
 
 const inter = Inter({ subsets: ["latin"], display: "swap" })
-const notoSansTc = Noto_Sans_TC({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-  variable: "--font-chinese",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cafedea.ca"),
@@ -230,7 +224,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} ${notoSansTc.variable}`} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={inter.className} suppressHydrationWarning>
         <Header />
 
         <main>{children}</main>

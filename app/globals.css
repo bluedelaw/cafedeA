@@ -73,7 +73,7 @@
 }
 
 .font-chinese {
-  font-family: var(--font-chinese), "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
 }
 
 @layer utilities {
