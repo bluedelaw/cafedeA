@@ -27,13 +27,11 @@ export default function Location() {
     }
   }, [])
 
-  const schedule = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
   const openLabel = isOpenNow === null ? "Daily 8–10" : isOpenNow ? "Open now" : "Closed now"
 
   return (
-    <div className="min-h-screen bg-[#F7F0E3] text-[#302117] pt-20 md:pt-28">
-      <div className="mx-auto max-w-6xl px-4 pb-28 sm:px-8 lg:pb-16">
+    <div className="bg-[#F7F0E3] text-[#302117] pt-[calc(var(--site-header-height)_+_1.25rem)]">
+      <div className="mx-auto max-w-6xl px-4 pb-28 sm:px-8 lg:pb-10">
         <header className="max-w-2xl pb-8">
           <p className="text-sm font-medium text-[#9A7420]">café de A · Ironwood Plaza</p>
           <h1 className="mt-2 font-tempus text-4xl leading-tight sm:text-5xl">Location</h1>
@@ -74,23 +72,15 @@ export default function Location() {
 
             <section className="border-b border-[#302117]/10 bg-[#F7F0E3]/50 px-5 py-8 sm:px-8">
               <h2 className="font-tempus text-2xl">Hours</h2>
-              <ul className="mt-5 divide-y divide-[#302117]/10 border-y border-[#302117]/10">
-                {schedule.map((day) => {
-                  const isToday = day === currentDayName
-                  return (
-                    <li key={day} className="flex items-baseline justify-between gap-4 py-2.5 text-sm">
-                      <span className={isToday ? "font-medium" : ""}>
-                        {day}
-                        {isToday ? " · today" : ""}
-                      </span>
-                      <span className={isToday ? "font-medium" : "text-[#302117]/70"}>8:00 AM – 10:00 PM</span>
-                    </li>
-                  )
-                })}
-              </ul>
+              <p className="mt-5 text-[15px] leading-relaxed">
+                Open daily, 8:00 AM – 10:00 PM
+                {currentDayName ? ` · ${currentDayName}` : ""}
+                {isOpenNow === null ? "" : isOpenNow ? " · open now" : " · closed now"}
+              </p>
               <p className="mt-4 text-sm leading-relaxed text-[#302117]/70">
                 Breakfast 8–11 · Lunch 11–2:30 · Afternoon tea 2:30–5:30 · Dinner 5:30–close
               </p>
+              <p className="mt-2 text-xs text-[#302117]/55">Hours listed in Pacific time.</p>
             </section>
 
             <section className="px-5 py-6 sm:px-8 sm:py-8">

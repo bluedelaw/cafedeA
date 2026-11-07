@@ -67,34 +67,34 @@ const roast = [
 export default function Home() {
   return (
     <div className="bg-paper text-espresso">
-      <section className="grid min-h-[calc(100svh-5rem)] grid-cols-1 lg:grid-cols-2">
-        <div className="flex flex-col justify-end px-6 pb-12 pt-28 sm:px-10 lg:px-14 lg:pb-16">
+      <section className="mt-[var(--site-header-height)] grid min-h-[calc(100svh_-_var(--site-header-height))] grid-cols-1 lg:grid-cols-2">
+        <div className="flex flex-col justify-end px-5 pb-8 pt-5 sm:px-10 sm:pb-12 lg:px-14 lg:pb-16">
           <p className="font-chinese text-sm text-burgundy">油尖旺冰室</p>
-          <h1 className="mt-2 font-tempus text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">café de A</h1>
-          <p className="mt-5 max-w-sm text-lg leading-snug">
+          <h1 className="mt-1 font-tempus text-4xl leading-[0.95] sm:text-6xl lg:text-7xl">café de A</h1>
+          <p className="mt-4 max-w-sm text-base leading-snug sm:mt-5 sm:text-lg">
             Hong Kong café in Ironwood Plaza.
             <br />
             8:00 AM – 10:00 PM, every day.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-semibold">
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm font-semibold sm:mt-8 sm:gap-x-6">
             <Link
               href="/menu"
-              className="inline-flex h-12 items-center bg-burgundy px-6 text-white hover:bg-[#a31830] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="inline-flex h-12 min-w-[7.5rem] items-center justify-center bg-burgundy px-6 text-white hover:bg-[#a31830] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               Menu
             </Link>
             <Link
               href="/order"
-              className="inline-flex h-12 items-center border border-espresso px-6 hover:bg-espresso hover:text-paper"
+              className="inline-flex h-12 min-w-[7.5rem] items-center justify-center border border-espresso px-6 hover:bg-espresso hover:text-paper"
             >
               Order
             </Link>
-            <Link href="/reservation" className="underline underline-offset-4">
+            <Link href="/reservation" className="inline-flex h-12 items-center underline underline-offset-4">
               Reserve
             </Link>
           </div>
         </div>
-        <div className="relative h-[52vh] w-full lg:h-auto lg:min-h-[calc(100svh-5.5rem)]">
+        <div className="relative h-[min(38vh,16.5rem)] w-full sm:h-[min(46vh,22rem)] lg:h-auto lg:min-h-[calc(100svh_-_var(--site-header-height))]">
           <Image
             src="/images/Home/cafedea.jpg"
             alt="Inside café de A, Ironwood Plaza"
@@ -108,24 +108,25 @@ export default function Home() {
       </section>
 
       <section className="border-b border-espresso/15">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {plates.map((plate) => (
+        <div className="grid grid-cols-2 lg:grid-cols-3">
+          {plates.map((plate, index) => (
             <Link
               key={plate.name}
               href={plate.href}
-              className="group relative block h-64 overflow-hidden sm:h-72 lg:h-[22rem]"
+              className="group relative aspect-[4/3] overflow-hidden"
             >
               <Image
                 src={plate.src}
                 alt={`${plate.name} (${plate.zh})`}
                 fill
                 className={`h-full w-full object-cover ${plate.crop} motion-reduce:transform-none`}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 1023px) 50vw, 33vw"
+                priority={index === 0}
               />
-              <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15" />
-              <span className="absolute bottom-4 left-4 text-white">
-                {plate.zh ? <span className="block font-chinese text-lg">{plate.zh}</span> : null}
-                <span className="text-sm opacity-90">{plate.name}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5 group-hover:from-black/70" />
+              <span className="absolute inset-x-0 bottom-0 p-3 text-white sm:p-4">
+                {plate.zh ? <span className="block font-chinese text-base drop-shadow-sm sm:text-lg">{plate.zh}</span> : null}
+                <span className="block text-xs leading-snug text-white/90 sm:text-sm">{plate.name}</span>
               </span>
             </Link>
           ))}
@@ -136,7 +137,7 @@ export default function Home() {
 
       <section className="border-y border-espresso/15">
         <div className="mx-auto grid max-w-6xl grid-cols-1 lg:grid-cols-12">
-          <div className="relative min-h-[22rem] lg:col-span-7 lg:min-h-[32rem]">
+          <div className="relative min-h-[22rem] overflow-hidden lg:col-span-7 lg:min-h-[32rem]">
             <Image
               src="/images/Home/roast-duck.jpg"
               alt="Roast ducks hanging in the café de A kitchen"
@@ -175,38 +176,18 @@ export default function Home() {
         <div className="border-b border-espresso/15 px-6 py-14 sm:px-10 md:border-r">
           <p className="font-chinese text-sm text-burgundy">餐廳位置</p>
           <h2 className="mt-1 font-tempus text-3xl">Ironwood Plaza</h2>
-          <address className="mt-5 not-italic text-[15px] leading-7">
-            #3050 – 11666 Steveston Hwy
-            <br />
-            Richmond, BC V7A 5J3
-            <br />
-            <a href="tel:6042767800" className="underline underline-offset-4">
-              (604) 276-7800
-            </a>
-            <br />
-            Open daily 8:00 AM – 10:00 PM
-          </address>
-          <Link href="/location" className="mt-6 inline-block text-sm font-semibold underline underline-offset-4">
-            Map and parking
+          <p className="mt-5 text-[15px] leading-relaxed text-espresso/80">Richmond, at Steveston Hwy and No. 5 Road.</p>
+          <Link href="/location" className="mt-6 inline-block text-sm font-semibold text-burgundy underline underline-offset-4">
+            Map
           </Link>
         </div>
         <div className="px-6 py-14 sm:px-10">
           <p className="font-chinese text-sm text-burgundy">到會 · 訂座</p>
           <h2 className="mt-1 font-tempus text-3xl">Tables and catering</h2>
-          <p className="mt-5 text-[15px] leading-relaxed text-espresso/80">
-            Book 1–6 online. Larger groups and party trays: call or send a note.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-6 text-sm font-semibold">
-            <Link href="/reservation" className="text-burgundy underline underline-offset-4">
-              Reserve
-            </Link>
-            <Link href="/waitlist" className="underline underline-offset-4">
-              Waitlist
-            </Link>
-            <Link href="/contact" className="underline underline-offset-4">
-              Catering
-            </Link>
-          </div>
+          <p className="mt-5 text-[15px] leading-relaxed text-espresso/80">Book 1–6 online. Larger groups: call.</p>
+          <Link href="/reservation" className="mt-6 inline-block text-sm font-semibold text-burgundy underline underline-offset-4">
+            Reserve
+          </Link>
         </div>
       </section>
     </div>

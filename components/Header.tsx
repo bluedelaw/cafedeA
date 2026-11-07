@@ -4,17 +4,19 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Instagram, Facebook, Phone, MapPin, Clock, CalendarDays, ShoppingBag } from "lucide-react"
+import { Menu, X, Instagram, Facebook, Phone, MapPin, CalendarDays, ShoppingBag } from "lucide-react"
 
 // Navigation items configuration with bilingual subtitles
 const navigationItems = [
   { name: "Home", href: "/", description: "Welcome to café de A" },
   { name: "Menu", href: "/menu", description: "Authentic HK dishes & BBQ" },
-  { name: "Order", href: "/order", description: "Pickup & Delivery" },
-  { name: "Reserve", href: "/reservation", description: "Book a table online" },
   { name: "Location", href: "/location", description: "Ironwood Plaza, Richmond" },
   { name: "Contact", href: "/contact", description: "Catering & Inquiries" },
 ] as const
+
+function isCurrentPath(pathname: string, href: string) {
+  return pathname === href || (href !== "/" && pathname.startsWith(href))
+}
 
 const socialLinks = [
   {
@@ -116,6 +118,9 @@ export default function Header() {
   const navRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
 
+  const isReservePage = isCurrentPath(pathname, "/reservation")
+  const isOrderPage = isCurrentPath(pathname, "/order")
+
   useClickOutside([navRef, menuButtonRef], closeMenu, isMenuOpen)
 
   useEffect(() => {
@@ -134,50 +139,8 @@ export default function Header() {
           isScrolled ? "border-white/10" : "border-white/5"
         }`}
       >
-        {/* Top Info Bar (Desktop & Tablet landscape) */}
-        <div className="hidden md:block bg-charcoal text-xs text-gray-300 border-b border-white/5 py-1.5 px-4 sm:px-6 lg:px-8">
-          <div className="container mx-auto flex items-center justify-between max-w-7xl">
-            <div className="flex items-center gap-6">
-              <span className="inline-flex items-center gap-1.5 text-gray-300">
-                <MapPin className="w-3.5 h-3.5 text-[#e8c9b8] shrink-0" />
-                <span>#3050-11666 Steveston Hwy, Richmond, BC (Ironwood Plaza)</span>
-              </span>
-              <span className="hidden lg:inline-flex items-center gap-1.5 text-gray-400">
-                <Clock className="w-3.5 h-3.5 text-[#e8c9b8] shrink-0" />
-                <span>Open Daily: 8:00 AM – 10:00 PM</span>
-              </span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <a
-                href="tel:6042767800"
-                className="inline-flex items-center gap-1 text-[#e8c9b8] hover:text-white transition-colors font-medium"
-              >
-                <Phone className="w-3.5 h-3.5 shrink-0" />
-                <span>(604) 276-7800</span>
-              </a>
-              <div className="h-3 w-px bg-white/20" />
-              <div className="flex items-center gap-2">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-[#e8c9b8] transition-colors"
-                    aria-label={`Follow on ${social.name}`}
-                  >
-                    <social.icon className="w-3.5 h-3.5" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Navbar */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+          <div className="relative flex items-center justify-between h-16 lg:h-20">
             {/* Left: Brand Logo */}
             <Link
               href="/"
@@ -185,7 +148,7 @@ export default function Header() {
               onClick={closeMenu}
               aria-label="café de A Homepage"
             >
-              <div className="relative w-40 sm:w-48 lg:w-56 h-12 lg:h-14">
+              <div className="relative h-10 w-32 sm:h-11 sm:w-40 lg:h-12 lg:w-44">
                 <Image
                   src="/images/logo.png"
                   alt="café de A"
@@ -197,18 +160,19 @@ export default function Header() {
             </Link>
 
             {/* Center: Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
+            <nav className="pointer-events-none absolute inset-x-0 hidden lg:flex items-center justify-center gap-0.5 xl:gap-1">
               {navigationItems.map((item) => {
-                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
+                const isActive = isCurrentPath(pathname, item.href)
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`relative whitespace-nowrap px-2.5 py-2 font-medium text-sm xl:px-3.5 ${
+                    className={`pointer-events-auto relative whitespace-nowrap px-2.5 py-2 font-medium text-sm xl:px-3.5 ${
                       isActive
                         ? "text-white"
-                        : "text-gray-300 hover:text-white"
+                        : "text-white/75 hover:text-white"
                     }`}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     <span>{item.name}</span>
                     {isActive && (
@@ -220,22 +184,30 @@ export default function Header() {
             </nav>
 
             {/* Right: Actions */}
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="relative z-10 hidden lg:flex items-center gap-3">
               <Link
                 href="/reservation"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-gray-200 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg transition-colors"
+                className={`relative inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-2 text-xs font-semibold transition-colors ${
+                  isReservePage
+                    ? "border-[#c41e3a]/70 bg-white/15 text-white"
+                    : "border-white/15 bg-white/10 text-gray-200 hover:border-white/30 hover:bg-white/15 hover:text-white"
+                }`}
+                aria-current={isReservePage ? "page" : undefined}
               >
                 <CalendarDays className="w-3.5 h-3.5 text-[#e8c9b8]" />
                 <span>Reserve</span>
+                {isReservePage ? <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#c41e3a]" /> : null}
               </Link>
-
-              {/* Order Online CTA */}
               <Link
                 href="/order"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#c41e3a] hover:bg-[#a31830] text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all font-tempus"
+                className={`relative inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm font-tempus transition-all ${
+                  isOrderPage ? "bg-[#a31830]" : "bg-[#c41e3a] hover:bg-[#a31830] hover:shadow"
+                }`}
+                aria-current={isOrderPage ? "page" : undefined}
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>Order Now</span>
+                {isOrderPage ? <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-white" /> : null}
               </Link>
             </div>
 
@@ -243,14 +215,22 @@ export default function Header() {
             <div className="flex lg:hidden items-center gap-1.5">
               <Link
                 href="/reservation"
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-[#c41e3a] hover:bg-[#a31830] rounded-lg transition-colors"
+                className={`relative inline-flex min-h-9 items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-semibold text-white transition-colors ${
+                  isReservePage
+                    ? "border-[#c41e3a]/70 bg-white/15"
+                    : "border-white/25 bg-white/10 hover:bg-white/15"
+                }`}
+                aria-current={isReservePage ? "page" : undefined}
               >
                 <CalendarDays className="hidden sm:block w-3.5 h-3.5" />
                 <span>Reserve</span>
               </Link>
               <Link
                 href="/order"
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-white bg-[#c41e3a] hover:bg-[#a31830] rounded-lg transition-colors"
+                className={`inline-flex min-h-9 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white transition-colors ${
+                  isOrderPage ? "bg-[#a31830]" : "bg-[#c41e3a] hover:bg-[#a31830]"
+                }`}
+                aria-current={isOrderPage ? "page" : undefined}
               >
                 <ShoppingBag className="hidden sm:block w-3.5 h-3.5" />
                 <span>Order</span>
@@ -275,7 +255,7 @@ export default function Header() {
         </div>
 
         <div
-          className={`lg:hidden fixed inset-0 top-16 md:top-[97px] bg-black/60 z-40 transition-opacity duration-300 ${
+          className={`lg:hidden fixed inset-0 top-[var(--site-header-height)] bg-black/60 z-40 transition-opacity duration-300 ${
             isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
           onClick={closeMenu}
@@ -285,7 +265,7 @@ export default function Header() {
         <nav
           ref={navRef}
           id="mobile-nav"
-          className={`lg:hidden fixed top-16 md:top-[97px] right-0 bottom-0 w-full max-w-md bg-espresso border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
+          className={`lg:hidden fixed top-[var(--site-header-height)] right-0 bottom-0 w-full max-w-md bg-espresso border-l border-white/10 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto transition-transform duration-300 ease-out ${
             isMenuOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"
           }`}
           aria-label="Mobile Navigation"
@@ -297,7 +277,10 @@ export default function Header() {
               <Link
                 href="/order"
                 onClick={closeMenu}
-                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#c41e3a] hover:bg-[#a31830] text-white rounded-xl font-semibold text-sm shadow-md transition-colors"
+                className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl font-semibold text-sm shadow-md transition-colors ${
+                  isOrderPage ? "bg-[#a31830] text-white ring-2 ring-white/40" : "bg-[#c41e3a] hover:bg-[#a31830] text-white"
+                }`}
+                aria-current={isOrderPage ? "page" : undefined}
               >
                 <ShoppingBag className="w-5 h-5" />
                 <span>Order</span>
@@ -306,7 +289,12 @@ export default function Header() {
               <Link
                 href="/reservation"
                 onClick={closeMenu}
-                className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white/10 hover:bg-white/15 text-white border border-[#c41e3a]/40 rounded-xl font-semibold text-sm transition-colors"
+                className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl font-semibold text-sm transition-colors ${
+                  isReservePage
+                    ? "bg-white/15 text-white border border-[#c41e3a]"
+                    : "bg-white/10 hover:bg-white/15 text-white border border-[#c41e3a]/40"
+                }`}
+                aria-current={isReservePage ? "page" : undefined}
               >
                 <CalendarDays className="w-5 h-5 text-[#e8c9b8]" />
                 <span>Reserve</span>
@@ -325,17 +313,18 @@ export default function Header() {
             {/* Navigation links list */}
             <div className="space-y-1">
               {navigationItems.map((item) => {
-                const isActive = pathname === item.href
+                const isActive = isCurrentPath(pathname, item.href)
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={closeMenu}
-                    className={`flex items-center justify-between p-3.5 rounded-xl transition-colors ${
+                    className={`flex items-center justify-between p-3.5 min-h-[3.25rem] rounded-xl transition-colors ${
                       isActive
                         ? "bg-[#c41e3a]/20 text-[#e8c9b8] border border-[#c41e3a]/40"
                         : "text-gray-200 hover:bg-white/5 hover:text-white"
                     }`}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     <div>
                       <span className="font-semibold text-base">{item.name}</span>
@@ -380,7 +369,7 @@ export default function Header() {
           </div>
 
           {/* Drawer Footer */}
-          <div className="p-6 border-t border-white/10 bg-[#131720] text-center space-y-3">
+          <div className="p-6 border-t border-white/10 bg-espresso text-center space-y-3">
             <div className="flex justify-center gap-4">
               {socialLinks.map((social) => (
                 <a

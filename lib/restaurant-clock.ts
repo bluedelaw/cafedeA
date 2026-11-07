@@ -1,10 +1,10 @@
-const ZONE = "America/Vancouver"
+export const RESTAURANT_TIMEZONE = "America/Vancouver"
 const OPEN_MINUTES = 8 * 60
 const CLOSE_MINUTES = 22 * 60
 
 export function restaurantClock(now = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: ZONE,
+    timeZone: RESTAURANT_TIMEZONE,
     weekday: "short",
     hour: "2-digit",
     minute: "2-digit",

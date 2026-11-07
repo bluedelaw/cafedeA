@@ -40,6 +40,13 @@
     --input: 24 18% 15% / 0.2;
     --ring: 43 67% 51%;
     --radius: 0.375rem;
+    --site-header-height: 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --site-header-height: 5rem;
+    }
   }
 }
 
@@ -74,6 +81,29 @@
 
 .font-chinese {
   font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+}
+
+dialog.poster-dialog {
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: 1rem;
+  background: rgb(0 0 0 / 0.94);
+  color: #fff;
+}
+
+dialog.poster-dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+dialog.poster-dialog::backdrop {
+  background: rgb(0 0 0 / 0.94);
 }
 
 @layer utilities {

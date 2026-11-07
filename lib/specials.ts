@@ -20,6 +20,16 @@ export const featuredSpecials: FeaturedSpecial[] = [
     badge: "Featured",
   },
   {
+    id: "lamb",
+    image: "/images/Special/Lamb.webp",
+    alt: "Seasonal lamb brisket hot pot at café de A",
+    title: "Seasonal Lamb Brisket Hot Pot",
+    chineseTitle: "時令羊腩煲",
+    description:
+      "Hot pot $43.95, lettuce +$7.00. Single-serving with steamed rice $28.95. Available 11:00 am to 9:00 pm.",
+    badge: "Seasonal",
+  },
+  {
     id: "chef-rec",
     image: "/images/Special/ChefRec.webp",
     alt: "Chef's recommendations at café de A",

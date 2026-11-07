@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, useRef, useCallback } from "react"
+import { useState, useEffect, useMemo, useRef, useCallback, type TouchEvent } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -81,11 +81,12 @@ const scannedSections: ScannedSection[] = [
     name: "Lunch",
     chinese: "午餐",
     images: [
-      { id: 1, imgSrc: "/images/Lunch/Lunch2.webp", alt: "Lunch menu page 1" },
-      { id: 2, imgSrc: "/images/Lunch/Lunch3.webp", alt: "Lunch menu page 2" },
-      { id: 3, imgSrc: "/images/Lunch/Lunch4.webp", alt: "Lunch menu page 3" },
-      { id: 4, imgSrc: "/images/Lunch/Lunch5.webp", alt: "Lunch menu page 4" },
-      { id: 5, imgSrc: "/images/Lunch/Lunch6.webp", alt: "Lunch menu page 5" },
+      { id: 1, imgSrc: "/images/Lunch/Lunch1.webp", alt: "Lunch menu page 1" },
+      { id: 2, imgSrc: "/images/Lunch/Lunch2.webp", alt: "Lunch menu page 2" },
+      { id: 3, imgSrc: "/images/Lunch/Lunch3.webp", alt: "Lunch menu page 3" },
+      { id: 4, imgSrc: "/images/Lunch/Lunch4.webp", alt: "Lunch menu page 4" },
+      { id: 5, imgSrc: "/images/Lunch/Lunch5.webp", alt: "Lunch menu page 5" },
+      { id: 6, imgSrc: "/images/Lunch/Lunch6.webp", alt: "Lunch menu page 6" },
     ],
   },
   {
@@ -138,10 +139,11 @@ const scannedSections: ScannedSection[] = [
     chinese: "廚師推介",
     images: [
       { id: 1, imgSrc: "/images/Special/Month.webp", alt: "Monthly specials" },
-      { id: 2, imgSrc: "/images/Special/ChefRec.webp", alt: "Chef's recommendation" },
-      { id: 3, imgSrc: "/images/Special/MidWeekSpecial.webp", alt: "Mid-week specials" },
-      { id: 4, imgSrc: "/images/Special/SeasonalLobster.webp", alt: "Seasonal lobster special" },
-      { id: 5, imgSrc: "/images/Special/LobsterSpecial.webp", alt: "Lobster baked rice special" },
+      { id: 2, imgSrc: "/images/Special/Lamb.webp", alt: "Lamb Hot Pot" },
+      { id: 3, imgSrc: "/images/Special/ChefRec.webp", alt: "Chef's Recommendation" },
+      { id: 4, imgSrc: "/images/Special/MidWeekSpecial.webp", alt: "Mid-week Special" },
+      { id: 5, imgSrc: "/images/Special/SeasonalLobster.webp", alt: "Seasonal Lobster Special" },
+      { id: 6, imgSrc: "/images/Special/LobsterSpecial.webp", alt: "Lobster Baked Rice Special" },
     ],
   },
 ]
@@ -149,7 +151,7 @@ const scannedSections: ScannedSection[] = [
 const categoryNavItems = [
   { id: "breakfast", label: "Breakfast", chinese: "早餐", time: "8:00–11:00" },
   { id: "lunch", label: "Lunch", chinese: "午餐", time: "11:00–2:30" },
-  { id: "lunch-combo", label: "Lunch special", chinese: "午餐套餐", time: "11:00–2:30" },
+  { id: "lunch-combo", label: "Lunch special", chinese: "午餐套餐", time: "11:00–5:00" },
   { id: "afternoon-tea", label: "Afternoon tea", chinese: "下午茶", time: "2:30–5:30" },
   { id: "dinner", label: "Dinner", chinese: "晚餐", time: "5:30–close" },
   { id: "bbq", label: "BBQ", chinese: "燒味", time: "All day" },
@@ -179,10 +181,8 @@ function chipClass(active: boolean) {
 
 function extraPrice(item: MenuItem) {
   const bits: string[] = []
-  if (item.hotPrice) bits.push(`熱 ${item.hotPrice}`)
-  if (item.coldPrice) bits.push(`凍 ${item.coldPrice}`)
-  if (item.halfPrice) bits.push(`半 ${item.halfPrice}`)
-  if (item.wholePrice) bits.push(`隻 ${item.wholePrice}`)
+  if (item.hotPrice) bits.push(`Hot ${item.hotPrice}`)
+  if (item.coldPrice) bits.push(`Iced ${item.coldPrice}`)
   return bits.join("  ·  ")
 }
 
@@ -190,6 +190,7 @@ function DishRow({ item }: { item: MenuItem }) {
   const zh = item.chineseName
   const en = item.name || item.englishName
   const extras = extraPrice(item)
+  const hasHalfWhole = Boolean(item.halfPrice || item.wholePrice)
 
   return (
     <div className="break-inside-avoid border-b border-[#302117]/10 py-3 lg:py-2.5">
@@ -201,7 +202,22 @@ function DishRow({ item }: { item: MenuItem }) {
           </p>
           {zh && en ? <p className="mt-0.5 text-[13px] leading-snug text-[#302117]/55">{en}</p> : null}
         </div>
-        {item.price ? (
+        {hasHalfWhole ? (
+          <div className="shrink-0 text-right font-tempus text-[15px] tabular-nums leading-snug text-[#302117]">
+            {item.halfPrice ? (
+              <p>
+                <span className="mr-1.5 font-sans text-[11px] text-[#302117]/50">Half</span>
+                {item.halfPrice}
+              </p>
+            ) : null}
+            {item.wholePrice ? (
+              <p className={item.halfPrice ? "mt-0.5" : undefined}>
+                <span className="mr-1.5 font-sans text-[11px] text-[#302117]/50">Whole</span>
+                {item.wholePrice}
+              </p>
+            ) : null}
+          </div>
+        ) : item.price ? (
           <span className="shrink-0 font-tempus text-[15px] tabular-nums text-[#302117]">{item.price}</span>
         ) : null}
       </div>
@@ -211,6 +227,31 @@ function DishRow({ item }: { item: MenuItem }) {
       ) : null}
     </div>
   )
+}
+
+function ChoiceGrid({ items }: { items: MenuItem[] }) {
+  return (
+    <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {items.map((item) => (
+        <li
+          key={String(item.id ?? item.name)}
+          className="flex items-baseline gap-3 rounded-md border border-[#302117]/12 bg-[#FFF9F0] px-3 py-2.5"
+        >
+          <span className="w-5 shrink-0 font-tempus text-[#9A7420] tabular-nums">{item.id}</span>
+          <span className="min-w-0">
+            <span className="block font-chinese text-[15px] leading-snug">{item.chineseName || item.name}</span>
+            {item.chineseName && item.name ? (
+              <span className="mt-0.5 block text-[13px] leading-snug text-[#302117]/55">{item.name}</span>
+            ) : null}
+          </span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+function isChoiceSection(section: MenuSectionGroup) {
+  return section.category === "BBQ Rice Combo"
 }
 
 export default function Menu() {
@@ -284,8 +325,56 @@ export default function Menu() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [modalState.isOpen, poster, navigateImage, closeModal])
 
+  useEffect(() => {
+    if (!modalState.isOpen && !poster) return
+
+    const html = document.documentElement
+    const body = document.body
+    const scrollY = window.scrollY
+    const previous = {
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyWidth: body.style.width,
+    }
+
+    html.style.overflow = "hidden"
+    body.style.overflow = "hidden"
+    body.style.position = "fixed"
+    body.style.top = `-${scrollY}px`
+    body.style.width = "100%"
+
+    return () => {
+      html.style.overflow = previous.htmlOverflow
+      body.style.overflow = previous.bodyOverflow
+      body.style.position = previous.bodyPosition
+      body.style.top = previous.bodyTop
+      body.style.width = previous.bodyWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [modalState.isOpen, poster])
+
+  const lightboxTouchX = useRef<number | null>(null)
+  const onLightboxTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
+    lightboxTouchX.current = event.changedTouches[0]?.clientX ?? null
+  }, [])
+  const onLightboxTouchEnd = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (lightboxTouchX.current == null) return
+      const dx = (event.changedTouches[0]?.clientX ?? lightboxTouchX.current) - lightboxTouchX.current
+      lightboxTouchX.current = null
+      if (Math.abs(dx) < 40) return
+      navigateImage(dx < 0 ? "next" : "prev")
+    },
+    [navigateImage]
+  )
+
   const currentCategoryData = menuData ? menuData[activeCategory] : null
   const currentScannedSection = scannedSections.find((s) => s.id === activeCategory) || scannedSections[0]
+  const lightboxSection = scannedSections.find((s) => s.id === modalState.sectionId)
+  const lightboxPage = lightboxSection?.images[modalState.imageIndex]
+  const lightboxCount = lightboxSection?.images.length ?? 0
   const activeNav = categoryNavItems.find((c) => c.id === activeCategory)
 
   const searchResults = useMemo(() => {
@@ -451,14 +540,15 @@ export default function Menu() {
                       key={page.id}
                       type="button"
                       onClick={() => openModal(currentScannedSection.id, idx)}
-                      className="text-left"
+                      className="min-w-0 text-left"
                     >
-                      <div className="relative aspect-[3/4] overflow-hidden rounded-md border border-[#302117]/15 bg-white">
+                      <div className="overflow-hidden rounded-md border border-[#302117]/15 bg-[#FFF9F0]">
                         <Image
                           src={page.imgSrc}
                           alt={page.alt}
-                          fill
-                          className="object-contain"
+                          width={870}
+                          height={1126}
+                          className="h-auto w-full"
                           sizes="(max-width: 640px) 100vw, 40vw"
                         />
                       </div>
@@ -472,12 +562,17 @@ export default function Menu() {
             ) : (
               <div>
                 <header className="mb-5 lg:mb-8">
-                  <h2 className="font-tempus text-2xl lg:text-4xl">
-                    {currentCategoryData?.name || activeNav?.label}
-                    {activeNav?.time ? (
-                      <span className="ml-3 font-sans text-sm font-normal text-[#302117]/50 lg:hidden">
-                        {activeNav.time}
-                      </span>
+                  <h2 className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-tempus text-2xl lg:text-4xl">
+                    <span>
+                      {currentCategoryData?.name || activeNav?.label}
+                      {activeNav?.time ? (
+                        <span className="ml-3 font-sans text-sm font-normal text-[#302117]/50 lg:hidden">
+                          {activeNav.time}
+                        </span>
+                      ) : null}
+                    </span>
+                    {currentCategoryData?.price ? (
+                      <span className="font-tempus text-xl tabular-nums lg:text-3xl">{currentCategoryData.price}</span>
                     ) : null}
                   </h2>
                   {activeNav?.time ? (
@@ -511,8 +606,14 @@ export default function Menu() {
                         onClick={() => setPoster(special)}
                         className="text-left"
                       >
-                        <div className="relative aspect-[3/4] overflow-hidden rounded-md border border-[#302117]/15 bg-white">
-                          <Image src={special.image} alt={special.alt} fill className="object-cover" sizes="33vw" />
+                        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md border border-[#302117]/15 bg-[#F7F0E3]">
+                          <Image
+                            src={special.image}
+                            alt={special.alt}
+                            fill
+                            className="object-cover object-top"
+                            sizes="33vw"
+                          />
                         </div>
                         <p className="mt-2 font-chinese text-sm">{special.chineseTitle}</p>
                         <p className="text-xs text-[#302117]/55">{special.title}</p>
@@ -537,12 +638,17 @@ export default function Menu() {
                           {section.id ? <span className="mr-2 text-[#9A7420]">{section.id}</span> : null}
                           {section.name || section.category || section.chineseName || section.chineseCategory}
                         </h3>
+                        {section.chineseCategory && (section.name || section.category) ? (
+                          <p className="mt-0.5 font-chinese text-sm text-[#302117]/50">{section.chineseCategory}</p>
+                        ) : null}
                       </div>
                       {section.price ? (
                         <span className="shrink-0 font-tempus text-lg tabular-nums">{section.price}</span>
                       ) : null}
                     </div>
-                    {section.note ? <p className="mb-2 text-xs text-[#9A7420]">{section.note}</p> : null}
+                    {section.note ? (
+                      <p className="mb-3 text-xs leading-relaxed text-[#9A7420] whitespace-pre-line">{section.note}</p>
+                    ) : null}
                     {section.availableTime ? (
                       <p className="mb-2 text-xs text-[#302117]/55 whitespace-pre-line">{section.availableTime}</p>
                     ) : null}
@@ -556,11 +662,15 @@ export default function Menu() {
                       </div>
                     ) : null}
                     {section.items && section.items.length > 0 ? (
-                      <div className="columns-1 lg:columns-2 lg:gap-x-12">
-                        {section.items.map((item, itemIdx) => (
-                          <DishRow key={itemIdx} item={item} />
-                        ))}
-                      </div>
+                      isChoiceSection(section) ? (
+                        <ChoiceGrid items={section.items} />
+                      ) : (
+                        <div className={activeCategory === "bbq" ? "" : "columns-1 lg:columns-2 lg:gap-x-12"}>
+                          {section.items.map((item, itemIdx) => (
+                            <DishRow key={itemIdx} item={item} />
+                          ))}
+                        </div>
+                      )
                     ) : null}
                     {section.subItems && section.subItems.length > 0 ? (
                       <div className="mt-2 columns-1 lg:columns-2 lg:gap-x-12">
@@ -605,50 +715,83 @@ export default function Menu() {
 
       {modalState.isOpen ? (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-2 sm:p-4"
-          onClick={closeModal}
+          className="fixed inset-0 z-[100] flex flex-col bg-black overscroll-none"
           role="dialog"
           aria-modal="true"
           aria-label="Scanned menu"
+          onTouchStart={onLightboxTouchStart}
+          onTouchEnd={onLightboxTouchEnd}
         >
-          <button onClick={closeModal} className="absolute right-4 top-4 text-white" aria-label="Close">
-            <X className="h-6 w-6" />
-          </button>
-          <div className="absolute left-4 top-4 text-xs text-white/80">
-            {scannedSections.find((s) => s.id === modalState.sectionId)?.name} — {modalState.imageIndex + 1}
+          <div className="flex items-center justify-between gap-3 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] pb-2 text-white">
+            <p className="min-w-0 truncate text-sm text-white/80">
+              {lightboxSection?.name}
+              {lightboxCount ? ` · ${modalState.imageIndex + 1} of ${lightboxCount}` : ""}
+            </p>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center"
+              aria-label="Close"
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              navigateImage("prev")
-            }}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white sm:left-6"
-            aria-label="Previous page"
-          >
-            <ChevronLeft className="h-8 w-8" />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              navigateImage("next")
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-white sm:right-6"
-            aria-label="Next page"
-          >
-            <ChevronRight className="h-8 w-8" />
-          </button>
-          <div className="relative flex max-h-[90vh] max-w-[95vw] items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            {scannedSections.find((s) => s.id === modalState.sectionId)?.images[modalState.imageIndex] ? (
+
+          <div className="relative flex min-h-0 flex-1 items-center justify-center px-2">
+            {lightboxCount > 1 ? (
+              <button
+                type="button"
+                onClick={() => navigateImage("prev")}
+                className="absolute left-1 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center text-white sm:inline-flex"
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="h-8 w-8" />
+              </button>
+            ) : null}
+            {lightboxPage ? (
               <Image
-                src={scannedSections.find((s) => s.id === modalState.sectionId)!.images[modalState.imageIndex].imgSrc}
-                alt="Scanned menu zoom"
+                src={lightboxPage.imgSrc}
+                alt={lightboxPage.alt}
                 width={1200}
                 height={1600}
-                className="max-h-[86vh] max-w-[92vw] object-contain"
+                className="max-h-full w-auto max-w-full object-contain"
                 priority
               />
             ) : null}
+            {lightboxCount > 1 ? (
+              <button
+                type="button"
+                onClick={() => navigateImage("next")}
+                className="absolute right-1 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center text-white sm:inline-flex"
+                aria-label="Next page"
+              >
+                <ChevronRight className="h-8 w-8" />
+              </button>
+            ) : null}
           </div>
+
+          {lightboxCount > 1 ? (
+            <div className="flex items-center gap-3 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:hidden">
+              <button
+                type="button"
+                onClick={() => navigateImage("prev")}
+                className="inline-flex h-12 flex-1 items-center justify-center gap-1 rounded-md bg-white/15 text-sm font-medium text-white"
+              >
+                <ChevronLeft className="h-5 w-5" />
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateImage("next")}
+                className="inline-flex h-12 flex-1 items-center justify-center gap-1 rounded-md bg-white text-sm font-medium text-black"
+              >
+                Next
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          ) : (
+            <div className="pb-[max(1rem,env(safe-area-inset-bottom))]" />
+          )}
         </div>
       ) : null}
     </div>

@@ -1,9 +1,10 @@
 import { Resend } from "resend"
 import { NextResponse } from "next/server"
 import { createWaitlistReservation, waitlistReservationConfigured } from "@/lib/waitlist-reservation"
-import { contactInquirySchema, isBookableDate, reservationFieldsSchema } from "@/lib/contact-schema"
+import { contactInquirySchema, isBookableReservation, reservationFieldsSchema } from "@/lib/contact-schema"
 import { escapeHtml } from "@/lib/html-escape"
 import { clientKey, isRateLimited } from "@/lib/rate-limit"
+import { RequestTooLargeError, readLimitedJson } from "@/lib/request-body"
 
 const MAX_BODY_BYTES = 50_000
 const WAITLIST_HOST = "cafedeawaitlist.vercel.app"
@@ -31,16 +32,23 @@ function safeManageUrl(value: string) {
 
 export async function POST(request: Request) {
   try {
-    const lengthHeader = request.headers.get("content-length")
-    if (lengthHeader && Number(lengthHeader) > MAX_BODY_BYTES) {
-      return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+    if (await isRateLimited(clientKey(request))) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": "3600" } },
+      )
     }
 
-    if (isRateLimited(clientKey(request))) {
-      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+    let body: unknown
+    try {
+      body = await readLimitedJson(request, MAX_BODY_BYTES)
+    } catch (error) {
+      if (error instanceof RequestTooLargeError) {
+        return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+      }
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 })
     }
 
-    const body = await request.json().catch(() => null)
     if (!body || typeof body !== "object") {
       return NextResponse.json({ error: "Invalid request." }, { status: 400 })
     }
@@ -80,7 +88,10 @@ export async function POST(request: Request) {
         partySize: inquiry.partySize,
         message: inquiry.message,
       })
-      if (!reservation.success || !isBookableDate(reservation.data.reservationDate)) {
+      if (
+        !reservation.success ||
+        !isBookableReservation(reservation.data.reservationDate, reservation.data.reservationTime)
+      ) {
         return NextResponse.json({ error: "Please choose a valid date, time, and party size." }, { status: 400 })
       }
 

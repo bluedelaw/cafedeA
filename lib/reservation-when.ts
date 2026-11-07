@@ -1,17 +1,27 @@
+import { RESTAURANT_TIMEZONE } from "@/lib/restaurant-clock"
+
 const OPEN_MINUTES = 8 * 60
 const LAST_SLOT_MINUTES = 21 * 60
 const INTERVAL = 15
 const BOOKABLE_DAYS = 30
 const WINDOW_MINUTES = 120
+export const MIN_ADVANCE_MINUTES = 60
 
-export function restaurantToday() {
-  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
+export function restaurantToday(now = new Date()) {
+  return now.toLocaleDateString("en-CA", { timeZone: RESTAURANT_TIMEZONE })
 }
 
 export function addDays(date: string, days: number) {
   const [year, month, day] = date.split("-").map(Number)
   const next = new Date(Date.UTC(year, month - 1, day + days))
   return next.toISOString().slice(0, 10)
+}
+
+export function isCivilDate(date: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false
+  const [year, month, day] = date.split("-").map(Number)
+  const utc = new Date(Date.UTC(year, month - 1, day))
+  return utc.getUTCFullYear() === year && utc.getUTCMonth() === month - 1 && utc.getUTCDate() === day
 }
 
 export function formatBookableDateLabel(date: string, today = restaurantToday()) {
@@ -44,6 +54,12 @@ export function generateReservationSlots() {
   return slots
 }
 
+const PERMITTED_SLOTS = new Set(generateReservationSlots())
+
+export function isPermittedReservationTime(time: string) {
+  return PERMITTED_SLOTS.has(time)
+}
+
 export function formatSlotLabel(time: string) {
   const [rawHours, rawMinutes] = String(time || "").split(":")
   const hours = Number(rawHours)
@@ -55,25 +71,25 @@ export function formatSlotLabel(time: string) {
   return `${displayHour}:${String(safeMinutes).padStart(2, "0")} ${ampm}`
 }
 
-function restaurantNowMinutes() {
+function restaurantNowMinutes(now = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Los_Angeles",
+    timeZone: RESTAURANT_TIMEZONE,
     hour: "2-digit",
     minute: "2-digit",
     hourCycle: "h23",
-  }).formatToParts(new Date())
+  }).formatToParts(now)
   const hour = Number(parts.find((part) => part.type === "hour")?.value || "0")
   const minute = Number(parts.find((part) => part.type === "minute")?.value || "0")
   return hour * 60 + minute
 }
 
-export function isSlotInPast(date: string, time: string) {
-  const today = restaurantToday()
+export function isSlotInPast(date: string, time: string, now = new Date()) {
+  const today = restaurantToday(now)
   if (date > today) return false
   if (date < today) return true
   const [hours, minutes] = String(time || "").split(":").map(Number)
   const slotMinutes = (Number(hours) || 0) * 60 + (Number.isFinite(minutes) ? minutes : 0)
-  return restaurantNowMinutes() > slotMinutes
+  return restaurantNowMinutes(now) > slotMinutes
 }
 
 function slotMinutes(time: string) {
@@ -81,10 +97,10 @@ function slotMinutes(time: string) {
   return (Number.isFinite(hours) ? hours : 0) * 60 + (Number.isFinite(minutes) ? minutes : 0)
 }
 
-export function isSlotTooSoon(date: string, time: string, minAdvanceMinutes = 60) {
-  if (date > restaurantToday()) return false
-  if (date < restaurantToday()) return true
-  return slotMinutes(time) - restaurantNowMinutes() < minAdvanceMinutes
+export function isSlotTooSoon(date: string, time: string, minAdvanceMinutes = MIN_ADVANCE_MINUTES, now = new Date()) {
+  if (date > restaurantToday(now)) return false
+  if (date < restaurantToday(now)) return true
+  return slotMinutes(time) - restaurantNowMinutes(now) < minAdvanceMinutes
 }
 
 export function defaultAroundTime(date: string) {
